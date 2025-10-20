@@ -271,6 +271,8 @@
             <p class="max-w-2xl text-sm md:text-base text-white/80">Sinds 2008 bouwen honderden vrijwilligers, artiesten en partners aan hét gratis festival van Overijssel. Samen vieren we cultuur voor iedereen — van eerste festivalgangers tot doorgewinterde liefhebbers.</p>
             <div class="flex flex-wrap gap-3">
               <a href="#programma" class="inline-flex items-center justify-center rounded-xl bg-brand-yellow px-5 py-2.5 text-brand-dark font-semibold transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-yellow/80">Bekijk programma</a>
+              <a href="https://bamfestival.nl/inschrijven-vrijwilligers" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl border border-white/60 px-5 py-2.5 text-white transition hover:bg-white/10 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80">Word vrijwilliger</a>
+              <a href="#sponsors" class="inline-flex items-center justify-center rounded-xl border border-white/60 px-5 py-2.5 text-white transition hover:bg-white/10 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80">Word sponsor</a>
               <a href="#doneer" class="inline-flex items-center justify-center rounded-xl border border-white/60 px-5 py-2.5 text-white transition hover:bg-white/10 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80">Doneer nu</a>
             </div>
             <ul class="grid w-full gap-4 text-sm text-white/85 sm:grid-cols-3">
@@ -579,26 +581,135 @@
 
   <template id="tpl-sponsors">
     <section class="w-full px-6 py-10">
-      <h1 class="font-display text-3xl md:text-4xl">Sponsors & Partners</h1>
-      <div id="sponsor-tiers" class="mt-4 grid gap-6"></div>
+      <article class="page-shell space-y-8 rounded-3xl border border-brand-primary/10 bg-white/95 p-6 shadow-card">
+        <header class="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)] lg:items-start">
+          <div class="space-y-4">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-primary/60">Samen bouwen aan BAM!</p>
+            <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Sponsors & Partners</h1>
+            <p class="text-sm md:text-base text-brand-dark/80">Op vrijdag 22 en zaterdag 23 mei 2026 verandert het Prins Bernhardplantsoen opnieuw in het BAM! Festival. Muziek, kunst, cultuur en gezelligheid komen samen dankzij de steun van sponsoren en vrijwilligers.</p>
+            <p class="text-sm md:text-base text-brand-dark/80">Sinds 2008 groeide BAM! van 2.000 naar ruim 15.000 bezoekers en een stevig online bereik. Een kernteam van twintig mensen werkt negen maanden aan het festival en krijgt hulp van talloze vrijwilligers. Zonder partners kunnen we dit gratis festival niet organiseren.</p>
+            <p class="text-sm md:text-base text-brand-dark/80">Na de eerste editie met vrijdagavond in 2022 en de terugkeer na corona is jouw steun belangrijker dan ooit. Download de sponsorbrochure en ontdek hoe we elkaar versterken.</p>
+            <div class="flex flex-wrap gap-3">
+              <a href="https://bamfestival.nl/sites/default/files/2025-02/2025-BAM-Sponsorbrochure.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl border border-brand-primary/20 px-4 py-2 text-sm font-semibold text-brand-primary transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow/60">Download sponsorbrochure</a>
+              <a href="mailto:sponsoring@bamfestival.nl" class="inline-flex items-center justify-center rounded-xl bg-brand-magenta px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow">Word sponsor</a>
+            </div>
+            <p class="text-xs uppercase tracking-wide text-brand-dark/60">Weet je al hoe je wilt bijdragen? Mail direct via sponsoring@bamfestival.nl – Patrick reageert zo snel mogelijk.</p>
+          </div>
+          <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/60 p-5 text-sm text-brand-dark/80">
+            <h2 class="font-display text-xl text-brand-primary">Waarom BAM! sponsoren?</h2>
+            <ul class="mt-3 space-y-2">
+              <li>Bereik 15.000+ bezoekers in het festivalweekend.</li>
+              <li>6.000+ Facebook, 1.300 X en 1.600+ Instagram volgers.</li>
+              <li>28.000 unieke bezoekers op bamfestival.nl in 2023.</li>
+              <li>Jouw steun houdt het festival gratis en toegankelijk.</li>
+            </ul>
+          </div>
+        </header>
+        <div>
+          <h2 class="font-display text-2xl text-brand-primary">Partners per categorie</h2>
+          <p class="mt-2 text-sm md:text-base text-brand-dark/80">We werken samen met hoofdsponsoren, partners en leveranciers die het festival mogelijk maken. Hieronder vind je het overzicht per tier.</p>
+          <div id="sponsor-tiers" class="mt-4 grid gap-6"></div>
+        </div>
+      </article>
     </section>
   </template>
 
   <template id="tpl-contact">
     <section class="w-full px-6 py-10">
-      <h1 class="font-display text-3xl md:text-4xl">Contact</h1>
-      <form class="mt-4 grid gap-3">
-        <label class="grid gap-1"><span>Naam</span><input class="px-3 py-2 rounded-xl border border-brand-primary/20 dark:border-white/20"/></label>
-        <label class="grid gap-1"><span>E‑mail</span><input class="px-3 py-2 rounded-xl border border-brand-primary/20 dark:border-white/20"/></label>
-        <label class="grid gap-1"><span>Bericht</span><textarea class="px-3 py-2 rounded-xl border border-brand-primary/20 dark:border-white/20 min-h-[120px]"></textarea></label>
-        <button class="px-4 py-2 rounded-xl text-white bg-brand-yellow w-max">Verstuur</button>
-      </form>
-      <div class="mt-6 rounded-3xl border border-brand-primary/10 bg-white p-5 text-sm shadow-card">
-        <h2 class="font-medium text-brand-primary">Festivalorganisatie</h2>
-        <p class="mt-2 opacity-80">BAM! Festival Hengelo (Ov.)<br />Vondelstraat 49 • 7551 BB Hengelo (Ov.)</p>
-        <p class="mt-2 opacity-80">Mail ons op <a class="text-brand-magenta underline" href="mailto:info@bamfestival.nl">info@bamfestival.nl</a> of volg de socials via de footer.</p>
-      </div>
-      <div id="contact-map" class="mt-6 h-72 w-full overflow-hidden rounded-3xl border border-brand-primary/15 bg-white shadow-card"></div>
+      <article class="page-shell space-y-8 rounded-3xl border border-brand-primary/10 bg-white/95 p-6 shadow-card">
+        <header class="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)] lg:items-start">
+          <div class="space-y-4">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-primary/60">Neem contact op</p>
+            <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Contact</h1>
+            <p class="text-sm md:text-base text-brand-dark/80">Heb je vragen of wil je informatie? Mail ons gerust of stuur ons een bericht via de socials. In de week voorafgaand aan en direct na het festival is de organisatie druk met op- en afbouw; houd er rekening mee dat een reactie dan iets langer kan duren.</p>
+          </div>
+          <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/60 p-5 text-sm text-brand-dark/80">
+            <h2 class="font-display text-xl text-brand-primary">Adresgegevens</h2>
+            <p class="mt-3">Stuur je liever post? Dan kan dat naar onderstaand adres:</p>
+            <address class="mt-3 not-italic leading-relaxed">
+              <strong>Stichting BAM! Festival</strong><br />
+              Vondelstraat 49<br />
+              7551 BB Hengelo (Ov.)<br />
+              KvK: 08185086
+            </address>
+            <p class="mt-3">Algemene vragen: <a class="text-brand-magenta underline" href="mailto:info@bamfestival.nl">info@bamfestival.nl</a></p>
+            <p class="mt-1">Website: <a class="text-brand-magenta underline" href="https://www.bamfestival.nl" target="_blank" rel="noopener noreferrer">bamfestival.nl</a></p>
+          </div>
+        </header>
+
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
+          <div class="space-y-6">
+            <section class="space-y-3">
+              <h2 class="font-display text-2xl text-brand-primary">Vrijwilliger worden</h2>
+              <p class="text-sm md:text-base text-brand-dark/80">Wil je vrijwilliger worden? Vul het online formulier in en we nemen zo snel mogelijk contact met je op. Voor andere vragen kun je mailen naar <a class="text-brand-magenta underline" href="mailto:vrijwilligers@bamfestival.nl">vrijwilligers@bamfestival.nl</a>.</p>
+              <div class="flex flex-wrap gap-3">
+                <a href="https://bamfestival.nl/inschrijven-vrijwilligers" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl bg-brand-magenta px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow">Meld je aan als vrijwilliger</a>
+                <a href="mailto:vrijwilligers@bamfestival.nl" class="inline-flex items-center justify-center rounded-xl border border-brand-magenta px-4 py-2 text-sm font-semibold text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta/50">Mail vrijwilligersteam</a>
+              </div>
+            </section>
+
+            <section class="space-y-3">
+              <h2 class="font-display text-2xl text-brand-primary">Sponsoring</h2>
+              <p class="text-sm md:text-base text-brand-dark/80">Wil je sponsor worden? Neem contact op met <strong>Patrick Slagers</strong>, onze chef sponsoring. Mail naar <a class="text-brand-magenta underline" href="mailto:sponsoring@bamfestival.nl">sponsoring@bamfestival.nl</a> of bekijk de sponsorbrochure.</p>
+              <div class="flex flex-wrap gap-3">
+                <a href="#sponsors" class="inline-flex items-center justify-center rounded-xl border border-brand-primary/20 px-4 py-2 text-sm font-semibold text-brand-primary transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow/60">Bekijk sponsorpakketten</a>
+                <a href="mailto:sponsoring@bamfestival.nl" class="inline-flex items-center justify-center rounded-xl bg-brand-yellow px-4 py-2 text-sm font-semibold text-brand-dark transition hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta/60">Word sponsor</a>
+              </div>
+            </section>
+
+            <section class="space-y-3">
+              <h2 class="font-display text-2xl text-brand-primary">Programmering</h2>
+              <p class="text-sm md:text-base text-brand-dark/80">Wil je optreden, je theateract brengen of kunst tonen op het festival? Stuur foto’s, informatie (inclusief social links) en je contactgegevens naar het juiste programmeerteam.</p>
+              <ul class="space-y-2 text-sm text-brand-dark/80">
+                <li><span class="font-semibold text-brand-primary">Muziek:</span> <a class="text-brand-magenta underline" href="mailto:programmering@bamfestival.nl">programmering@bamfestival.nl</a></li>
+                <li><span class="font-semibold text-brand-primary">Theater:</span> <a class="text-brand-magenta underline" href="mailto:theater@bamfestival.nl">theater@bamfestival.nl</a></li>
+                <li><span class="font-semibold text-brand-primary">Kunst:</span> <a class="text-brand-magenta underline" href="mailto:kunst@bamfestival.nl">kunst@bamfestival.nl</a></li>
+                <li><span class="font-semibold text-brand-primary">Film:</span> <a class="text-brand-magenta underline" href="mailto:film@bamfestival.nl">film@bamfestival.nl</a></li>
+              </ul>
+            </section>
+
+            <section class="space-y-3">
+              <h2 class="font-display text-2xl text-brand-primary">Pers & fotografie</h2>
+              <p class="text-sm md:text-base text-brand-dark/80">Pers of fotografen kunnen accreditatie aanvragen via <a class="text-brand-magenta underline" href="mailto:marketing@bamfestival.nl">marketing@bamfestival.nl</a> onder vermelding van naam, e-mailadres, telefoonnummer, website en social media links.</p>
+            </section>
+
+            <section class="space-y-2">
+              <h2 class="font-display text-2xl text-brand-primary">Overige vragen</h2>
+              <p class="text-sm md:text-base text-brand-dark/80">Staat je vraag niet in onze <a class="text-brand-magenta underline" href="#faq">FAQ</a>? Mail dan naar <a class="text-brand-magenta underline" href="mailto:info@bamfestival.nl">info@bamfestival.nl</a>. Gevonden voorwerpen worden verzameld en vermeld via de FAQ.</p>
+            </section>
+          </div>
+
+          <aside class="space-y-4 rounded-3xl border border-brand-primary/15 bg-brand-light/50 p-5 text-sm text-brand-dark/80">
+            <h2 class="font-display text-lg text-brand-primary">Belangrijke contacten</h2>
+            <dl class="space-y-3">
+              <div>
+                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Algemeen</dt>
+                <dd><a class="text-brand-magenta underline" href="mailto:info@bamfestival.nl">info@bamfestival.nl</a></dd>
+              </div>
+              <div>
+                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Vrijwilligers</dt>
+                <dd><a class="text-brand-magenta underline" href="mailto:vrijwilligers@bamfestival.nl">vrijwilligers@bamfestival.nl</a></dd>
+              </div>
+              <div>
+                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Sponsoring</dt>
+                <dd><a class="text-brand-magenta underline" href="mailto:sponsoring@bamfestival.nl">sponsoring@bamfestival.nl</a></dd>
+              </div>
+              <div>
+                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Pers & Marketing</dt>
+                <dd><a class="text-brand-magenta underline" href="mailto:marketing@bamfestival.nl">marketing@bamfestival.nl</a></dd>
+              </div>
+            </dl>
+            <p class="text-xs uppercase tracking-wide text-brand-dark/60">Tip: volg BAM! Festival op social media voor snelle updates.</p>
+          </aside>
+        </div>
+
+        <section class="space-y-3">
+          <h2 class="font-display text-2xl text-brand-primary">Bezoek ons in het park</h2>
+          <p class="text-sm md:text-base text-brand-dark/80">Tijdens het festival vind je ons in het Prins Bernhardplantsoen in Hengelo. Gebruik de kaart hieronder voor de snelste route.</p>
+        </section>
+
+        <div id="contact-map" class="h-72 w-full overflow-hidden rounded-3xl border border-brand-primary/15 bg-white shadow-card"></div>
+      </article>
     </section>
   </template>
 
