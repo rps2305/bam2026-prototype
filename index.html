@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="nl" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BAM! Festival — Prototype</title>
+  <meta name="description" content="BAM! Festival — gratis stadsfestival in het Prins Bernhardplantsoen, Hengelo (Ov.)." />
+  <meta property="og:title" content="BAM! Festival" />
+  <meta property="og:description" content="Gratis stadsfestival in Hengelo (Ov.)." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/assets/og-image.jpg" />
+  <link rel="icon" href="/assets/favicon.ico" />
+
+  <!-- Brand Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (Play CDN) — compiles in browser. For a real build, use CLI. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Tailwind config (works with CDN). Adjust when migrating to a build.
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Merriweather Sans', 'Interstate', 'ui-sans-serif', 'system-ui'],
+            display: ['Interstate', 'Merriweather Sans', 'ui-sans-serif', 'system-ui']
+          },
+          colors: {
+            brand: {
+              // Officiële BAM! Festival kleuren (bron: bamfestival.nl)
+              DEFAULT: '#8B1C66',
+              primary: '#8B1C66',
+              magenta: '#E31362',
+              pink: '#E31362',
+              yellow: '#FFD829',
+              blue: '#009DE0',
+              purple: '#5E2E84',
+              dark: '#111827',
+              light: '#FDF8ED'
+            }
+          },
+          boxShadow: {
+            card: '0 8px 30px rgba(0,0,0,0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face{
+      font-family:'Interstate';
+      src:url('https://bamfestival.nl/themes/custom/bamfestival2025/assets/fonts/Interstate-Light.woff2') format('woff2');
+      font-weight:300;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:'Interstate';
+      src:url('https://bamfestival.nl/themes/custom/bamfestival2025/assets/fonts/Interstate-Regular.woff2') format('woff2');
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:'Interstate';
+      src:url('https://bamfestival.nl/themes/custom/bamfestival2025/assets/fonts/Interstate-Bold.woff2') format('woff2');
+      font-weight:700;
+      font-style:normal;
+      font-display:swap;
+    }
+    /* Headline helper */
+    .font-display{font-family:'Interstate','Merriweather Sans',ui-sans-serif,system-ui;font-weight:700;letter-spacing:0.01em;}
+    .bg-bam-gradient{
+      background-image:linear-gradient(310deg,rgba(94,46,132,.85) 0%,rgba(127,36,115,.82) 26%,rgba(226,18,98,.8) 52%,rgba(0,157,224,.78) 72%,rgba(208,198,134,.75) 86%,rgba(255,216,41,.72) 100%);
+      background-attachment:fixed;
+      background-size:cover;
+    }
+    .page-shell{
+      width:100%;
+      max-width:100%;
+      margin:0;
+      background:rgba(253,248,237,0.9);
+      border-radius:0;
+      box-shadow:none;
+      backdrop-filter:blur(4px);
+    }
+    #app{
+      transition:opacity 0.35s ease;
+    }
+    #app.page-fade{
+      opacity:0;
+    }
+    .privacy-block p{margin-top:1.25rem;}
+    .privacy-block h2{margin-top:2.5rem;margin-bottom:0.85rem;}
+    .privacy-block ul{margin:1.25rem 0 1.75rem 1.25rem;}
+    .privacy-block li+li{margin-top:0.6rem;}
+    .page-shell p a,
+    .page-shell li a{
+      color:inherit;
+      text-decoration:underline;
+      text-decoration-color:rgba(139,28,102,0.35);
+      transition:color .25s ease,text-decoration-color .25s ease,box-shadow .25s ease;
+    }
+    .page-shell p a:hover,
+    .page-shell li a:hover{
+      color:#E31362;
+      text-decoration-color:#FFD829;
+      box-shadow:0 4px 12px rgba(227,19,98,0.2);
+    }
+  </style>
+  
+  <!-- JSON-LD Festival Schema (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Festival",
+    "name": "BAM! Festival",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "isAccessibleForFree": true,
+    "location": {
+      "@type": "Place",
+      "name": "Prins Bernhardplantsoen",
+      "address": "Hengelo, Overijssel, Nederland"
+    },
+    "organizer": {"@type": "Organization", "name": "BAM! Festival"},
+    "url": "https://bamfestival.nl"
+  }
+  </script>
+</head>
+<body class="bg-bam-gradient text-brand-dark dark:bg-brand-dark dark:text-white">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 border-b border-brand-primary/20 bg-white/80 backdrop-blur dark:bg-black/60 dark:border-white/10">
+    <div class="flex h-16 w-full items-center gap-3 px-6">
+      <button id="btnMenu" class="lg:hidden px-3 py-2 rounded-xl border border-black/10 dark:border-white/20" aria-label="Open navigatie" aria-controls="mobile-nav" aria-expanded="false">☰</button>
+      <a href="#home" class="flex items-center gap-2 shrink-0">
+        <img id="brandLogo" src="bam-logo.png" alt="BAM! Festival" class="h-7 w-auto" onerror="this.src='https://dummyimage.com/140x40/7c3aed/ffffff&text=BAM!+Festival'" />
+      </a>
+      <nav class="hidden lg:flex items-center gap-1 ml-2">
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#home">Home</a>
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#programma">Line‑up</a>
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#plattegrond">Plattegrond</a>
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#nieuws">Nieuws</a>
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#media">Media</a>
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#faq">FAQ</a>
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#sponsors">Sponsors</a>
+        <a class="px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta md:text-sm" href="#contact">Contact</a>
+      </nav>
+      <div class="ml-auto hidden md:flex items-center gap-2">
+        <form id="searchForm" class="hidden md:flex items-center gap-2" role="search">
+          <input id="searchInput" class="px-3 py-2 w-44 lg:w-56 rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
+          <button class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20" type="submit">Zoek</button>
+        </form>
+        <button id="btnTheme" class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20" aria-label="Thema wisselen">☀️</button>
+        <a href="#doneer" class="px-4 py-2 rounded-xl text-white bg-brand-yellow transition transform hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-magenta">Doneer</a>
+      </div>
+    </div>
+    <!-- Mobile row -->
+    <div class="md:hidden px-4 pb-2 flex items-center gap-2 border-t border-black/10 dark:border-white/10">
+      <form id="searchFormMobile" class="flex-1 flex items-center gap-2 py-2" role="search">
+        <input id="searchInputMobile" class="px-3 py-2 w-full rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
+      </form>
+      <button id="btnThemeMobile" class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20" aria-label="Thema wisselen">☀️</button>
+      <a href="#doneer" class="px-3 py-2 rounded-xl text-white bg-brand-yellow transition transform hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-magenta">Doneer</a>
+    </div>
+    <!-- Mobile menu (collapsible) -->
+    <div id="mobile-nav" class="lg:hidden overflow-hidden transition-[max-height] max-h-0" aria-hidden="true">
+      <nav class="px-4 pb-3 grid gap-1 bg-white dark:bg-black/80 border-t border-black/10 dark:border-white/10">
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#home">Home</a>
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#programma">Line‑up</a>
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#plattegrond">Plattegrond</a>
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#nieuws">Nieuws</a>
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#media">Media</a>
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#faq">FAQ</a>
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#sponsors">Sponsors</a>
+        <a class="px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wide transition transform hover:-translate-y-0.5 hover:shadow-md ring-1 ring-transparent hover:ring-brand-yellow hover:bg-brand-yellow/10 dark:hover:bg-brand-magenta/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-magenta" href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main id="app" class="min-h-[70vh] px-4 py-10 md:py-16"></main>
+
+  <!-- Footer -->
+  <footer class="mt-10 border-t border-brand-primary/20 bg-white/80 backdrop-blur dark:bg-black/60 dark:border-white/10">
+    <div class="grid w-full gap-6 px-6 py-10 text-sm opacity-90 md:grid-cols-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <img src="bam-logo.png" alt="BAM! Festival" class="h-6 w-auto" onerror="this.src='https://dummyimage.com/120x32/7c3aed/ffffff&text=BAM!'" />
+          <span class="font-display text-brand-primary">BAM! Festival</span>
+        </div>
+        <p class="mt-1 text-brand-dark/80">Prins Bernhardplantsoen, Hengelo (Ov.)</p>
+      </div>
+      <div>
+        <div class="font-semibold uppercase tracking-wide text-brand-primary">Snelkoppelingen</div>
+        <ul class="mt-2 space-y-1 text-brand-dark/70">
+          <li><a class="underline decoration-brand-magenta decoration-2 underline-offset-4" href="#sponsors">Sponsors & Partners</a></li>
+          <li><a class="underline decoration-brand-magenta decoration-2 underline-offset-4" href="#faq">Huisregels & FAQ</a></li>
+          <li><a class="underline decoration-brand-magenta decoration-2 underline-offset-4" href="#contact">Contact</a></li>
+          <li><a class="underline decoration-brand-magenta decoration-2 underline-offset-4" href="#privacy">Privacy & Disclaimer</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold uppercase tracking-wide text-brand-primary">Volg ons</div>
+        <ul class="mt-2 flex flex-wrap gap-2">
+          <li>
+            <a class="inline-flex h-16 w-16 items-center justify-center rounded-3xl border border-brand-primary/20 bg-white/70 text-brand-primary transition hover:-translate-y-0.5 hover:bg-brand-primary/10 hover:shadow-md" href="https://www.facebook.com/BAM.Festival/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <span class="sr-only">Facebook</span>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.07C22 6.48 17.52 2 11.93 2 6.35 2 1.86 6.48 1.86 12.07c0 4.99 3.64 9.12 8.39 9.95v-7.03H7.9v-2.92h2.35V9.41c0-2.32 1.39-3.61 3.52-3.61 1.02 0 2.1.18 2.1.18v2.31h-1.18c-1.17 0-1.54.73-1.54 1.48v1.78h2.63l-.42 2.92h-2.21v7.03c4.75-.83 8.39-4.96 8.39-9.95z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a class="inline-flex h-16 w-16 items-center justify-center rounded-3xl border border-brand-primary/20 bg-white/70 text-brand-primary transition hover:-translate-y-0.5 hover:bg-brand-primary/10 hover:shadow-md" href="https://www.instagram.com/bamfestival.hengelo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <span class="sr-only">Instagram</span>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm10 2H7a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3zm-5 3a5 5 0 110 10 5 5 0 010-10zm0 2.2A2.8 2.8 0 1014.8 12 2.81 2.81 0 0012 9.2zM17.8 6.2a1.2 1.2 0 11-1.2 1.2 1.2 1.2 0 011.2-1.2z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a class="inline-flex h-16 w-16 items-center justify-center rounded-3xl border border-brand-primary/20 bg-white/70 text-brand-primary transition hover:-translate-y-0.5 hover:bg-brand-primary/10 hover:shadow-md" href="https://www.youtube.com/channel/UCcgTzyV1jlKLgUQWf32KoqQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <span class="sr-only">YouTube</span>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 7.2c.8.2 1.4.8 1.6 1.6.4 1.5.4 4.6.4 4.6s0 3.1-.4 4.6c-.2.8-.8 1.4-1.6 1.6-1.4.4-7.6.4-7.6.4s-6.2 0-7.6-.4c-.8-.2-1.4-.8-1.6-1.6C2.4 16.5 2.4 13.4 2.4 13.4s0-3.1.4-4.6c.2-.8.8-1.4 1.6-1.6C5.8 6.8 12 6.8 12 6.8s6.2 0 7.6.4zM10 15.6l5-2.2-5-2.2v4.4z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a class="inline-flex h-16 w-16 items-center justify-center rounded-3xl border border-brand-primary/20 bg-white/70 text-brand-primary transition hover:-translate-y-0.5 hover:bg-brand-primary/10 hover:shadow-md" href="https://nl.linkedin.com/company/bam-festival-hengelo-official" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <span class="sr-only">LinkedIn</span>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5.02 2.5 2.5 0 01.02-5.02zM3 9h4v12H3V9zm7 0h3.8v1.7h.1c.5-.9 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6v6h-4v-5.3c0-1.3 0-3-1.9-3s-2.2 1.4-2.2 2.9V21H10V9z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a class="inline-flex h-16 w-16 items-center justify-center rounded-3xl border border-brand-primary/20 bg-white/70 text-brand-primary transition hover:-translate-y-0.5 hover:bg-brand-primary/10 hover:shadow-md" href="https://open.spotify.com/playlist/0kgBDP2q9romYPcZRgeK1x" target="_blank" rel="noopener noreferrer" aria-label="Spotify">
+              <span class="sr-only">Spotify</span>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm4.4 14.6a.75.75 0 01-1.04.25 12.7 12.7 0 00-6.72-1.36.75.75 0 11-.12-1.5 14.2 14.2 0 017.52 1.53.75.75 0 01.36 1.08zM17.7 12.6a.9.9 0 01-1.26.3 15.7 15.7 0 00-8.24-1.67.9.9 0 11-.2-1.8 17.5 17.5 0 019.22 1.87.9.9 0 01.48 1.3zM18 10a1 1 0 01-1.4.4 18.8 18.8 0 00-9.96-2.02A1 1 0 016.5 6.5 20.7 20.7 0 0117.1 8.7 1 1 0 0118 10z"/></svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-brand-primary/20 py-4 text-center text-xs text-brand-dark/60 dark:border-white/10 dark:text-white/60">
+      <a class="underline decoration-brand-magenta decoration-2 underline-offset-4 hover:text-brand-primary transition" href="https://bamfestival.nl/anbi" target="_blank" rel="noopener noreferrer">ANBI</a>
+      <span class="mx-1">•</span>
+      <a class="underline decoration-brand-magenta decoration-2 underline-offset-4 hover:text-brand-primary transition" href="#privacy">Privacy</a>
+      <span class="mx-1">•</span>
+      <a class="underline decoration-brand-magenta decoration-2 underline-offset-4 hover:text-brand-primary transition" href="https://bamfestival.nl/cookies" target="_blank" rel="noopener noreferrer">Cookies</a>
+    </div>
+    <div class="pb-6 text-center text-xs text-brand-dark/70 dark:text-white/60">© 2025 BAM! Festival Hengelo (Ov.) — Vondelstraat 49 | 7551 BB Hengelo (Ov.)</div>
+  </footer>
+
+  <!-- App templates (rendered via JS) -->
+  <template id="tpl-home">
+    <section class="w-full px-6 py-10">
+      <!-- Hero -->
+      <section class="relative overflow-hidden rounded-3xl border border-brand-primary/20 bg-[linear-gradient(315deg,#5e2e84,#722a7e_12%,#7f2473_23%,#8c1d67_35%,#ad1a66_46%,#ca1664_57%,#e21262_66%,#b95b98_74%,#8381c1_81%,#009de0_87%,#93b2b8_92%,#d0c686_96%,#ffd829)] text-white shadow-card">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,216,41,0.35),transparent_60%)]"></div>
+        <div class="relative flex flex-col gap-8 p-6 md:flex-row md:items-center md:p-12">
+          <div class="flex-1 space-y-5">
+            <div class="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1 text-xs font-semibold uppercase tracking-wide">
+              <span>17e editie</span>
+              <span class="h-1 w-1 rounded-full bg-white/60"></span>
+              <span>Gratis toegang</span>
+            </div>
+            <h1 class="font-display text-4xl leading-tight md:text-6xl md:leading-tight">BAM! Festival Hengelo 2026</h1>
+            <p class="max-w-xl text-base md:text-lg text-white/85">Vrijdag 22 &amp; zaterdag 23 mei 2026 in het Prins Bernhardplantsoen. Twee dagen vol muziek, theater, kunst en verrassingen midden in Hengelo (Ov.).</p>
+            <p class="max-w-2xl text-sm md:text-base text-white/80">Sinds 2008 bouwen honderden vrijwilligers, artiesten en partners aan hét gratis festival van Overijssel. Samen vieren we cultuur voor iedereen — van eerste festivalgangers tot doorgewinterde liefhebbers.</p>
+            <div class="flex flex-wrap gap-3">
+              <a href="#programma" class="inline-flex items-center justify-center rounded-xl bg-brand-yellow px-5 py-2.5 text-brand-dark font-semibold transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-yellow/80">Bekijk programma</a>
+              <a href="#doneer" class="inline-flex items-center justify-center rounded-xl border border-white/60 px-5 py-2.5 text-white transition hover:bg-white/10 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80">Doneer nu</a>
+            </div>
+            <ul class="grid w-full gap-4 text-sm text-white/85 sm:grid-cols-3">
+              <li class="flex h-full flex-col justify-between rounded-3xl border border-white/30 bg-white/10 p-6 shadow-lg backdrop-blur">
+                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Wanneer</div>
+                <div class="mt-3 text-lg font-semibold leading-snug text-white" style="text-wrap:balance">22 &amp; 23 mei 2026<br />Vrijdagavond + zaterdag</div>
+              </li>
+              <li class="flex h-full flex-col justify-between rounded-3xl border border-white/30 bg-white/10 p-6 shadow-lg backdrop-blur">
+                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Waar</div>
+                <div class="mt-3 text-lg font-semibold leading-snug text-white" style="text-wrap:balance">Prins Bernhardplantsoen<br />Hengelo (Ov.)</div>
+              </li>
+              <li class="flex h-full flex-col justify-between rounded-3xl border border-white/30 bg-white/10 p-6 shadow-lg backdrop-blur">
+                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Prijs</div>
+                <div class="mt-3 text-lg font-semibold leading-snug text-white" style="text-wrap:balance">Altijd gratis toegang<br />Donaties welkom</div>
+              </li>
+            </ul>
+          </div>
+          <div class="w-full max-w-md shrink-0 overflow-hidden rounded-3xl border border-white/20 bg-white/10 backdrop-blur">
+            <img class="h-full w-full object-cover mix-blend-screen" src="https://bamfestival.nl/sites/default/files/2025-05/2025-zaterdag-WimvanderGeest-WI0_5345%20-1.jpg" alt="Sfeervolle impressie van BAM! Festival" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1600&auto=format&fit=crop'; this.classList.remove('mix-blend-screen');" />
+          </div>
+        </div>
+      </section>
+      <!-- Now/Next -->
+      <section class="mt-8">
+        <div class="flex items-end justify-between"><h2 class="font-display text-2xl md:text-3xl">Nu & Straks</h2><a href="#programma" class="underline">Volledige timetable →</a></div>
+        <div id="home-nownext" class="mt-4 grid md:grid-cols-2 gap-4"></div>
+      </section>
+      <!-- Line-up -->
+      <section class="mt-10">
+        <h2 class="font-display text-2xl md:text-3xl mb-3">Line‑up</h2>
+        <div id="home-lineup" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+      </section>
+      <!-- Story -->
+      <section class="mt-12 grid gap-6 lg:grid-cols-[1.25fr,1fr]">
+        <article class="rounded-3xl border border-brand-primary/15 bg-white p-6 shadow-card">
+          <span class="inline-flex items-center rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase text-brand-primary">Waarom BAM!</span>
+          <h2 class="mt-4 font-display text-3xl text-brand-primary">Festival voor en door Hengelo</h2>
+          <p class="mt-4 text-sm md:text-base opacity-80">BAM! Festival is al sinds 2008 een gratis cultureel feest voor iedereen – van jong tot oud, midden in het hart van Hengelo. Vrijwilligers, makers en sponsoren zorgen samen voor een tweedaags spektakel met muziek, theater, kunst en verrassende ontmoetingen.</p>
+          <p class="mt-4 text-sm md:text-base opacity-80">Wat ooit begon als een spontaan idee van een groep vrienden, is uitgegroeid tot hét festival van Overijssel en werd meerdere keren bekroond. We blijven vernieuwen met vijf podia, intieme parkstages, straattheater en kunstinstallaties verspreid over het Prins Bernhardplantsoen.</p>
+          <a class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-magenta underline underline-offset-4" href="#nieuws">Lees het laatste nieuws →</a>
+        </article>
+        <article class="relative overflow-hidden rounded-3xl border border-brand-primary/15 bg-brand-purple/10 p-6 shadow-card">
+          <div class="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-brand-yellow/40 blur-3xl"></div>
+          <div class="relative space-y-4">
+            <h3 class="font-display text-2xl text-brand-primary">Festival highlights</h3>
+            <ul class="space-y-3 text-sm opacity-85">
+              <li class="flex items-start gap-3"><span class="mt-0.5 text-brand-yellow">★</span><span>Vijf podia met nationale en internationale acts plus verrassende straatoptredens.</span></li>
+              <li class="flex items-start gap-3"><span class="mt-0.5 text-brand-yellow">★</span><span>Foodboulevard vol lokale smaakmakers, vegan opties en Twentse speciaalbieren.</span></li>
+              <li class="flex items-start gap-3"><span class="mt-0.5 text-brand-yellow">★</span><span>Inclusief festivalterrein met rolstoelvriendelijke routes, rustige zones en toegankelijk sanitair.</span></li>
+              <li class="flex items-start gap-3"><span class="mt-0.5 text-brand-yellow">★</span><span>Kunst &amp; cultuur in het park met workshops, installaties en spoken word.</span></li>
+            </ul>
+            <a href="#plattegrond" class="inline-flex items-center gap-2 rounded-xl border border-brand-magenta px-4 py-2 text-sm font-semibold text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">Bekijk terrein &amp; plattegrond</a>
+          </div>
+        </article>
+      </section>
+      <!-- Nieuws -->
+      <section class="mt-10">
+        <div class="flex items-end justify-between"><h2 class="font-display text-2xl md:text-3xl">Laatste nieuws</h2><a href="#nieuws" class="underline">Alles →</a></div>
+        <div id="home-news" class="mt-4 grid md:grid-cols-3 gap-4"></div>
+      </section>
+    </section>
+  </template>
+
+  <template id="tpl-plattegrond">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Plattegrond</h1>
+      <p class="mt-2 max-w-2xl opacity-80">Verken het Prins Bernhardplantsoen nog voor de poorten open gaan. Zo weet je precies waar je favoriete podia, foodtrucks en chillzones staan.</p>
+      <div class="mt-6 grid gap-6 lg:grid-cols-[2fr,1fr]">
+        <figure class="overflow-hidden rounded-3xl border border-brand-primary/10 bg-white shadow-card">
+          <img class="h-full w-full object-cover" src="plattegrond.webp" alt="Indicatieve plattegrond van het festival" />
+          <figcaption class="px-4 py-3 text-sm opacity-70">Indicatieve schets van het terrein. Definitieve kaart volgt dichter op het festival.</figcaption>
+        </figure>
+        <div class="rounded-3xl border border-brand-primary/10 bg-white p-4 shadow-card">
+          <h2 class="font-medium text-brand-primary">Hoogtepunten</h2>
+          <ul id="map-zones" class="mt-3 space-y-3 text-sm opacity-90"></ul>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-programma">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Programma</h1>
+      <p class="mt-2 max-w-3xl text-sm md:text-base opacity-80">Van intieme parkstages tot het Fuldauer hoofdpodium: ontdek vijf podia vol muziek, theater en spoken word. Filter op dag of podium en stel jouw ultieme BAM!-route samen.</p>
+      <div class="mt-3 flex flex-wrap gap-3 items-center">
+        <select id="filter-day" class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20">
+          <option value="all">Alle dagen</option>
+        </select>
+        <select id="filter-stage" class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20">
+          <option value="all">Alle podia</option>
+        </select>
+      </div>
+      <div class="mt-6 grid gap-6 md:grid-cols-2">
+        <div class="rounded-3xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
+          <h2 class="font-medium mb-2">Lijst</h2>
+          <ul id="list-program" class="space-y-3"></ul>
+        </div>
+        <div class="rounded-3xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
+          <h2 class="font-medium mb-2">Timetable (schets)</h2>
+          <div id="grid-program" class="grid gap-2 text-[0.7rem] sm:text-xs md:text-sm"></div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-artist">
+    <section class="w-full px-6 py-10">
+      <div class="grid items-start gap-6 md:grid-cols-[320px,1fr]">
+        <div class="aspect-square overflow-hidden rounded-2xl border border-brand-primary/15">
+          <img id="artist-img" class="w-full h-full object-cover" alt="Artiest" />
+        </div>
+        <div>
+          <h1 id="artist-name" class="font-display text-3xl md:text-4xl"></h1>
+          <p id="artist-genres" class="opacity-80"></p>
+          <div id="artist-meta" class="mt-2 text-sm opacity-80"></div>
+          <div id="artist-badges" class="mt-4 flex gap-2"></div>
+          <p id="artist-bio" class="mt-4 max-w-prose opacity-90"></p>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <button class="px-3 py-2 rounded-xl text-white bg-brand-yellow transition transform hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-magenta">Favoriet</button>
+            <button class="px-3 py-2 rounded-xl border border-brand-magenta text-brand-magenta">Deel</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 rounded-3xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
+        <div class="grid aspect-video place-items-center overflow-hidden rounded-xl bg-black/5">Spotify/YouTube embed (mock)</div>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-nieuws">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Nieuws</h1>
+      <p class="mt-2 max-w-3xl text-sm md:text-base opacity-80">Volg de laatste aankondigingen: nieuwe namen, plattegrond-updates, vrijwilligersoproepen en meer verhalen achter de schermen.</p>
+      <div id="news-list" class="mt-4 grid gap-4"></div>
+    </section>
+  </template>
+
+  <template id="tpl-news-detail">
+    <section class="w-full px-6 py-10">
+      <article class="prose prose-sm md:prose-base dark:prose-invert">
+        <h1 id="nd-title"></h1>
+        <p><em id="nd-date"></em></p>
+        <p id="nd-body"></p>
+      </article>
+    </section>
+  </template>
+
+  <template id="tpl-media">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Media</h1>
+      <p class="mt-2 max-w-2xl text-sm md:text-base opacity-80">Sfeerbeelden uit het Prins Bernhardplantsoen: van gouden uur op het hoofdpodium tot nachtelijke parkpoëzie.</p>
+      <div id="media-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+    </section>
+  </template>
+
+  <template id="tpl-faq">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">FAQ</h1>
+      <div id="faq-acc" class="mt-4 space-y-3"></div>
+    </section>
+  </template>
+
+  <template id="tpl-sponsors">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Sponsors & Partners</h1>
+      <div id="sponsor-tiers" class="mt-4 grid gap-6"></div>
+    </section>
+  </template>
+
+  <template id="tpl-contact">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Contact</h1>
+      <form class="mt-4 grid gap-3">
+        <label class="grid gap-1"><span>Naam</span><input class="px-3 py-2 rounded-xl border border-brand-primary/20 dark:border-white/20"/></label>
+        <label class="grid gap-1"><span>E‑mail</span><input class="px-3 py-2 rounded-xl border border-brand-primary/20 dark:border-white/20"/></label>
+        <label class="grid gap-1"><span>Bericht</span><textarea class="px-3 py-2 rounded-xl border border-brand-primary/20 dark:border-white/20 min-h-[120px]"></textarea></label>
+        <button class="px-4 py-2 rounded-xl text-white bg-brand-yellow w-max">Verstuur</button>
+      </form>
+      <div class="mt-6 rounded-3xl border border-brand-primary/10 bg-white p-5 text-sm shadow-card">
+        <h2 class="font-medium text-brand-primary">Festivalorganisatie</h2>
+        <p class="mt-2 opacity-80">BAM! Festival Hengelo (Ov.)<br />Vondelstraat 49 • 7551 BB Hengelo (Ov.)</p>
+        <p class="mt-2 opacity-80">Mail ons op <a class="text-brand-magenta underline" href="mailto:info@bamfestival.nl">info@bamfestival.nl</a> of volg de socials via de footer.</p>
+      </div>
+      <div id="contact-map" class="mt-6 h-72 w-full overflow-hidden rounded-3xl border border-brand-primary/15 bg-white shadow-card"></div>
+    </section>
+  </template>
+
+  <template id="tpl-doneer">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Doneer</h1>
+      <p class="mt-2 text-sm md:text-base opacity-80">BAM! Festival is al sinds 2008 een gratis cultureel feest voor iedereen — en dat houden we graag zo. Na de natte editie van afgelopen jaar hebben we de steun van bezoekers en partners harder nodig dan ooit om het park te transformeren tot een veilig, duurzaam festivalterrein.</p>
+      <div class="mt-6 overflow-hidden rounded-3xl border border-brand-primary/15 bg-[linear-gradient(120deg,rgba(139,28,102,0.15),rgba(255,216,41,0.12))] p-6 shadow-card">
+        <h2 class="font-display text-2xl text-brand-primary">Elke bijdrage telt</h2>
+        <p class="mt-4 text-sm md:text-base opacity-80">Dankzij jouw donatie kunnen we artiesten betalen, nieuwe makers een podium geven en investeren in toegankelijkheid: van rolstoelroutes tot prikkelarme zones en veel vrijwilligers met een warm hart.</p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="https://qrcode.ideal.nl/qr1.ideal.nl/574f0572-03bb-4edd-96bf-19b2ec518b83" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl bg-brand-magenta px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow">Doneer via iDEAL</a>
+          <span class="text-xs uppercase tracking-wide text-brand-primary/70">Of kies zelf een bedrag hieronder</span>
+        </div>
+      </div>
+      <div class="mt-6 grid gap-6 md:grid-cols-2">
+        <div class="rounded-3xl border border-brand-primary/10 bg-white p-5 shadow-card">
+          <h2 class="font-medium text-brand-primary">Kies een bijdrage</h2>
+          <ul id="donation-tiers" class="mt-4 space-y-3 text-sm opacity-90"></ul>
+        </div>
+        <form id="donation-form" class="rounded-3xl border border-brand-primary/10 bg-white p-5 shadow-card grid gap-3">
+          <label class="grid gap-1 text-sm">
+            <span>Bedrag (EUR)</span>
+            <input id="donation-amount" type="number" min="5" step="5" class="rounded-xl border border-brand-primary/20 px-3 py-2" placeholder="25" required />
+          </label>
+          <label class="grid gap-1 text-sm">
+            <span>Naam</span>
+            <input id="donation-name" class="rounded-xl border border-brand-primary/20 px-3 py-2" placeholder="Voornaam Achternaam" />
+          </label>
+          <label class="grid gap-1 text-sm">
+            <span>E‑mail</span>
+            <input id="donation-email" type="email" class="rounded-xl border border-brand-primary/20 px-3 py-2" placeholder="jij@voorbeeld.nl" />
+          </label>
+          <label class="grid gap-1 text-sm">
+            <span>Bericht (optioneel)</span>
+            <textarea id="donation-message" class="rounded-xl border border-brand-primary/20 px-3 py-2 min-h-[100px]" placeholder="Laat een boodschap achter voor het team."></textarea>
+          </label>
+          <button class="mt-2 inline-flex items-center justify-center rounded-xl bg-brand-magenta px-4 py-2 text-white transition hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow" type="submit">Doneer veilig</button>
+          <p id="donation-feedback" class="text-xs font-semibold"></p>
+        </form>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-search">
+    <section class="w-full px-6 py-10">
+      <h1 class="font-display text-3xl md:text-4xl">Zoekresultaten</h1>
+      <p id="search-summary" class="mt-2 text-sm opacity-80"></p>
+      <div id="search-results" class="mt-6 grid gap-6"></div>
+    </section>
+  </template>
+
+  <template id="tpl-privacy">
+    <section class="w-full px-6 py-10">
+      <div class="overflow-hidden rounded-3xl border border-brand-primary/20 shadow-card">
+        <div class="relative h-48 w-full bg-cover bg-center" style="background-image:url('https://bamfestival.nl/sites/default/files/styles/wide/public/basicpages/2023-12/pexels-scott-webb-430208.jpg.webp');">
+          <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/10"></div>
+          <div class="relative flex h-full flex-col items-center justify-center px-6 text-center text-white">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">Disclaimer, Copyright &amp; Privacy</p>
+            <h1 class="font-display text-3xl md:text-4xl">Zo beschermen we jouw gegevens</h1>
+          </div>
+        </div>
+        <div class="privacy-block bg-white/95 px-6 py-8 text-sm leading-relaxed text-brand-dark/80 md:text-base" id="privacy-body"></div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Data (mock) -->
+  <script>
+    const DAYS = [ { id:'fri', label:'Vrijdag' }, { id:'sat', label:'Zaterdag' } ];
+    const STAGES = ['Fuldauer Hoofdpodium','Plantsoen Parkstage','Stadstheater Hengelo'];
+
+    const ARTISTS = [
+      { id:'m1', name:'Neon Bloom', genres:['Alternative / Indie Electronic','Dream Pop'], stage:'Fuldauer Hoofdpodium', day:'sat', start:'21:00', end:'22:00', img:'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=1200&auto=format&fit=crop', bio:'Analoge synths, zwevende vocalen en pulserende beats.' },
+      { id:'m2', name:'Hengelo Brass', genres:['Brass Band','Funk Fusion'], stage:'Plantsoen Parkstage', day:'sat', start:'18:30', end:'19:15', img:'https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=1200&auto=format&fit=crop', bio:'Groovy blazerssectie met dansgarantie.' },
+      { id:'m3', name:'Park Poets', genres:['Hip-hop / Spoken Word'], stage:'Plantsoen Parkstage', day:'fri', start:'19:00', end:'19:45', img:'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop', bio:'Ritmische woordkunst met live band.' },
+      { id:'m4', name:'The Fireflies', genres:['Alternative Rock','Festival Anthems'], stage:'Fuldauer Hoofdpodium', day:'sat', start:'20:00', end:'21:00', img:'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop', bio:'Gitaren, hooks en een grote meezing‑finale.' },
+      { id:'m5', name:'De Vriendelijke Reus', genres:['Street Theater','Family Show'], stage:'Stadstheater Hengelo', day:'sat', start:'14:30', end:'15:00', img:'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop', bio:'Straattheater voor jong en oud.' }
+    ];
+
+    const NEWS = [
+      { id:'n1', title:'Eerste namen voor 2026!', date:'2026‑02‑15', teaser:'We trappen af met Neon Bloom en meer…', img:'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop', body:'Mock nieuwsbericht met details, tijden en links.' },
+      { id:'n2', title:'Plattegrond vernieuwd', date:'2026‑03‑12', teaser:'Meer ruimte, extra zitplekken en kortere looproutes.', img:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1600&auto=format&fit=crop', body:'Uitleg over wijzigingen en tips voor bereikbaarheid.' }
+    ];
+
+    const SPONSORS = {
+      Diamond:[
+        { name:'Hoofdsponsor X', logo:'https://dummyimage.com/220x110/ffd829/111827&text=Hoofdsponsor' },
+        { name:'Gemeente Hengelo', logo:'https://dummyimage.com/220x110/8b1c66/ffffff&text=Gemeente' }
+      ],
+      Gold:[
+        { name:'Bedrijf A', logo:'https://dummyimage.com/200x110/009de0/ffffff&text=Gold+A' },
+        { name:'Bedrijf B', logo:'https://dummyimage.com/200x110/5e2e84/ffffff&text=Gold+B' },
+        { name:'Bedrijf C', logo:'https://dummyimage.com/200x110/e31362/ffffff&text=Gold+C' }
+      ],
+      Silver:[
+        { name:'Partner 1', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+1' },
+        { name:'Partner 2', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+2' },
+        { name:'Partner 3', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+3' },
+        { name:'Partner 4', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+4' }
+      ]
+    };
+    const MEDIA_ARCHIVE = [
+      {
+        year:2025,
+        items:[
+          { title:'Hoofdpodium zaterdag', photographer:'Foto: Wim van der Geest', src:'https://bamfestival.nl/sites/default/files/2025-05/2025-zaterdag-WimvanderGeest-WI0_5345%20-1.jpg' },
+          { title:'Vrijdag sunset vibes', photographer:'Foto: Anne Peters', src:'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop' },
+          { title:'Straattheater in het park', photographer:'Foto: Daniel Vermeer', src:'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?q=80&w=1600&auto=format&fit=crop' }
+        ]
+      },
+      {
+        year:2024,
+        items:[
+          { title:'Neon afterparty', photographer:'Foto: Lotte de Vries', src:'https://images.unsplash.com/photo-1464375117522-1311d0bfc108?q=80&w=1600&auto=format&fit=crop' },
+          { title:'Familievoorstelling Plantsoen', photographer:'Foto: Patrick Mulder', src:'https://images.unsplash.com/photo-1523757956233-94a86ff74ea5?q=80&w=1600&auto=format&fit=crop' }
+        ]
+      },
+      {
+        year:2023,
+        items:[
+          { title:'Jazz brunch', photographer:'Foto: Iris Noort', src:'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1600&auto=format&fit=crop' },
+          { title:'Kunstinstallatie park', photographer:'Foto: Marco Visser', src:'https://images.unsplash.com/photo-1529634898388-84d3e7f7bc71?q=80&w=1600&auto=format&fit=crop' }
+        ]
+      }
+    ];
+    const PRIVACY_CONTENT = [
+      { heading:'Privacy Statement' },
+      { text:'In dit Privacy Statement wordt omschreven hoe BAM! Festival omgaat met de persoonlijke informatie van de bezoekers van haar website.' },
+      { text:'Door gebruik te maken van deze website en/of indien je via deze website gegevens aan BAM! Festival verstrekt, stem je in met de voorwaarden van het privacy beleid van BAM! Festival, zoals neergelegd in dit Privacy Statement.' },
+      { text:'BAM! Festival gaat zorgvuldig om met jouw persoonsgegevens. Deze worden verwerkt in overeenstemming met de eisen die de Wet Bescherming Persoonsgegevens hieraan stelt, alsmede met overige toepasselijke wet- en regelgeving. Tevens neemt BAM! Festival passende beveiligingsmaatregelen om je gegevens te beschermen tegen onbevoegde toegang tot of onbevoegde wijziging, bekendmaking of vernietiging van jouw gegevens.' },
+      { text:'BAM! Festival verzamelt en registreert gegevens van gebruikers zoals onder andere de voornaam, de achternaam, alsmede het adres (NAW-gegevens), het e-mailadres, (mobiele) telefoonnummer, de geboortedatum, geslacht, (profiel) foto’s, bankgegevens, IP-adres en muzieksmaak naar genre. Indien je via onze site solliciteert op een vacature, zullen wij de verstrekte gegevens in portefeuille houden voor een periode van één jaar. BAM! Festival heeft niet de bedoeling bijzondere persoonsgegevens (zoals gegevens betreffende politieke voorkeuren, religieuze overtuigingen e.d.) te verzamelen via deze website. Indien je BAM! Festival ongevraagd bijzondere persoonsgegevens verstrekt, dan wijzen wij je erop dat je uitdrukkelijk toestemt in het gebruik door ons van die gegevens. Daarnaast is dit Privacy Statement van toepassing op alle informatie die BAM! Festival over jou verzamelt via de website bamfestival.nl, waaronder de aanmelding voor de verschillende nieuwsbrieven.' },
+      { text:'BAM! Festival maakt voor haar dienstverlening gebruik van derden. Wanneer persoonsgegevens van deze derden worden verkregen, of via deze derde worden verzameld, dan neemt BAM! Festival dezelfde zorgvuldigheid in acht als ware zij zelf deze gegevens had verkregen, of via haar eigen website had verzameld.' },
+      { heading:'Websites van derden' },
+      { text:'Dit Privacy Statement is niet van toepassing op de websites van derden, zoals sponsors van BAM! Festival of samenwerkingspartners. Bezoek voor het privacy beleid van deze derden de desbetreffende websites. BAM! Festival is niet verantwoordelijk voor het privacy beleid van de websites van die andere partijen, welke sterk kunnen afwijken van het Privacy Statement van BAM! Festival.' },
+      { heading:'Doeleinden van gegevensverwerking' },
+      { text:'BAM! Festival kan de gegevens van de gebruikers onder meer aanwenden:' },
+      { list:[
+        'ter uitvoering van haar dienstverlening op het gebied van de organisatie van concerten en andere (aan haar gelieerde) evenementen (zoals festivals) in de meest ruime zin;',
+        'voor het beheer van haar klantenadministratie;',
+        'om de gebruiker informatie te verschaffen over aanbiedingen, concerten en andere evenementen (zoals festivals), die door, mede door of in opdracht van BAM! Festival worden georganiseerd, bijvoorbeeld via mailings per e-mail of per mobiele telefoon (WhatsApp/SMS/EMS/MMS-berichten), via social media of per gewone post;',
+        'wanneer je van onze social mediakanalen gebruik maakt, zoals Facebook en Twitter, onze (festival) app(s) download of je gegevens openbaar maakt op een van onze andere publiekelijke platforms;',
+        'ter verbetering van haar dienstverlening (bijvoorbeeld via enquêtes);',
+        'ter registratie van bezoekersgegevens van (onderdelen van) haar website(s);',
+        'ter uitvoering van een marktonderzoek en data-analyse; en',
+        'ter verbetering en beveiliging van haar websites.'
+      ]},
+      { text:'Indien de gebruiker geen berichten meer van BAM! Festival wil ontvangen, dan kan hij zich hiervoor afmelden. Bij een verzoek tot deelname aan een marktonderzoek zal BAM! Festival informatie verstrekken over de gegevens die de gebruiker ten behoeve van dat onderzoek verschaft.' },
+      { heading:'Verstrekking van gegevens' },
+      { text:'BAM! Festival kan de persoonsgegevens van de gebruiker onder meer verstrekken aan de aan BAM! Festival gelieerde ondernemingen en aan partijen die BAM! Festival inschakelt bij de uitvoering van haar dienstverlening in de ruimste zin des woords en aan partijen waarvan BAM! Festival het nodig of gewenst acht deze persoonsgegevens aan te verstrekken. Tevens kunnen wij jouw persoonsgegevens verstrekken aan derden indien wij hiertoe wettelijk verplicht zijn.' },
+      { heading:'Gegevens wijzigen' },
+      { text:'De gebruiker kan zijn gegevens altijd opvragen en zo nodig (laten) wijzigen of verwijderen. Indien je een relatie met BAM! Festival hebt, kun je ons schriftelijk verzoeken inzage te verlenen in jouw persoonsgegevens en ons te verzoeken deze (in het geval de gegevens onjuistheden bevatten) te laten wijzigen, aanvullen of verwijderen. Om gebruik te maken van laatstgenoemd recht dien je ons een verzoek met een kopie van jouw geldige legitimatiebewijs te sturen naar: bestuur@bamfestival.nl.' },
+      { heading:'Afmelden' },
+      { text:'Onderaan elk e-mail-, SMS-, EMS- of MMS-bericht dat je van BAM! Festival ontvangt, heb je als gebruiker de mogelijkheid om je af te melden van een mailinglijst. Hierna zul je van BAM! Festival van die lijst geen informatie meer ontvangen.' },
+      { heading:'Beveiliging' },
+      { text:'BAM! Festival doet haar uiterste best ervoor te zorgen dat de informatie van de gebruiker goed is beveiligd. Slechts die personen voor wie het uit hoofde van zijn of haar functie noodzakelijk of gebruikelijk is, krijgen toegang tot de systemen waarop de gegevens van de gebruikers zijn opgeslagen. De systemen zijn voorzien van beveiligingssystemen en toegangscodes. De persoonsgegevens die je ons verstrekt bewaren wij (ook in de cloud) zolang als naar de aard van het onderliggende contact noodzakelijk is. Dit hangt af van het doel waarvoor wij jouw persoonsgegevens nodig hebben en hetgeen hierover is vastgelegd in de wet. Sommige gegevens die voortkomen uit één of meer bezoeken aan bamfestival.nl worden permanent bewaard, maar wel anoniem.' },
+      { heading:'Cookies' },
+      { text:'Wij maken op deze website gebruik van cookies. Klik hier voor de Cookie Verklaring.' },
+      { heading:'Beveiliging online betalen' },
+      { text:'Online betalingen worden verwerkt en beveiligd door het betalingssysteem OGONE (www.ogone.nl), Rabobank en BAM! Festival. Wij hebben geen inzage in je bank- of creditcardgegevens. BAM! Festival doet haar uiterste best ervoor te zorgen dat jouw informatie goed is beveiligd. Slechts die personen voor wie het uit hoofde van zijn of haar functie noodzakelijk is, krijgen toegang tot de computers waarop de gegevens van de gebruikers zijn opgeslagen. Wij raden je aan je computer goed te beveiligen en zorgvuldig met je accountgegevens en wachtwoord om te gaan.' },
+      { heading:'Foto’s en media' },
+      { text:'Bij BAM! Festival worden regelmatig foto’s en video’s gemaakt. Deze foto’s worden geplaatst op onze website of op de site van onze partners. Wij vragen hiervoor geen toestemming maar als je wilt kun je je foto laten verwijderen — een e-mail aan marketing@bamfestival.nl volstaat daarvoor.' },
+      { heading:'Logbestanden en analytics' },
+      { text:'Zoals vele andere websites verzamelen wij de anonieme gegevens van het gebruik van onze website in logboekbestanden. Wat we opslaan is o.a. je IP-adres, het adres van je internetprovider, de browser die je gebruikt voor een bezoek aan onze site, de tijd en duur van je bezoek en welke pagina’s je bezocht.' },
+      { heading:'Links naar andere websites' },
+      { text:'Je vindt op onze website links naar andere websites. Wij zijn niet verantwoordelijk of aansprakelijk voor het gebruik van je gegevens door websites van derden. Controleer daarom altijd de privacy policy van de betreffende websites. Wij behouden ons het recht voor om wijzigingen aan te brengen in onze privacy policy. Controleer deze daarom regelmatig op wijzigingen.' },
+      { heading:'Vragen' },
+      { text:'Heb je vragen over ons privacy beleid? Neem dan gerust contact met ons op via bestuur@bamfestival.nl. Aan de informatie op deze website kunnen geen rechten ontleend worden. De website heeft tot doel om informatie over BAM! Festival en haar programmering te verschaffen. Keuzes die gemaakt worden op basis van informatie op deze website zijn volledig voor eigen verantwoordelijkheid van de bezoeker.' },
+      { heading:'Wijzigingen' },
+      { text:'BAM! Festival behoudt zich het recht voor om zonder voorafgaande kennisgeving op elk moment wijzigingen op deze website en/of in dit Privacy Statement aan te brengen. Deze wijzigingen zullen op onze website worden gepubliceerd. Gebruikers worden aangemoedigd om regelmatig het privacy beleid van BAM! Festival te bestuderen.' },
+      { text:'Op dit Privacy Statement is het Nederlands recht van toepassing.' },
+      { text:'Heb je vragen of opmerkingen over dit Privacy Statement, dan kun je contact opnemen met bestuur@bamfestival.nl. Dit Privacy Statement is laatst gewijzigd op: 3 februari 2021.' }
+    ];
+  </script>
+
+  <!-- App Logic -->
+  <script>
+    const app = document.getElementById('app');
+    const routes = {
+      home: renderHome,
+      plattegrond: renderPlattegrond,
+      programma: renderProgramma,
+      nieuws: renderNieuws,
+      media: renderMedia,
+      faq: renderFAQ,
+      sponsors: renderSponsors,
+      contact: renderContact,
+      privacy: renderPrivacy,
+      doneer: renderDoneer
+    };
+    let contactMap;
+
+    function navigate() {
+      const hash = (location.hash || '#home').slice(1);
+      const [route, param] = hash.split(':');
+      if (route === 'artist' && param) return renderArtist(param);
+      if (route === 'nieuws' && param) return renderNewsDetail(param);
+      if (route === 'zoek') return renderSearch(param);
+      (routes[route] || routes.home)();
+    }
+
+    window.addEventListener('hashchange', navigate);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Theme init
+      const stored = localStorage.getItem('bam.theme');
+      if (stored === 'dark') document.documentElement.classList.add('dark');
+      updateThemeButtons();
+      // Populate select options for filters when needed
+      navigate();
+      // Header interactions
+      initHeader();
+    });
+
+    // ------- Header interactions ---------
+    function initHeader(){
+      const btnTheme = document.getElementById('btnTheme');
+      const btnThemeMobile = document.getElementById('btnThemeMobile');
+      btnTheme?.addEventListener('click', toggleTheme);
+      btnThemeMobile?.addEventListener('click', toggleTheme);
+
+      const form = document.getElementById('searchForm');
+      const input = document.getElementById('searchInput');
+      const formM = document.getElementById('searchFormMobile');
+      const inputM = document.getElementById('searchInputMobile');
+      const doSearch = (q) => { if(!q) return; location.hash = 'zoek:'+encodeURIComponent(q); };
+      form?.addEventListener('submit', e=>{ e.preventDefault(); doSearch(input.value); });
+      formM?.addEventListener('submit', e=>{ e.preventDefault(); doSearch(inputM.value); closeMobileMenu(); });
+
+      const btnMenu = document.getElementById('btnMenu');
+      btnMenu?.addEventListener('click', toggleMobileMenu);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMobileMenu(); });
+      document.getElementById('mobile-nav')?.addEventListener('click', (e)=>{
+        if(e.target.tagName === 'A') closeMobileMenu();
+      });
+    }
+
+    function toggleTheme(){
+      const root = document.documentElement;
+      const dark = root.classList.toggle('dark');
+      localStorage.setItem('bam.theme', dark ? 'dark' : 'light');
+      updateThemeButtons();
+    }
+    function updateThemeButtons(){
+      const dark = document.documentElement.classList.contains('dark');
+      const s = dark ? '🌙' : '☀️';
+      const btns = [document.getElementById('btnTheme'), document.getElementById('btnThemeMobile')];
+      btns.forEach(b=>{ if(b) b.textContent = s; });
+    }
+
+    function toggleMobileMenu(){
+      const nav = document.getElementById('mobile-nav');
+      const btn = document.getElementById('btnMenu');
+      const isOpen = nav.style.maxHeight && nav.style.maxHeight !== '0px';
+      if (isOpen){
+        nav.style.maxHeight = '0px';
+        nav.setAttribute('aria-hidden','true');
+        btn.setAttribute('aria-expanded','false');
+      } else {
+        nav.style.maxHeight = nav.scrollHeight + 'px';
+        nav.setAttribute('aria-hidden','false');
+        btn.setAttribute('aria-expanded','true');
+      }
+    }
+    function closeMobileMenu(){
+      const nav = document.getElementById('mobile-nav');
+      const btn = document.getElementById('btnMenu');
+      if (nav){ nav.style.maxHeight = '0px'; nav.setAttribute('aria-hidden','true'); }
+      if (btn){ btn.setAttribute('aria-expanded','false'); }
+    }
+
+    // ------- Renderers -------------------
+    let firstRender = true;
+
+    function render(templateId){
+      const tpl = document.getElementById(templateId);
+      if (!tpl){
+        app.innerHTML = '<section class="page-shell w-full px-6 py-12 text-center text-brand-primary">Pagina niet gevonden.</section>';
+        return;
+      }
+
+      app.innerHTML = '';
+      const frag = tpl.content.cloneNode(true);
+      const firstEl = Array.from(frag.childNodes).find(node => node.nodeType === 1);
+      if (firstEl?.classList && !firstEl.classList.contains('page-shell')){
+        firstEl.classList.add('page-shell');
+      }
+      app.appendChild(frag);
+
+      if (firstRender){
+        firstRender = false;
+      } else {
+        app.classList.add('page-fade');
+        void app.offsetHeight;
+        requestAnimationFrame(() => app.classList.remove('page-fade'));
+      }
+    }
+
+    function renderHome(){
+      render('tpl-home');
+      const nowNextEl = document.getElementById('home-nownext');
+      const lineupEl = document.getElementById('home-lineup');
+      const newsEl = document.getElementById('home-news');
+
+      const nowNext = [...ARTISTS].sort((a,b)=>a.start.localeCompare(b.start)).slice(0,2);
+      nowNextEl.innerHTML = nowNext.map(a => `
+        <div class="flex items-center gap-4 rounded-3xl border border-brand-primary/15 bg-white/90 p-4 shadow-card">
+          <div class="w-24 font-mono text-xs font-semibold uppercase tracking-wide text-brand-primary/70">${a.start}–${a.end}</div>
+          <div class="flex-1">
+            <div class="font-semibold text-brand-primary">${a.name}</div>
+            <div class="text-xs uppercase tracking-wide text-brand-dark/70">${a.stage}</div>
+          </div>
+          <a href="#artist:${a.id}" class="px-3 py-1 rounded-xl border border-brand-magenta text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">Open</a>
+        </div>`).join('');
+
+      lineupEl.innerHTML = ARTISTS.slice(0,4).map(a => cardArtist(a)).join('');
+
+      newsEl.innerHTML = NEWS.map(n => `
+        <article class="overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
+          <div class="aspect-video bg-brand-purple/10"><img class="h-full w-full object-cover transition duration-500 hover:scale-105" src="${n.img}" alt="Nieuwsbeeld"></div>
+          <div class="space-y-2 p-4">
+            <div class="text-xs font-semibold uppercase tracking-wide text-brand-primary/70">${n.date}</div>
+            <h3 class="font-display text-lg text-brand-primary"><a href="#nieuws:${n.id}" class="hover:underline">${n.title}</a></h3>
+            <p class="text-sm text-brand-dark/70">${n.teaser}</p>
+          </div>
+        </article>`).join('');
+    }
+
+    function cardArtist(a){
+      return `<article class="flex flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card dark:bg-white/5">
+        <div class="aspect-square w-full overflow-hidden bg-brand-purple/10">
+          <img src="${a.img}" alt="${a.name}" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+        </div>
+        <div class="flex flex-1 flex-col gap-2 p-4">
+          <h3 class="font-display text-xl leading-tight text-brand-primary"><a href="#artist:${a.id}" class="hover:underline">${a.name}</a></h3>
+          <div class="text-sm text-brand-dark/70">${labelDay(a.day)} · ${a.start}–${a.end}</div>
+          <div>
+            <span class="inline-block rounded-full bg-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">${a.stage}</span>
+          </div>
+          <div class="mt-auto flex flex-wrap gap-2 pt-2 text-xs uppercase tracking-wide text-brand-dark/60">
+            ${a.genres.map(g=>`<span class="rounded-full bg-brand-primary/10 px-2.5 py-0.5">${g}</span>`).join('')}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function renderPlattegrond(){
+      render('tpl-plattegrond');
+      const zones = [
+        { title:'Fuldauer Hoofdpodium', badge:'Main stage', desc:'Het grootste podium met headline acts, spectaculaire lichteffecten en ruimte voor het hele park.' },
+        { title:'Plantsoen Parkstage', badge:'Intiem groen', desc:'Onder de bomen beleef je akoestische sessies, kleinkunst en spoken word van lokale helden.' },
+        { title:'Foodboulevard', badge:'Lokaal & duurzaam', desc:'Een mix van Twentse foodtrucks met vega(n) opties, barista koffie en dorstlessers.' },
+        { title:'Toegankelijkheidszone', badge:'Inclusief', desc:'Rustige zitplekken, rolstoeltoegankelijke toiletten en prikkelarme zones met vrijwilligers.' }
+      ];
+      const list = document.getElementById('map-zones');
+      list.innerHTML = zones.map(z => `
+        <li class="rounded-2xl border border-brand-primary/15 bg-brand-light/60 p-3">
+          <div class="flex items-baseline justify-between gap-3">
+            <span class="font-medium text-brand-primary">${z.title}</span>
+            <span class="text-xs uppercase text-brand-blue">${z.badge}</span>
+          </div>
+          <p class="mt-2 text-sm opacity-80">${z.desc}</p>
+        </li>`).join('');
+    }
+
+    function renderProgramma(){
+      render('tpl-programma');
+      const selDay = document.getElementById('filter-day');
+      const selStage = document.getElementById('filter-stage');
+      DAYS.forEach(d=> selDay.appendChild(new Option(d.label, d.id)));
+      STAGES.forEach(s=> selStage.appendChild(new Option(s, s)));
+
+      const listEl = document.getElementById('list-program');
+      const gridEl = document.getElementById('grid-program');
+
+      const parseTime = (time) => {
+        const [h, m] = time.split(':').map(Number);
+        return h * 60 + m;
+      };
+      const formatTime = (totalMinutes) => {
+        const h = Math.floor(totalMinutes / 60).toString().padStart(2, '0');
+        const m = (totalMinutes % 60).toString().padStart(2, '0');
+        return `${h}:${m}`;
+      };
+      const generateSlots = (start, end, step = 30) => {
+        const slots = [];
+        for (let t = start; t <= end; t += step){
+          slots.push(formatTime(t));
+        }
+        return slots;
+      };
+
+      function update(){
+        const day = selDay.value;
+        const stage = selStage.value;
+        const filtered = ARTISTS.filter(a => (day === 'all' || a.day === day) && (stage === 'all' || a.stage === stage));
+
+        if (!filtered.length){
+          listEl.innerHTML = `<li class="rounded-2xl border border-dashed border-brand-primary/20 bg-white/90 px-4 py-6 text-center text-sm text-brand-dark/70">Geen optredens gevonden voor deze selectie.</li>`;
+          gridEl.innerHTML = `<div class="rounded-2xl border border-dashed border-brand-primary/20 bg-white/90 px-4 py-6 text-center text-sm text-brand-dark/70">Timetable volgt zodra er optredens in deze selectie zijn.</div>`;
+          gridEl.style.gridTemplateColumns = '1fr';
+          return;
+        }
+
+        const sorted = [...filtered].sort((a,b)=>a.start.localeCompare(b.start));
+        listEl.innerHTML = sorted.map(a => `
+          <li class="flex items-center gap-4 rounded-2xl border border-brand-primary/15 bg-white/95 px-4 py-3 shadow-card">
+            <img src="${a.img}" alt="${a.name}" class="h-16 w-16 shrink-0 rounded-2xl object-cover" />
+            <div class="flex-1 min-w-0">
+              <div class="text-[0.65rem] font-semibold uppercase tracking-wide text-brand-dark/60">${labelDay(a.day)} • ${a.stage}</div>
+              <div class="truncate font-semibold text-brand-primary">${a.name}</div>
+              <div class="truncate text-[0.7rem] text-brand-dark/60">${a.genres.join(' / ')}</div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono text-xs font-semibold text-brand-primary">${a.start}</div>
+              <div class="font-mono text-[0.7rem] text-brand-dark/60">${a.end}</div>
+            </div>
+            <a href="#artist:${a.id}" class="inline-flex items-center rounded-xl bg-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:shadow-lg">Info</a>
+          </li>`).join('');
+
+        const activeStages = stage === 'all' ? STAGES : [stage];
+        const relevant = stage === 'all' ? filtered : filtered.filter(a=>a.stage===stage);
+        const minStart = Math.min(...relevant.map(a => parseTime(a.start)));
+        const maxEnd = Math.max(...relevant.map(a => parseTime(a.end)));
+        const roundedStart = Math.floor(minStart / 30) * 30;
+        const roundedEnd = Math.ceil(maxEnd / 30) * 30;
+        const slots = generateSlots(roundedStart, roundedEnd);
+
+        const eventsByStage = {};
+        activeStages.forEach(s => {
+          eventsByStage[s] = filtered.filter(a => a.stage === s).reduce((acc, cur) => {
+            acc[cur.start] = cur;
+            return acc;
+          }, {});
+        });
+
+        gridEl.innerHTML = '';
+        gridEl.style.gridTemplateColumns = `110px ${activeStages.map(()=> 'minmax(0,1fr)').join(' ')}`;
+
+        gridEl.insertAdjacentHTML('beforeend', `<div class="p-2 text-xs font-semibold uppercase tracking-wide text-brand-primary">Tijd</div>`);
+        activeStages.forEach(s => {
+          gridEl.insertAdjacentHTML('beforeend', `<div class="p-2 text-xs font-semibold uppercase tracking-wide text-brand-primary">${s}</div>`);
+        });
+
+        slots.forEach(time => {
+          gridEl.insertAdjacentHTML('beforeend', `<div class="p-2 font-mono text-xs text-brand-dark/60">${time}</div>`);
+          activeStages.forEach(stageName => {
+            const event = eventsByStage[stageName]?.[time];
+            if (event){
+              gridEl.insertAdjacentHTML('beforeend', `
+                <div class="flex h-full flex-col justify-between gap-1 rounded-2xl border border-brand-primary/20 bg-brand-primary/10 p-3">
+                  <div class="font-semibold text-brand-primary">${event.name}</div>
+                  <div class="text-[0.65rem] uppercase tracking-wide text-brand-dark/60">${event.start} – ${event.end}</div>
+                  <a href="#artist:${event.id}" class="inline-flex w-max items-center rounded-lg bg-brand-magenta px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:shadow-md">Bekijk</a>
+                </div>`);
+            } else {
+              gridEl.insertAdjacentHTML('beforeend', `<div class="rounded-2xl border border-dashed border-brand-primary/10 bg-white/80"></div>`);
+            }
+          });
+        });
+      }
+      selDay.addEventListener('change', update);
+      selStage.addEventListener('change', update);
+      update();
+    }
+
+    function renderArtist(id){
+      render('tpl-artist');
+      const a = ARTISTS.find(x=>x.id===id);
+      if(!a){ app.innerHTML = '<section class="page-shell w-full px-6 py-12 text-center text-brand-primary">Artiest niet gevonden.</section>'; return; }
+      document.getElementById('artist-img').src = a.img;
+      document.getElementById('artist-name').textContent = a.name;
+      document.getElementById('artist-genres').textContent = a.genres.join(' · ');
+      document.getElementById('artist-meta').textContent = `${labelDay(a.day)} · ${a.start}–${a.end} · ${a.stage}`;
+      document.getElementById('artist-bio').textContent = a.bio;
+      const badges = a.genres.map(g=>`<span class="px-2 py-0.5 rounded-full text-xs bg-white/20 text-white border border-white/30">${g}</span>`).join('');
+      document.getElementById('artist-badges').innerHTML = badges;
+    }
+
+    function renderNieuws(){
+      render('tpl-nieuws');
+      const el = document.getElementById('news-list');
+      el.innerHTML = NEWS.map(n => `
+        <article class="overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
+          <div class="aspect-video bg-brand-purple/10"><img class="h-full w-full object-cover transition duration-500 hover:scale-105" src="${n.img}" alt="Nieuws" /></div>
+          <div class="space-y-2 p-4">
+            <div class="text-xs font-semibold uppercase tracking-wide text-brand-primary/70">${n.date}</div>
+            <h2 class="font-display text-xl text-brand-primary"><a class="hover:underline" href="#nieuws:${n.id}">${n.title}</a></h2>
+            <p class="text-sm text-brand-dark/70">${n.teaser}</p>
+          </div>
+        </article>`).join('');
+    }
+
+    function renderNewsDetail(id){
+      render('tpl-news-detail');
+      const n = NEWS.find(x=>x.id===id);
+      if(!n){ app.innerHTML = '<section class="page-shell w-full px-6 py-12 text-center text-brand-primary">Bericht niet gevonden.</section>'; return; }
+      document.getElementById('nd-title').textContent = n.title;
+      document.getElementById('nd-date').textContent = n.date;
+      document.getElementById('nd-body').textContent = n.teaser + ' Dit is mock‑body copy voor het nieuwsbericht.';
+    }
+
+    function renderMedia(){
+      render('tpl-media');
+      const el = document.getElementById('media-grid');
+      el.innerHTML = MEDIA_ARCHIVE.slice().sort((a,b)=>b.year-a.year).map(block => `
+        <section class="space-y-4">
+          <h2 class="font-display text-2xl text-brand-primary">${block.year}</h2>
+          <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+            ${block.items.map(item => `
+              <figure class="group overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
+                <img class="h-full w-full object-cover transition duration-500 group-hover:scale-105" src="${item.src}" alt="${item.title}" onerror="this.src='https://dummyimage.com/800x600/cccccc/111827&text=BAM!+Festival'" />
+                <figcaption class="p-3 text-[0.7rem] uppercase tracking-wide text-brand-dark/70">${item.photographer} – ${item.title}</figcaption>
+              </figure>`).join('')}
+          </div>
+        </section>`).join('');
+    }
+
+    function renderFAQ(){
+      render('tpl-faq');
+      const items = [
+        {q:'Wat kost BAM! Festival?', a:'BAM! is gratis. Donaties helpen het festival mogelijk te maken.'},
+        {q:'Is het terrein rolstoeltoegankelijk?', a:'Ja. Verharde paden, rolstoeltoiletten en rustige zones aanwezig.'},
+        {q:'Mag ik eigen eten en drinken meenemen?', a:'Kleine snacks en water zijn oké. Geen glas en geen alcohol.'},
+      ];
+      document.getElementById('faq-acc').innerHTML = items.map(it=>`
+        <details class="group rounded-2xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
+          <summary class="cursor-pointer font-semibold text-brand-primary transition group-open:text-brand-magenta">${it.q}</summary>
+          <div class="mt-2 text-sm text-brand-dark/70">${it.a}</div>
+        </details>`).join('');
+    }
+
+    function renderSponsors(){
+      render('tpl-sponsors');
+      const el = document.getElementById('sponsor-tiers');
+      el.innerHTML = Object.entries(SPONSORS).map(([tier,items])=>`
+        <section class="rounded-3xl border border-brand-primary/15 bg-white/95 p-5 shadow-card">
+          <h2 class="font-display text-xl uppercase tracking-wide text-brand-primary">${tier}</h2>
+          <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-6">
+            ${items.map(({name,logo})=>`
+              <figure class="flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-2 text-center">
+                <img src="${logo}" alt="${name}" class="h-14 w-full object-contain" onerror="this.src='https://dummyimage.com/180x80/cccccc/111827&text=Sponsor'" />
+                <figcaption class="text-[0.65rem] font-semibold uppercase tracking-wide text-brand-primary">${name}</figcaption>
+              </figure>`).join('')}
+          </div>
+        </section>`).join('');
+    }
+
+    function renderContact(){
+      render('tpl-contact');
+      const mapContainer = document.getElementById('contact-map');
+      if (typeof L === 'undefined'){
+        if (mapContainer){
+          mapContainer.innerHTML = '<div class="p-4 text-sm text-brand-dark/70">Kaart kon niet geladen worden. Probeer het later opnieuw.</div>';
+        }
+        return;
+      }
+      if (contactMap){
+        contactMap.remove();
+      }
+      contactMap = L.map('contact-map', { scrollWheelZoom:false }).setView([52.2620094, 6.793677], 16);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>-bijdragers'
+      }).addTo(contactMap);
+      L.marker([52.2620094, 6.793677]).addTo(contactMap).bindPopup('<strong>BAM! Festival</strong><br>Vondelstraat 49<br>7551 BB Hengelo (Ov.)');
+    }
+
+    function renderDoneer(){
+      render('tpl-doneer');
+      const tiers = [
+        { amount:'€10', label:'Start de dag', detail:'Help ons het park klaar te maken en vrijwilligers van koffie te voorzien.' },
+        { amount:'€25', label:'Supporter', detail:'Dekt de gage van een lokaal talent of materiaal voor het kunstprogramma.' },
+        { amount:'€50', label:'BAM! Vriend', detail:'Maakt extra techniek of licht mogelijk op het hoofdpodium.' },
+        { amount:'€100', label:'Superfan', detail:'Draagt bij aan inclusieve voorzieningen zoals gebarentolken en rustige zones.' }
+      ];
+      document.getElementById('donation-tiers').innerHTML = tiers.map(t => `
+        <li class="rounded-2xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
+          <div class="flex items-baseline justify-between gap-3">
+            <span class="text-xl font-semibold text-brand-primary">${t.amount}</span>
+            <span class="rounded-full bg-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">${t.label}</span>
+          </div>
+          <p class="mt-3 text-sm text-brand-dark/70">${t.detail}</p>
+        </li>`).join('');
+
+      const form = document.getElementById('donation-form');
+      const feedback = document.getElementById('donation-feedback');
+      form.addEventListener('submit', (event)=>{
+        event.preventDefault();
+        const rawAmount = document.getElementById('donation-amount').value;
+        const amount = parseInt(rawAmount, 10);
+        if (!amount || amount < 5){
+          feedback.textContent = 'Vul een geldig bedrag van minimaal €5 in.';
+          feedback.classList.remove('text-brand-primary');
+          feedback.classList.add('text-brand-magenta');
+          return;
+        }
+        feedback.textContent = `Bedankt voor je toezegging van €${amount}. We sturen je binnen 24 uur een betaalverzoek.`;
+        feedback.classList.remove('text-brand-magenta');
+        feedback.classList.add('text-brand-primary');
+        form.reset();
+      });
+    }
+
+    function renderPrivacy(){
+      render('tpl-privacy');
+      const container = document.getElementById('privacy-body');
+      const decorate = (text) =>
+        text
+          .replace(/bestuur@bamfestival\.nl/g, '<a class="text-brand-magenta underline" href="mailto:bestuur@bamfestival.nl">bestuur@bamfestival.nl</a>')
+          .replace(/marketing@bamfestival\.nl/g, '<a class="text-brand-magenta underline" href="mailto:marketing@bamfestival.nl">marketing@bamfestival.nl</a>')
+          .replace(/Klik hier voor de Cookie Verklaring ?\.?/i, '<a class="text-brand-magenta underline" href="https://bamfestival.nl/cookies" target="_blank" rel="noopener noreferrer">Klik hier voor de Cookie Verklaring</a>.')
+          .replace(/OGONE \(www\.ogone\.nl\)/, 'OGONE (<a class="text-brand-magenta underline" href="https://www.ogone.nl" target="_blank" rel="noopener noreferrer">www.ogone.nl</a>)');
+
+      container.innerHTML = PRIVACY_CONTENT.map(item => {
+        if (item.heading){
+          return `<h2 class="font-display text-xl text-brand-primary">${item.heading}</h2>`;
+        }
+        if (item.list){
+          return `<ul class="ml-4 list-disc space-y-2">${item.list.map(li => `<li>${decorate(li)}</li>`).join('')}</ul>`;
+        }
+        return `<p>${decorate(item.text)}</p>`;
+      }).join('');
+    }
+
+    function renderSearch(rawTerm){
+      render('tpl-search');
+      const summary = document.getElementById('search-summary');
+      const container = document.getElementById('search-results');
+      const term = decodeURIComponent(rawTerm || '').trim();
+      if (!term){
+        summary.textContent = 'Voer een zoekterm in om artiesten of nieuwsberichten te vinden.';
+        container.innerHTML = '';
+        return;
+      }
+      const query = term.toLowerCase();
+      const artistMatches = ARTISTS.filter(a =>
+        [a.name, a.stage, a.genres.join(' '), a.bio].join(' ').toLowerCase().includes(query)
+      );
+      const newsMatches = NEWS.filter(n =>
+        [n.title, n.teaser, n.body].join(' ').toLowerCase().includes(query)
+      );
+      const total = artistMatches.length + newsMatches.length;
+      summary.textContent = total
+        ? `Zoekterm: "${term}" — ${total} resultaat${total === 1 ? '' : 'en'}`
+        : `Geen resultaten voor "${term}". Probeer een andere zoekterm.`;
+
+      const sections = [];
+      if (artistMatches.length){
+        sections.push(`
+          <section class="rounded-3xl border border-brand-primary/15 bg-white p-5 shadow-card">
+            <h2 class="font-medium text-brand-primary">Artiesten (${artistMatches.length})</h2>
+            <ul class="mt-3 space-y-3">
+              ${artistMatches.map(a => `
+                <li class="flex flex-col gap-1 rounded-2xl border border-brand-primary/10 bg-brand-light/60 p-3 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <div class="font-semibold text-brand-primary">${a.name}</div>
+                    <div class="text-sm opacity-70">${labelDay(a.day)} · ${a.stage}</div>
+                    <div class="text-xs uppercase opacity-60">${a.genres.join(' / ')}</div>
+                  </div>
+                  <a class="mt-2 inline-flex items-center justify-center rounded-xl border border-brand-magenta px-3 py-1 text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md md:mt-0" href="#artist:${a.id}">Bekijk artiest</a>
+                </li>`).join('')}
+            </ul>
+          </section>`);
+      }
+      if (newsMatches.length){
+        sections.push(`
+          <section class="rounded-3xl border border-brand-primary/15 bg-white p-5 shadow-card">
+            <h2 class="font-medium text-brand-primary">Nieuws (${newsMatches.length})</h2>
+            <ul class="mt-3 space-y-3">
+              ${newsMatches.map(n => `
+                <li class="rounded-2xl border border-brand-primary/10 bg-brand-light/60 p-3">
+                  <div class="text-xs uppercase opacity-70">${n.date}</div>
+                  <a class="font-semibold text-brand-primary hover:underline" href="#nieuws:${n.id}">${n.title}</a>
+                  <p class="mt-1 text-sm opacity-80">${n.teaser}</p>
+                </li>`).join('')}
+            </ul>
+          </section>`);
+      }
+      container.innerHTML = sections.join('');
+    }
+
+    function labelDay(id){ return (DAYS.find(d=>d.id===id)||{}).label || id; }
+  </script>
+</body>
+</html>
