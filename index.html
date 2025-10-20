@@ -887,7 +887,7 @@
         title:'Vrijwilligersprogramma 2026 geopend',
         date:'2026-03-28',
         teaser:'Meld je nu aan voor crew, hospitality of duurzaamheidsteams en bouw mee aan BAM! Festival.',
-        img:'https://images.unsplash.com/photo-1515169067865-5387ec356754?q=80&w=1600&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1600&auto=format&fit=crop',
         author:'Team Vrijwilligers BAM! Festival',
         category:'Community',
         highlights:[
@@ -1231,6 +1231,11 @@
       doneer: renderDoneer
     };
     let contactMap;
+    const formatTimeLabel = (value) => {
+      if (value === null || value === undefined) return '';
+      const str = String(value).trim();
+      return str.endsWith('u') ? str : `${str}u`;
+    };
 
     function navigate() {
       const hash = (location.hash || '#home').slice(1);
@@ -1348,7 +1353,7 @@
       const nowNext = [...ARTISTS].sort((a,b)=>a.start.localeCompare(b.start)).slice(0,2);
       nowNextEl.innerHTML = nowNext.map(a => `
         <div class="flex items-center gap-4 rounded-3xl border border-brand-primary/15 bg-white/90 p-4 shadow-card">
-          <div class="w-24 font-mono text-xs font-semibold uppercase tracking-wide text-brand-primary/70">${a.start}–${a.end}</div>
+          <div class="w-24 font-mono text-xs font-semibold uppercase tracking-wide text-brand-primary/70">${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)}</div>
           <div class="flex-1">
             <div class="font-semibold text-brand-primary">${a.name}</div>
             <div class="text-xs uppercase tracking-wide text-brand-dark/70">${a.stage}</div>
@@ -1377,7 +1382,7 @@
         </div>
         <div class="flex flex-1 flex-col gap-2 p-4">
           <h3 class="font-display text-xl leading-tight text-brand-primary"><a href="#artist:${a.id}" class="hover:underline">${a.name}</a></h3>
-          <div class="text-sm text-brand-dark/70">${labelDay(a.day)} · ${a.start}–${a.end}</div>
+          <div class="text-sm text-brand-dark/70">${labelDay(a.day)} · ${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)}</div>
           <div>
             <span class="inline-block rounded-full bg-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">${a.stage}</span>
           </div>
@@ -1456,8 +1461,8 @@
               <div class="truncate text-[0.7rem] text-brand-dark/60">${a.genres.join(' / ')}</div>
             </div>
             <div class="text-right">
-              <div class="font-mono text-xs font-semibold text-brand-primary">${a.start}</div>
-              <div class="font-mono text-[0.7rem] text-brand-dark/60">${a.end}</div>
+              <div class="font-mono text-xs font-semibold text-brand-primary">${formatTimeLabel(a.start)}</div>
+              <div class="font-mono text-[0.7rem] text-brand-dark/60">${formatTimeLabel(a.end)}</div>
             </div>
             <a href="#artist:${a.id}" class="inline-flex items-center rounded-xl bg-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:shadow-lg">Info</a>
           </li>`).join('');
@@ -1487,14 +1492,14 @@
         });
 
         slots.forEach(time => {
-          gridEl.insertAdjacentHTML('beforeend', `<div class="p-2 font-mono text-xs text-brand-dark/60">${time}</div>`);
+          gridEl.insertAdjacentHTML('beforeend', `<div class="p-2 font-mono text-xs text-brand-dark/60">${formatTimeLabel(time)}</div>`);
           activeStages.forEach(stageName => {
             const event = eventsByStage[stageName]?.[time];
             if (event){
               gridEl.insertAdjacentHTML('beforeend', `
                 <div class="flex h-full flex-col justify-between gap-1 rounded-2xl border border-brand-primary/20 bg-brand-primary/10 p-3">
                   <div class="font-semibold text-brand-primary">${event.name}</div>
-                  <div class="text-[0.65rem] uppercase tracking-wide text-brand-dark/60">${event.start} – ${event.end}</div>
+                  <div class="text-[0.65rem] uppercase tracking-wide text-brand-dark/60">${formatTimeLabel(event.start)} – ${formatTimeLabel(event.end)}</div>
                   <a href="#artist:${event.id}" class="inline-flex w-max items-center rounded-lg bg-brand-magenta px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:shadow-md">Bekijk</a>
                 </div>`);
             } else {
@@ -1527,7 +1532,7 @@
       imgEl.alt = `Persfoto ${a.name}`;
       document.getElementById('artist-name').textContent = a.name;
       document.getElementById('artist-genres').textContent = a.genres.join(' · ');
-      document.getElementById('artist-meta').textContent = `${labelDay(a.day)} · ${a.start}–${a.end} · ${a.stage}`;
+      document.getElementById('artist-meta').textContent = `${labelDay(a.day)} · ${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)} · ${a.stage}`;
       const originEl = document.getElementById('artist-origin');
       if (a.hometown){
         originEl.textContent = `Herkomst: ${a.hometown}`;
