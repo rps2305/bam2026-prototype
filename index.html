@@ -397,7 +397,7 @@
         </div>
         <section class="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
           <div class="overflow-hidden rounded-3xl border border-brand-primary/15 bg-black/5 shadow-card">
-            <iframe id="artist-video" class="aspect-video h-full w-full" src="" title="Line-up video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe id="artist-video" class="aspect-video h-full w-full" src="" title="Line-up video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
           <div class="space-y-4 rounded-3xl border border-brand-primary/15 bg-brand-light/50 p-5 shadow-card">
             <h2 class="font-display text-lg text-brand-primary">Waar kijk je naar?</h2>
@@ -839,7 +839,7 @@
         img:'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=1200&auto=format&fit=crop',
         bio:'Analoge synths, zwevende vocalen en pulserende beats.',
         hometown:'Toronto, Canada',
-        video:'https://www.youtube.com/embed/ktvTqknDobU',
+        video:'ktvTqknDobU',
         highlights:[
           'Primeur van het nieuwe album "Skyline Echoes".',
           'Live visuals door het Hengelose collectief Prism.',
@@ -861,7 +861,7 @@
         img:'https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=1200&auto=format&fit=crop',
         bio:'Groovy blazerssectie met dansgarantie.',
         hometown:'Hengelo, Nederland',
-        video:'https://www.youtube.com/embed/0La6SB8zLuo',
+        video:'0La6SB8zLuo',
         highlights:[
           'Verse arrangementen van festivalklassiekers.',
           'Gastsolisten uit de Hengelose muziekscene.',
@@ -882,7 +882,7 @@
         img:'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop',
         bio:'Ritmische woordkunst met live band.',
         hometown:'Enschede, Nederland',
-        video:'https://www.youtube.com/embed/YyxAHE8twvQ',
+        video:'YyxAHE8twvQ',
         highlights:[
           'Nieuwe spoken word cypher met regionale makers.',
           'Live band die jazz en hiphop samenbrengt.',
@@ -903,7 +903,7 @@
         img:'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop',
         bio:'Gitaren, hooks en een grote meezingfinale.',
         hometown:'Manchester, Verenigd Koninkrijk',
-        video:'https://www.youtube.com/embed/X5Vk5t_Yj1k',
+        video:'X5Vk5t_Yj1k',
         highlights:[
           'Energieke opener met lichtshow en CO2 jets.',
           'Primeur van de single "Midnight Static".',
@@ -924,7 +924,7 @@
         img:'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop',
         bio:'Straattheater voor jong en oud.',
         hometown:'Zwolle, Nederland',
-        video:'https://www.youtube.com/embed/HX_DhvfaxeM',
+        video:'HX_DhvfaxeM',
         highlights:[
           'Interactief straattheater met reusachtige poppen.',
           'Workshops voorafgaand aan de show voor kinderen.',
@@ -1347,6 +1347,34 @@
       const str = String(value).trim();
       return str.endsWith('u') ? str : `${str}u`;
     };
+    const buildYouTubeEmbed = (value) => {
+      if (!value) return null;
+      let videoId = value.trim();
+      if (/^https?:/i.test(videoId)){
+        try{
+          const url = new URL(videoId);
+          if (url.hostname.includes('youtu.be')){
+            videoId = url.pathname.replace('/', '');
+          } else if (url.pathname.includes('/embed/')){
+            videoId = url.pathname.split('/').pop();
+          } else if (url.searchParams.get('v')){
+            videoId = url.searchParams.get('v');
+          }
+        } catch (error){
+          console.warn('Kon YouTube URL niet parsen', error);
+        }
+      }
+      if (!videoId) return null;
+      const params = new URLSearchParams({
+        rel:'0',
+        modestbranding:'1',
+        playsinline:'1'
+      });
+      if (location?.origin && location.origin !== 'null'){
+        params.set('origin', location.origin);
+      }
+      return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?${params.toString()}`;
+    };
 
     function navigate() {
       const hash = (location.hash || '#home').slice(1);
@@ -1665,9 +1693,12 @@
       const videoEl = document.getElementById('artist-video');
       const videoWrapper = videoEl.parentElement;
       if (a.video){
-        const url = a.video.startsWith('http') ? a.video : `https://www.youtube.com/embed/${a.video}`;
-        const separator = url.includes('?') ? '&' : '?';
-        videoEl.src = `${url}${url.includes('rel=0') ? '' : `${separator}rel=0`}`;
+        const embedUrl = buildYouTubeEmbed(a.video);
+        if (embedUrl){
+          videoEl.src = embedUrl;
+        } else {
+          videoWrapper.innerHTML = '<div class="grid aspect-video place-items-center text-sm text-brand-dark/60 p-6">Video kon niet geladen worden.</div>';
+        }
       } else {
         videoWrapper.innerHTML = '<div class="grid aspect-video place-items-center text-sm text-brand-dark/60 p-6">Video binnenkort beschikbaar.</div>';
       }
