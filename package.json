@@ -1,0 +1,19 @@
+{
+  "name": "bam2026-prototype",
+  "version": "1.0.0",
+  "description": "Een statische prototype-homepage voor het gratis BAM! Festival in Hengelo (Ov.). De pagina is opgebouwd met Tailwind CSS (Play CDN) en vanilla JavaScript en bevat mockdata voor artiesten, nieuws en sponsors.",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/styles/main.css -o ./assets/css/main.css --minify",
+    "watch:css": "tailwindcss -i ./src/styles/main.css -o ./assets/css/main.css --watch",
+    "build": "npm run build:css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.15"
+  }
+}

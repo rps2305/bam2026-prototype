@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Interstate';
+    src: url('https://bamfestival.nl/themes/custom/bamfestival2025/assets/fonts/Interstate-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Interstate';
+    src: url('https://bamfestival.nl/themes/custom/bamfestival2025/assets/fonts/Interstate-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Interstate';
+    src: url('https://bamfestival.nl/themes/custom/bamfestival2025/assets/fonts/Interstate-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  body {
+    min-height: 100%;
+    background-color: #f8f7f4;
+  }
+
+  #app {
+    transition: opacity 0.35s ease;
+    scroll-margin-top: 5rem;
+  }
+
+  #app.page-fade {
+    opacity: 0;
+  }
+
+  .privacy-block p {
+    margin-top: 1.25rem;
+  }
+
+  .privacy-block h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .privacy-block ul {
+    margin: 1.25rem 0 1.75rem 1.25rem;
+  }
+
+  .privacy-block li + li {
+    margin-top: 0.6rem;
+  }
+
+  .page-shell p a,
+  .page-shell li a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(139, 28, 102, 0.35);
+    transition: color 0.25s ease, text-decoration-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .page-shell p a:hover,
+  .page-shell li a:hover {
+    color: #E31362;
+    text-decoration-color: #FFD829;
+    box-shadow: 0 4px 12px rgba(227, 19, 98, 0.2);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-transform: uppercase;
+  }
+
+  h4,
+  h5,
+  h6 {
+    text-transform: capitalize;
+  }
+
+  a:focus-visible:not(.skip-link),
+  button:focus-visible,
+  input:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid #E31362;
+    outline-offset: 3px;
+  }
+
+  .dark a:focus-visible:not(.skip-link),
+  .dark button:focus-visible,
+  .dark input:focus-visible,
+  .dark summary:focus-visible {
+    outline-color: #FFD829;
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: 'Interstate', 'Merriweather Sans', ui-sans-serif, system-ui;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .bg-bam-gradient {
+    background-image: radial-gradient(circle at 15% 20%, rgba(29, 12, 46, 0.95) 0%, rgba(56, 19, 76, 0.92) 38%, rgba(90, 22, 90, 0.9) 58%, rgba(10, 57, 89, 0.88) 100%);
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  .page-shell {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    background: rgba(253, 248, 237, 0.94);
+    border-radius: 1.75rem;
+    box-shadow: 0 24px 54px rgba(17, 24, 39, 0.18);
+    backdrop-filter: blur(6px);
+  }
+
+  .dark .page-shell {
+    background: rgba(17, 24, 39, 0.92);
+    box-shadow: 0 24px 54px rgba(0, 0, 0, 0.6);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    background: #E31362;
+    color: #fff;
+    border-radius: 9999px;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .dark .skip-link {
+    background: #FFD829;
+    color: #111827;
+  }
+
+  .skip-link:focus-visible {
+    left: 50%;
+    top: 1.25rem;
+    width: auto;
+    height: auto;
+    clip: auto;
+    clip-path: none;
+    transform: translateX(-50%);
+    z-index: 9999;
+    outline: none;
+  }
+}
