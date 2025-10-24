@@ -1,4 +1,17 @@
+# robots.txt for BAM! Festival prototype (aligned with Drupal 11 best practices)
 User-agent: *
-Allow: /
+Allow: /themes/
+Allow: /sites/default/files/
+Disallow: /core/
+Disallow: /vendor/
+Disallow: /node/
+Disallow: /search/
+Disallow: /user/
+Disallow: /admin/
+Disallow: /cgi-bin/
 
-Sitemap: https://prototype.bamfestival.nl/sitemap.xml
+# Crawl-delay to prevent unnecessary load during onsite events
+Crawl-delay: 5
+
+# Sitemap location
+Sitemap: https://bamfestival.nl/sitemap.xml
