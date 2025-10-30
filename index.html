@@ -198,7 +198,6 @@
           <input id="searchInput" class="px-3 py-2 w-44 lg:w-56 rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
         </form>
         <button id="btnTheme" class="theme-toggle" type="button" aria-label="Schakel donker thema" aria-pressed="false"><span class="theme-toggle__icon" aria-hidden="true">☀️</span><span class="sr-only">Schakel donkere modus</span></button>
-        <a href="#doneer" class="btn-primary text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-yellow">Doneer</a>
       </div>
     </div>
     <!-- Mobile row -->
@@ -207,7 +206,6 @@
         <input id="searchInputMobile" class="px-3 py-2 w-full rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
       </form>
       <button id="btnThemeMobile" class="theme-toggle" type="button" aria-label="Schakel donker thema" aria-pressed="false"><span class="theme-toggle__icon" aria-hidden="true">☀️</span><span class="sr-only">Schakel donkere modus</span></button>
-      <a href="#doneer" class="btn-primary text-sm px-3 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-yellow">Doneer</a>
     </div>
     <!-- Mobile menu (collapsible) -->
     <div id="mobile-nav" class="lg:hidden overflow-hidden transition-[max-height] max-h-0" aria-hidden="true">
@@ -337,23 +335,16 @@
             <div class="flex flex-wrap gap-3">
               <a href="#programma" class="btn-primary">Bekijk programma</a>
               <a href="#vrijwilligers" class="btn-ghost">Word vrijwilliger</a>
-              <a href="#sponsors" class="btn-ghost">Word sponsor</a>
+              <a href="#sponsors" class="btn-ghost inline-flex items-center gap-2">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3.5 9.5l4.5-4.5 4 4 4-4 4.5 4.5" />
+                  <path d="M3.5 14.5l4.5 4.5 4-4 4 4 4.5-4.5" />
+                  <path d="M8 9.5l8 5" />
+                </svg>
+                <span>Word sponsor</span>
+              </a>
               <a href="#doneer" class="btn-ghost">Doneer nu</a>
             </div>
-            <ul class="grid w-full gap-4 text-sm text-white/85 sm:grid-cols-3">
-              <li class="flex flex-col gap-3 rounded-3xl border border-white/30 bg-white/10 p-6 shadow-lg backdrop-blur">
-                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Wanneer</div>
-                <div class="text-lg font-semibold leading-snug text-white" style="text-wrap:balance">22 &amp; 23 mei 2026<br />Vrijdagavond + zaterdag</div>
-              </li>
-              <li class="flex flex-col gap-3 rounded-3xl border border-white/30 bg-white/10 p-6 shadow-lg backdrop-blur">
-                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Waar</div>
-                <div class="text-lg font-semibold leading-snug text-white" style="text-wrap:balance">Prins Bernhardplantsoen<br />Hengelo (Ov.)</div>
-              </li>
-              <li class="flex flex-col gap-3 rounded-3xl border border-white/30 bg-white/10 p-6 shadow-lg backdrop-blur">
-                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Prijs</div>
-                <div class="text-lg font-semibold leading-snug text-white" style="text-wrap:balance">Altijd gratis toegang<br />Donaties welkom</div>
-              </li>
-            </ul>
           </div>
           <div class="w-full max-w-md shrink-0 overflow-hidden rounded-3xl border border-white/20 bg-white/10 backdrop-blur">
             <img class="h-full w-full object-cover mix-blend-screen" src="assets/images/hero-park-2026-1200.webp" srcset="assets/images/hero-park-2026-800.webp 800w, assets/images/hero-park-2026-1200.webp 1200w" sizes="(max-width: 768px) 100vw, 40vw" alt="Sfeervolle impressie van BAM! Festival" loading="lazy" decoding="async" />
@@ -370,7 +361,7 @@
               <p class="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90">Word sponsor</p>
               <h3 class="font-display text-2xl">Zet jouw merk in de spotlights</h3>
               <p class="text-sm text-white/85">Maak impact als hoofdsponsor, podiumpartner of met activaties op het terrein. We bouwen graag een pakkend pakket op maat.</p>
-              <a class="inline-flex items-center gap-2 rounded-xl border border-white/70 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-lg" href="#contact">Plan een sponsorcall →</a>
+              <a class="btn-secondary border-brand-magenta/60 text-brand-magenta" href="#contact">Plan een sponsorcall →</a>
             </div>
           </article>
           <article class="rounded-3xl border border-brand-primary/15 bg-white/95 p-6 shadow-card">
@@ -392,7 +383,7 @@
               </span>
               <h3 class="font-display text-2xl text-brand-primary">Word onderdeel van de crew</h3>
               <p class="text-sm text-brand-dark">Van backstage hospitality tot duurzaamheidsteams: ontmoet nieuwe mensen en bouw mee aan het mooiste parkfestival van Oost-Nederland.</p>
-              <a class="inline-flex items-center gap-2 rounded-xl border border-brand-blue/40 px-4 py-2 text-sm font-semibold text-brand-blue transition hover:-translate-y-0.5 hover:bg-brand-blue/10 hover:shadow-md" href="#vrijwilligers">Aanmelden als vrijwilliger →</a>
+              <a class="btn-secondary border-brand-magenta/60 text-brand-magenta" href="#vrijwilligers">Aanmelden als vrijwilliger →</a>
             </div>
           </article>
         </div>
@@ -406,7 +397,14 @@
           </div>
           <a href="#faq" class="btn-secondary border-brand-magenta/60 text-brand-magenta">Bekijk alle veelgestelde vragen →</a>
         </div>
-        <dl class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <dl class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div class="rounded-2xl border border-brand-primary/15 bg-brand-light/60 p-4">
+            <dt class="text-xs font-semibold uppercase tracking-wide text-brand-primary/70">Toegang</dt>
+            <dd class="mt-2 text-sm text-brand-dark">
+              BAM! Festival is een volledig gratis festival.<br />
+              Geen tickets nodig, jouw vrijwillige donatie houdt het mogelijk.
+            </dd>
+          </div>
           <div class="rounded-2xl border border-brand-primary/15 bg-brand-light/60 p-4">
             <dt class="text-xs font-semibold uppercase tracking-wide text-brand-primary/70">Openingstijden</dt>
             <dd class="mt-2 text-sm text-brand-dark">
@@ -432,12 +430,12 @@
         </dl>
       </section>
       <!-- Now/Next -->
-      <section class="mt-8">
+      <section class="mt-8 rounded-3xl border border-brand-primary/15 bg-white/95 p-6 shadow-card">
         <div class="flex items-end justify-between"><h2 class="font-display text-2xl md:text-3xl">Nu & straks op het podium</h2><a href="#programma" class="underline">Bekijk de volledige timetable →</a></div>
         <div id="home-nownext" class="mt-4 grid md:grid-cols-2 gap-4"></div>
       </section>
       <!-- Line-up -->
-      <section class="mt-10">
+      <section class="mt-10 rounded-3xl border border-brand-primary/15 bg-white/95 p-6 shadow-card">
         <h2 class="font-display text-2xl md:text-3xl mb-3">Line‑up</h2>
         <div id="home-lineup" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
       </section>
@@ -465,11 +463,11 @@
         </article>
       </section>
       <!-- Nieuws -->
-      <section class="mt-10">
+      <section class="mt-10 rounded-3xl border border-brand-primary/15 bg-white/95 p-6 shadow-card">
         <div class="flex items-end justify-between"><h2 class="font-display text-2xl md:text-3xl">Laatste nieuws & updates</h2><a href="#nieuws" class="underline">Bekijk alle nieuwsberichten →</a></div>
         <div id="home-news" class="mt-4 grid md:grid-cols-3 gap-4"></div>
       </section>
-      <section class="mt-10">
+      <section class="mt-10 rounded-3xl border border-brand-primary/15 bg-white/95 p-6 shadow-card">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <span class="text-xs font-semibold uppercase tracking-[0.28em] text-brand-primary/60">Partners &amp; sponsors</span>
