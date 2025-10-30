@@ -1,140 +1,88 @@
-# BAM! Festival 2026 — Front-end Prototype
+# BAM! Festival 2026 – Front-end Prototype
 
-Een high-fidelity prototype van de vernieuwde BAM! Festival website.  
-De pagina is één HTML-bestand (met inline CSS/JS) dat rechtstreeks in de browser draait en de ervaring van een volwaardige Drupal-implementatie benadert.
+Deze repository bevat de goedgekeurde front-end van het BAM! Festival 2026. De HTML en Tailwind CSS worden later omgezet naar een custom Drupal 11 thema. Alle pagina’s, componenten en assets zijn geoptimaliseerd voor toegankelijkheid, SEO, performance en mobile-first gebruik.
 
-## Inhoudsopgave
+## Belangrijkste verbeteringen
+- Eén consistente design language met lokaal gebouwde Tailwind CSS en gedeelde tokens.
+- Volledige keyboard-navigatie, zichtbare focus states, aria-labels en e-mailobfuscatie.
+- Uitgebreide structured data (MusicEvent, Organization, LocalBusiness, FAQPage) en social previews (OG/Twitter).
+- Responsive afbeeldingen (WebP varianten, `srcset`, `loading="lazy"`) en lokale assets in plaats van CDN’s.
+- Dark-mode met toegankelijke toggle (`aria-pressed`) en een privacy-proof cookiebanner.
+- Nieuwe contentroutes: enquêtepagina (Microsoft Form), vrijwilligersformulier, sponsorgrid, onderhouds- en 404-pagina in huisstijl.
 
-1. [Belangrijkste features](#belangrijkste-features)  
-2. [Technische stack](#technische-stack)  
-3. [Aan de slag](#aan-de-slag)  
-4. [Projectstructuur](#projectstructuur)  
-5. [Mockdata & data‑model](#mockdata--data-model)  
-6. [Toegankelijkheid & SEO verbeteringen](#toegankelijkheid--seo-verbeteringen)  
-7. [Designsystem & branding](#designsystem--branding)  
-8. [Roadmap](#roadmap)  
-9. [Contributie](#contributie)  
-10. [Licentie](#licentie)
+## Design System
 
----
+### Kleurpalet (WCAG 2.1 AA)
+| Rol | Kleur | Hex |
+| --- | --- | --- |
+| Primary text | Slate 900 | `#1F2937` |
+| Secondary text | Gray 500 | `#6B7280` |
+| Accent | Teal 500 | `#14B8A6` |
+| CTA | Amber 400 | `#FACC15` |
+| Gradient start | Pink 500 | `#EC4899` |
+| Gradient mid | Violet 500 | `#8B5CF6` |
+| Gradient end | Cyan 500 | `#06B6D4` |
+| Background overlay | Transparent black | `rgba(0,0,0,0.4)` |
 
-## Belangrijkste features
+### Typografie
+- Fonts: `Interstate` (display) + `Merriweather Sans` (body).
+- Body tekst: 16px (mobile) – 17px (desktop), `leading-relaxed`.
+- Navigatie en metadata gebruiken uppercase of tracking voor leesbaarheid.
 
-- **Single-page navigatie** via hash-routing (`#home`, `#programma`, `#nieuws:slug`, …).  
-- **Hero + CTA’s** afgestemd op 2026 festivalcampagne, inclusief gradient-achtergrond.  
-- **Line-up filters** op dag, podium en discipline; ondersteunt meerdere tijdsloten per artiest.  
-- **Artiestdetail** met highlights, embedded YouTube-video en Spotify-playlist.  
-- **Nieuws-overzicht & detail** met metadata (geplaatst/bijgewerkt), tagchips en share-links.  
-- **Zoekfunctionaliteit** voor artiesten en nieuws (client-side).  
-- **Media-sectie** (albums en aftermovies) met responsive galerijen.  
-- **Vrijwilligerspagina** met timeline, rollen, voordelen en FAQ.  
-- **Doneer-CTA’s** en iDEAL-link (mock).  
-- **Sponsoroverzicht** per tier.  
-- **Contactpagina** met Leaflet-kaart (OpenStreetMap) en relevante e-mails.  
-- **Privacy/ANBI/Doneer** basisteksten ter ondersteuning van contentmigratie.
+### Heading Capitalization
+- `<h1>`, `<h2>`, `<h3>`: tekst in toegankelijke titel-/zinvorm; visueel uppercase via CSS.
+- `<h4>`, `<h5>`, `<h6>`: Capitalize (initiële hoofdletter).
 
-## Technische stack
-
-| Onderdeel            | Beschrijving                                                    |
-|----------------------|------------------------------------------------------------------|
-| HTML                 | Handmatig opgebouwd, geen templating-engine                      |
-| CSS                  | Tailwind Play CDN (runtime compile) + custom CSS in `<style>`    |
-| JavaScript           | Vanilla ES6 modules, geen bundler                                |
-| Icons                | Inline SVG’s (social, Spotify, etc.)                             |
-| Map                  | [Leaflet 1.9.x](https://leafletjs.com) met OpenStreetMap tiles   |
-| Fonts                | Interstate (remote) + Merriweather Sans via Google Fonts         |
-| Data                 | Mockobjecten in `ARTISTS`, `NEWS`, `PHOTO_ALBUMS`, …             |
-
-> Tip: bij productie-integratie moet Tailwind via build pipeline draaien i.p.v. Play CDN.
-
-## Aan de slag
-
-1. Clone of download de repository.  
-2. Open `index.html` in een moderne browser (Chrome, Firefox, Safari, Edge).  
-3. Geen build- of install-stappen nodig.  
-4. Gebruik hash-links in de adresbalk of het navigatiemenu om tussen secties te wisselen.
-
-### Optioneel
-
-- **Live reload**: start een statische server (`npx serve`, `python -m http.server`) zodat Leaflet tiles en fonts consistent laden.  
-- **Linting**: run `npm run lint:html` (indien tooling is toegevoegd).
-
-## Projectstructuur
-
-```
-.
-├── index.html            # Kernbestand met markup, CSS en JavaScript
-├── robots.txt            # Crawlrichtlijnen voor Drupal 11 implementatie
-├── TODO.md               # Actuele werkpunten / backlog
-└── (assets)              # Afbeeldingen / logo's (inline of via CDN)
+## Develop & Build
+```bash
+npm install --cache .npm-cache    # lokale cache voorkomt root-permissies
+npm run build                     # tailwindcss -i src/styles/main.css -o assets/css/main.css --minify
+npm run watch:css                 # development watch (optioneel)
 ```
 
-Belangrijke codeblokken binnen `index.html`:
+### Bestanden & structuur
+- `index.html` bevat alle templates (home, line-up, enquête, enz.).
+- `assets/images/` bevat geoptimaliseerde WebP assets (hero, OG-image, posters).
+- `assets/css/main.css` is het gepurge-de output van Tailwind.
+- `404.html` en `maintenance.html` gebruiken dezelfde tokens en hebben inline script voor e-mail-obfuscatie.
+- `sitemap.xml` en `robots.txt` sluiten aan op Drupal 11 conventies.
 
-| Sectie                  | Doel                                                       |
-|-------------------------|-------------------------------------------------------------|
-| `<style>`               | Tailwind config + custom helpers (buttons, focus states)   |
-| JSON-LD scripts         | Festival + LocalBusiness schema                            |
-| Hash-routing functies   | `render(...)` helpers, `navigate()`                        |
-| Mockdata                | `ARTISTS`, `NEWS`, `PHOTO_ALBUMS`, `AFTERMOVIES`, …        |
-| UI renderers            | `renderHome()`, `renderProgramma()`, `renderNieuws()`, …   |
+## Accessibility
+- `lang="nl"`, één `<h1>` per pagina/template, semantische `<header>`, `<nav>`, `<main>`, `<footer>`.
+- Focus states met contrasterende outline + `focus-visible`.
+- Skiplink & toetsenbordvriendelijk navigatiemenu (Escape sluit mobiele nav).
+- Alt-teksten voor contentafbeeldingen, `alt=""` voor decoratief materiaal.
+- Cookiebanner met dialoog-rollen, Esc ondersteuning en `aria-pressed` toggles.
+- E-mailadressen worden pas via JavaScript omgezet naar `mailto:` om harvesters te blokkeren.
 
-## Mockdata & data-model
+## Mobile-first & UX
+- Sticky header met compacte hoogtes, grotere tap targets voor knoppen.
+- CTA’s (`btn-primary`, `btn-secondary`) hebben hover/focus-states en schaduwen.
+- Hero, timetable, sponsors en footer bevatten aanvullende subkoppen voor scanbaarheid.
+- Microsoft Forms embeds (vrijwilligers + enquête) laden lazy en hebben fallbacklinks.
 
-- **Artiesten (`ARTISTS`)**  
-  - `type`, `genres`, `links[]`, `extraSlots[]` voor meerdere optredens.  
-  - `playlist` embed URL, `video` (YouTube-ID), `highlights[]`.
-- **Nieuws (`NEWS`)**  
-  - `created`, `updated`, `tags[]`, `links[]`, `body[]` (paragraph/quote/list).  
-  - Extra metadata wordt gebruikt voor SEO en zoekresultaten.
-- **Albums / Aftermovies**  
-  - `gallery[]` met caption/credit en `download` links.  
-  - Aftermovies bevatten `videoId`, `runtime`, `highlights`.
+## SEO & Structured Data
+- Titel: “BAM! Festival 2026 – Gratis muziekfestival Hengelo” (53 chars).
+- Meta description: 180 karakters, call-to-action gericht op weekend 22/23 mei 2026.
+- Canonical + hreflang (`nl`, `x-default`), `OG`/`Twitter` met lokale WebP.
+- JSON-LD (`@graph`) voor MusicEvent + organizer, LocalBusiness, FAQPage.
+- Sitemap verwijst naar toekomstige Drupal-routes (plattegrond, programma, vrijwilligers, enquête).
 
-Data staat bewust gescheiden van de renderlogica zodat een latere API-koppeling eenvoudiger is.
+## Performance & Assets
+- Tailwind CLI build met purge en minificatie (`npm run build`).
+- Alle BAM-assets lokaal gedownload en geconverteerd naar WebP (hero, OG, posters, privacy bg).
+- `loading="lazy"` en `decoding="async"` op alle afbeeldingen en iframes.
+- CSS gradient (`bg-bam-gradient`) vervangt bitmap background op 404/maintenance.
+- Documentatie benoemt caching headers + Brotli/Gzip als deployment taak.
 
-## Toegankelijkheid & SEO verbeteringen
+## Security & Privacy
+- Content Security Policy met beperkte domeinen (`script-src` alleen eigen + unpkg voor Leaflet).
+- Cookie consent dialoog slaat keuze in `localStorage` op en blokkeert niet-functionele cookies bij weigering.
+- E-mailadressen via `data-user`/`data-domain` en JS hydratatie, geen raw `mailto:` in bron.
+- `robots.txt` blokkeert admin/search routes zodra thema in Drupal draait.
 
-- Skip link, verbeterde `focus-visible` outlines.  
-- Contrastverhoudingen volgens WCAG AA (knoppen, tekst op gradient).  
-- Responsive afbeeldingen (`srcset` + `sizes`) voor nieuws/galerijen.  
-- JSON-LD (Festival + LocalBusiness) met organizer, keywords, openingHours.  
-- Meta title/description verkort tot best practice (±60 tekens / ±180 tekens).  
-- Sociale previews (OG/Twitter image).  
-- Navigatie heeft `aria-label`s, mobile menu respecteert `aria-expanded`.  
-- Kaartmarker gecentreerd op Prins Bernhardplantsoen.
+## Verdere documentatie
+- Zie `TODO.md` voor checklists per domein (accessibility, SEO, performance, mobile, security, design consistency).
+- Gebruik `npm run watch:css` tijdens theming in Drupal om Tailwind classes te monitoren.
 
-## Designsystem & branding
-
-- **Typografie**: Interstate (headings), Merriweather Sans (body).  
-- **Kleurset**:
-  - Primair paars `#8B1C66`, magenta `#E31362`, geel `#FFD829`, blauw `#009DE0`, licht `#FDF8ED`, donker `#111827`.  
-  - Gradient `315deg` voor hero/achtergrond.  
-  - Buttons gestandaardiseerd: `.btn-primary`, `.btn-secondary`, `.btn-ghost`.
-- **CTA’s**: Elevated met schaduw, hover en focus states.  
-- **Section headings**: Taglines + H1 (per route) voor herkenbare flow.
-
-## Roadmap
-
-- [ ] **Content**: echte teksten (ANBI, privacy) importeren i.p.v. placeholder.  
-- [ ] **API-koppeling**: replace mockdata door Drupal JSON:API endpoints.  
-- [ ] **Tailwind build**: overstappen naar pre-compiled CSS voor performance.  
-- [ ] **Testing**: visuele regressietests + axe-core toegankelijkheidschecks.  
-- [ ] **Performance**: lazy-load media (IntersectionObserver), minify assets.  
-- [ ] **i18n**: ondersteuning voor Engels / Duits indien gewenst.  
-- [ ] **CMS snippets**: componenten vertalen naar Twig/React (afhankelijk van Drupal thema).
-
-Zie ook [TODO.md](TODO.md) voor gedetailleerde taken.
-
-## Contributie
-
-1. Fork of feature branch aanmaken.  
-2. Beschrijf wijzigingen in README/TODO waar relevant.  
-3. Houd formatting consistent (Tailwind classes, dubbele quotes in JS).  
-4. Test in meerdere browsers (focus: Chrome, Firefox, Safari, Edge).  
-5. Maak een Pull Request met duidelijke beschrijving / screenshots.
-
-## Licentie
-
-Deze prototype-code is bedoeld voor interne evaluatie van BAM! Festival en valt onder de voorwaarden die door de opdrachtgever zijn vastgesteld. Gebruik buiten dit project alleen na toestemming.
-
+> Bij migratie naar Drupal: koppel deze HTML-templates stuk voor stuk aan Twig views, behoud de `data-` hooks voor JSON:API en voeg caching headers toe via het Drupal config systeem.

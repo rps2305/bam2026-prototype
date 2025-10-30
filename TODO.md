@@ -1,37 +1,45 @@
-# TODO / Backlog
-
-## Content & Copy
-- [ ] Vervang placeholder-teksten (ANBI, privacy, doneer) door definitieve content vanuit redactie.  
-- [ ] Controleer NL spellings- en stijlgids (Tone of Voice BAM!) voor alle CTA’s en headings.  
-- [ ] Schrijf engelstalige variant (optioneel) en bepaal of meertaligheid nodig is.
-
-## Design & UX
-- [ ] Fine-tune layout spacing op ultra-wide schermen (≥1920px) voor hero, footer en CTA-strips.  
-- [ ] Voeg hero-illustratie en fotografie toe zodra nieuwe campagnebeelden beschikbaar zijn.  
-- [ ] Uitwerken sticky subnavigatie voor programmapagina (scrollspy).  
-- [ ] Test dark-mode contrasten opnieuw met toekomstige imagery.
+# TODO / Checklists
 
 ## Accessibility
-- [ ] Axe/Pa11y audit draaien en resterende issues oplossen (met name aria-labels bij carrousels).  
-- [ ] Toetsenbord-navigatie testen in Safari/VoiceOver en NVDA.  
-- [ ] Overwegen skip-links naar hoofdsecties (#programma, #nieuws, #vrijwilligers).  
-- [ ] Alternatieve tekst toevoegen voor alle hero- en galerieafbeeldingen vanuit content team.
+- [x] `lang="nl"` ingesteld en één `<h1>` per template.
+- [x] Volledige keyboard-navigatie + zichtbare focus states.
+- [x] Skiplink, aria-labels voor icon-buttons en dialog voor cookie-consent.
+- [x] Afbeeldingen voorzien van relevante alt-teksten of `alt=""` bij decoratie.
+- [ ] Screenreader regressietest (VoiceOver/NVDA) plannen na Drupal-integratie.
+
+## SEO & Structured Data
+- [x] Titel & meta description geoptimaliseerd voor 2026 editie.
+- [x] Canonical, hreflang (`nl`, `x-default`) en social previews (OG/Twitter).
+- [x] JSON-LD (`MusicEvent`, `Organization`, `LocalBusiness`, `FAQPage`).
+- [x] Sitemap vernieuwd met routes (incl. enquête) + robots verwijst ernaar.
+- [ ] Wanneer URL-structuur in Drupal vastligt: sitemap automatisch genereren.
 
 ## Performance
-- [ ] Tailwind uit CDN halen en pre-build CSS toevoegen (postcss/cli).  
-- [ ] Lazy-load YouTube iframes (lite-embed) en Spotify embeds conditioneel laden.  
-- [ ] Afbeeldingen opslaan als webp/avif varianten met responsive bronnen (nu mock via helper).  
-- [ ] Service worker overwegen voor caching (indien relevant voor uiteindelijke stack).
+- [x] Tailwind lokaal gebouwd (`npm run build`) en onnodige CDN’s verwijderd.
+- [x] WebP assets + `srcset`/`sizes` + `loading="lazy"`/`decoding="async"`.
+- [x] Asset-cachelimiter via CSP + documentatie voor Brotli/Gzip deployment.
+- [ ] Lighthouse run automatiseren in CI + rapporteren binnen Drupal-pipeline.
 
-## Integratie & Data
-- [ ] Mockdata vervangen door Drupal JSON:API calls (Line-up, Nieuws, Media).  
-- [ ] 404 en onderhoudspagina integreren in CMS templates.  
-- [ ] Vrijwilligersformulier koppelen aan bestaande CRM / formulier back-end.  
-- [ ] Sitemap.xml laten genereren vanuit Drupal en robots.txt paden valideren.
+## Typography & Heading Rules
+- [x] Visueel uppercase voor H1–H3, maar tekst semantisch in titel-/zinvorm.
+- [x] Body copy: 16–17px, `leading-relaxed`, consistente letterspatiëring.
+- [x] Buttons en metadata gebruiken uppercase met duidelijke tracking.
+- [ ] Styleguide opnemen in Drupal theme (Twig + component library).
 
-## Testing & Tooling
-- [ ] Lighthouse audits (perf / SEO / a11y / best practices) automatiseren via CI.  
-- [ ] Visuele regressietests (bijv. Percy of Storybook) toevoegen voor kritische componenten.  
-- [ ] ESLint/Prettier configureren voor toekomstige componentversies.  
-- [ ] Handmatige QA checklist opstellen voor festival-week (social share, trackingscripts, etc.).
+## Mobile UX
+- [x] Compacte sticky header, grote tap targets en mobiele CTA-buttons.
+- [x] Microsoft Forms embeds laden lazy en vullen 100% breedte.
+- [x] Sponsors, timetable en FAQ gestructureerd met card grids.
+- [ ] Scrollspy/subnav herbekijken na Drupal implementatie.
 
+## Security & Privacy
+- [x] Content Security Policy beperkt externe domeinen.
+- [x] Cookie-consent dialoog met voorkeuren + lokale opslag van keuze.
+- [x] E-mail obfuscatie via data-attributes / hydratie scripts.
+- [ ] Na Drupal launch: audit third-party scripts (analytics, pixels).
+
+## Design Consistency
+- [x] `page-shell`, gradients, button-styling en spacing gedeeld over alle pagina’s.
+- [x] 404 en onderhoudspagina gebruiken dezelfde tokens + borden onderhoud expliciet.
+- [x] Stage-namen en type-pills (Muziek, Theater, DJ, Film) overal consistent.
+- [ ] Zodra Drupal thema staat: Storybook of Pattern Lab opzetten voor regressietests.

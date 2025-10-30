@@ -3,101 +3,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>404 — Oeps, BAM! viel even stil</title>
+  <title>Pagina niet gevonden | BAM! Festival 2026</title>
   <link rel="icon" href="logo-bam-festival-zwart.webp" type="image/webp" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            magenta: '#E31362',
-            purple: '#5E2E84',
-            yellow: '#FFD829',
-            teal: '#009DE0',
-            midnight: '#0F172A'
-          },
-          fontFamily: {
-            display: ['Interstate','Merriweather Sans','ui-sans-serif','system-ui']
-          }
-        }
-      }
-    };
-  </script>
-  <style>
-    .swirl{
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(255,216,41,0.18), transparent 45%),
-        radial-gradient(circle at 80% 30%, rgba(0,157,224,0.25), transparent 60%),
-        radial-gradient(circle at 40% 80%, rgba(227,19,98,0.22), transparent 55%),
-        radial-gradient(circle at 70% 65%, rgba(94,46,132,0.28), transparent 50%),
-        #111827;
-    }
-    .floating-bubble{
-      position:absolute;
-      border-radius:9999px;
-      background:rgba(255,255,255,0.16);
-      box-shadow:0 0 30px rgba(255,255,255,0.12);
-      animation: drift 12s ease-in-out infinite;
-    }
-    .floating-bubble:nth-child(1){width:140px;height:140px;top:8%;left:10%;animation-delay:0s;}
-    .floating-bubble:nth-child(2){width:90px;height:90px;top:22%;right:12%;animation-delay:2s;}
-    .floating-bubble:nth-child(3){width:120px;height:120px;bottom:18%;left:20%;animation-delay:4s;}
-    .floating-bubble:nth-child(4){width:70px;height:70px;bottom:12%;right:18%;animation-delay:6s;}
-    @keyframes drift{
-      0%,100%{transform:translate3d(0,0,0) scale(1);}
-      50%{transform:translate3d(16px,-18px,0) scale(1.12);}
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-<body class="h-full text-white">
-  <div class="swirl" aria-hidden="true"></div>
-  <div class="floating-bubble" aria-hidden="true"></div>
-  <div class="floating-bubble" aria-hidden="true"></div>
-  <div class="floating-bubble" aria-hidden="true"></div>
-  <div class="floating-bubble" aria-hidden="true"></div>
+<body class="min-h-screen bg-bam-gradient text-brand-primary">
+  <main class="flex min-h-screen items-center justify-center px-4 py-16">
+    <article class="page-shell w-full max-w-5xl space-y-10 rounded-3xl border border-brand-primary/15 bg-white/95 p-8 shadow-card">
+      <header class="space-y-4 text-center md:text-left">
+        <span class="inline-flex items-center gap-2 rounded-full bg-brand-accent/10 px-4 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-brand-accent">404 — Weg kwijt</span>
+        <h1 class="font-display text-4xl md:text-5xl text-brand-primary">We hebben je podium niet gevonden</h1>
+        <p class="max-w-3xl text-sm md:text-base text-brand-secondary">De pagina die je zocht staat niet (meer) op bamfestival.nl. Geen zorgen: met onderstaande snelkoppelingen sta je zo weer tussen de muziek, vrijwilligers en veelgestelde vragen.</p>
+      </header>
 
-  <main class="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
-    <header class="space-y-6">
-      <div class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-white/70">404 — Weg kwijt</div>
-      <h1 class="font-display text-5xl md:text-7xl" style="letter-spacing:0.02em;">Waar is het podium gebleven?</h1>
-      <p class="max-w-2xl text-base md:text-lg text-white/75">Het lijkt alsof deze pagina een backstage pasje mist. Geen zorgen, we sturen je graag terug naar de spotlights met een paar korte routes.</p>
-    </header>
-
-    <section class="mt-8 grid w-full max-w-3xl gap-6 text-left md:grid-cols-[1.1fr,0.9fr]">
-      <article class="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-lg backdrop-blur">
-        <h2 class="font-display text-2xl text-yellow">Plan je festival</h2>
-        <p class="mt-3 text-sm md:text-base text-white/80">Check de timetable, ontdek welke acts nu &amp; straks spelen en stel je eigen route samen.</p>
-        <a href="index.html#programma" class="mt-5 inline-flex items-center gap-2 rounded-xl border border-yellow/70 bg-yellow/10 px-4 py-2 text-sm font-semibold text-yellow transition hover:-translate-y-0.5 hover:shadow-lg">Naar de line-up →</a>
-      </article>
-      <article class="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-lg backdrop-blur">
-        <h2 class="font-display text-2xl text-magenta">Contact crew</h2>
-        <p class="mt-3 text-sm md:text-base text-white/80">Heb je een vraag over toegankelijkheid, vrijwilligerswerk of sponsoring? Wij helpen je graag.</p>
-        <div class="mt-5 flex flex-col gap-3">
-          <a href="index.html#contact" class="inline-flex items-center gap-2 rounded-xl border border-magenta/70 bg-magenta/10 px-4 py-2 text-sm font-semibold text-magenta transition hover:-translate-y-0.5 hover:shadow-lg">Contactformulier →</a>
-          <a href="mailto:info@bamfestival.nl" class="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition hover:-translate-y-0.5 hover:shadow-lg">Mail ons: info@bamfestival.nl</a>
+      <section class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/70 p-6 shadow-card">
+          <h2 class="font-display text-xl text-brand-primary">Terug naar het hoofdpodium</h2>
+          <p class="mt-3 text-sm text-brand-dark">Bekijk het programma, ontdek de podia en plan je route over het festivalterrein.</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="index.html#programma" class="btn-primary text-xs">Bekijk timetable</a>
+            <a href="index.html#plattegrond" class="btn-secondary text-xs">Plattegrond &amp; zones</a>
+          </div>
         </div>
-      </article>
-    </section>
+        <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/70 p-6 shadow-card">
+          <h2 class="font-display text-xl text-brand-primary">Zoek het antwoord</h2>
+          <p class="mt-3 text-sm text-brand-dark">Heb je vragen over vrijwilligerswerk, toegankelijkheid of sponsors? We helpen je graag verder.</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="index.html#faq" class="btn-secondary text-xs">Veelgestelde vragen</a>
+            <a href="index.html#contact" class="btn-secondary text-xs">Contact &amp; crew</a>
+          </div>
+        </div>
+      </section>
 
-    <section class="mt-10 grid w-full max-w-4xl gap-4 md:grid-cols-3">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-left">
-        <p class="text-xs font-semibold uppercase tracking-wide text-white/60">Festivaltijden</p>
-        <p class="mt-2 text-sm text-white/80">Vrijdag 23 mei 2025 · 18:00-01:00<br />Zaterdag 24 mei 2025 · 12:00-01:00</p>
-      </div>
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-left">
-        <p class="text-xs font-semibold uppercase tracking-wide text-white/60">Locatie</p>
-        <p class="mt-2 text-sm text-white/80">Prins Bernhardplantsoen — hartje Hengelo. Net vijf minuten lopen van het station.</p>
-      </div>
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-left">
-        <p class="text-xs font-semibold uppercase tracking-wide text-white/60">Toch verdwalen?</p>
-        <p class="mt-2 text-sm text-white/80">Volg ons op <a class="font-semibold text-yellow underline-offset-4 hover:underline" href="https://www.instagram.com/bamfestival.hengelo/" target="_blank" rel="noopener noreferrer">Instagram</a> voor live updates uit het park.</p>
-      </div>
-    </section>
+      <section class="grid gap-4 md:grid-cols-3">
+        <div class="rounded-2xl border border-brand-primary/15 bg-white/90 p-4 shadow-card">
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-secondary">Festivaltijden</p>
+          <p class="mt-2 text-sm text-brand-dark">Vrijdag 22 mei 2026 · 18:00&nbsp;–&nbsp;01:00<br />Zaterdag 23 mei 2026 · 12:00&nbsp;–&nbsp;01:00</p>
+        </div>
+        <div class="rounded-2xl border border-brand-primary/15 bg-white/90 p-4 shadow-card">
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-secondary">Locatie</p>
+          <p class="mt-2 text-sm text-brand-dark">Prins Bernhardplantsoen, Hengelo — vijf minuten lopen vanaf het station.</p>
+        </div>
+        <div class="rounded-2xl border border-brand-primary/15 bg-white/90 p-4 shadow-card">
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-secondary">Volg live updates</p>
+          <p class="mt-2 text-sm text-brand-dark">Check <a href="https://www.instagram.com/bamfestival.hengelo/" target="_blank" rel="noopener noreferrer" class="font-semibold text-brand-accent underline underline-offset-4">Instagram</a> of <a href="https://www.facebook.com/BAM.Festival" target="_blank" rel="noopener noreferrer" class="font-semibold text-brand-accent underline underline-offset-4">Facebook</a> voor het laatste nieuws.</p>
+        </div>
+      </section>
 
-    <footer class="mt-12 text-xs uppercase tracking-[0.2em] text-white/40">BAM! Festival Hengelo — gratis entree, grote glimlach</footer>
+      <footer class="flex flex-wrap items-center gap-3 text-xs text-brand-secondary">
+        <span>BAM! Festival Hengelo — gratis stadsfestival sinds 2008</span>
+        <span class="hidden md:inline">•</span>
+        <span class="email-link text-brand-accent underline" data-user="info" data-domain="bamfestival.nl" data-label="info@bamfestival.nl">info [at] bamfestival [dot] nl</span>
+        <span class="hidden md:inline">•</span>
+        <span>085 308 77 77</span>
+      </footer>
+    </article>
   </main>
+
+  <script>
+    (function () {
+      const nodes = document.querySelectorAll('[data-user][data-domain]');
+      nodes.forEach((node) => {
+        const user = node.getAttribute('data-user');
+        const domain = node.getAttribute('data-domain');
+        const label = node.getAttribute('data-label') || user + '@' + domain;
+        if (!user || !domain) return;
+        const anchor = document.createElement('a');
+        anchor.href = `mailto:${user}@${domain}`;
+        anchor.textContent = label;
+        anchor.className = node.className || 'text-brand-accent underline';
+        node.replaceWith(anchor);
+      });
+    })();
+  </script>
 </body>
 </html>
