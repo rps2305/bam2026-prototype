@@ -849,10 +849,15 @@
     </section>
   </template>
   <template id="tpl-faq">
-    <section class="w-full px-4 sm:px-6 py-10">
-      <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Veelgestelde vragen</span>
-      <h1 class="font-display text-3xl md:text-4xl">FAQ</h1>
-      <div id="faq-acc" class="mt-4 space-y-3"></div>
+    <section id="faq" class="w-full px-4 sm:px-6 py-10">
+      <article class="page-shell space-y-6 rounded-3xl border border-brand-primary/10 bg-white/95 p-6 shadow-card">
+        <div class="space-y-2">
+          <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Veelgestelde vragen</span>
+          <h1 class="font-display text-3xl md:text-4xl text-brand-primary">FAQ</h1>
+          <p class="text-sm md:text-base text-brand-dark/80">Selecteer een categorie en open de vragen met Enter of spatie. Gebruik de pijltjestoetsen om tussen vragen te bladeren.</p>
+        </div>
+        <div id="faq-grid" class="grid grid--responsive gap-4 sm:grid-cols-2 xl:grid-cols-4" role="list"></div>
+      </article>
     </section>
   </template>
   <template id="tpl-sponsors">
@@ -1653,6 +1658,104 @@
       {
         question:'Zijn er 18+ functies?',
         answer:'De meeste rollen zijn vanaf 18 jaar. Voor bepaalde functies (bar, logistiek) is 18+ verplicht. Ben je jonger? Meld je toch aan — we kijken graag wat mogelijk is.'
+      }
+    ];
+    const FAQ_CATEGORIES = [
+      {
+        title:'Festival',
+        description:'Praktische info over het festivalweekend en het terrein.',
+        items:[
+          {
+            question:'Wanneer is BAM! Festival 2026?',
+            answer:'Op vrijdag 22 en zaterdag 23 mei 2026 in het Prins Bernhardplantsoen in Hengelo. Bekijk de <a class="text-brand-magenta underline" href="#timetable">timetable</a> voor exacte tijden per podium en act.'
+          },
+          {
+            question:'Heb ik een ticket nodig?',
+            answer:'Nee, de toegang is gratis. Een vrijwillige donatie via de site of bij de donatiepunten helpt ons het festival gratis te houden.'
+          },
+          {
+            question:'Hoe laat gaan de ingangen open?',
+            answer:'Vrijdag openen we om 17:00 uur en zaterdag om 13:00 uur. Bars sluiten rond middernacht; updates delen we via de homepage en onze socials.'
+          },
+          {
+            question:'Mag ik eigen eten en drinken meenemen?',
+            answer:'Kleine snacks en een hervulbare waterfles zonder glas zijn oké. Alcohol, glaswerk en grote koelboxen laten we thuis. Op het terrein vind je foodtrucks en bars met vegetarische en vegan opties.'
+          },
+          {
+            question:'Is het terrein rolstoeltoegankelijk?',
+            answer:'Ja. Er zijn verharde paden, rolstoeltoiletten en vrijwilligers die kunnen helpen. Meld je bij de infobalie bij binnenkomst als je extra ondersteuning wilt.'
+          }
+        ]
+      },
+      {
+        title:'Vrijwilligers',
+        description:'Alles over crewshifts, aanmelding en wat je kunt verwachten.',
+        items:[
+          {
+            question:'Hoe meld ik me aan als vrijwilliger?',
+            answer:'Ga naar de sectie <a class="text-brand-magenta underline" href="#vrijwilligers">Vrijwilligers</a> en vul het aanmeldformulier in. Je krijgt binnen enkele dagen bericht van het crewteam.'
+          },
+          {
+            question:'Hoeveel shifts moet ik draaien?',
+            answer:'Standaard draai je één of twee shifts van 4 tot 6 uur. Geef je beschikbaarheid aan bij het aanmelden; we plannen in overleg en houden waar mogelijk rekening met voorkeuren.'
+          },
+          {
+            question:'Kan ik samen met een vriend(in) ingedeeld worden?',
+            answer:'Ja, noteer dit bij je aanmelding. We proberen koppels of vriendengroepen zoveel mogelijk samen te plaatsen in dezelfde shift of rol.'
+          },
+          {
+            question:'Wat regelen jullie qua eten en drinken?',
+            answer:'Tijdens je shift staat er crewcatering klaar met maaltijden, snacks en drankjes. Buiten je shift kun je terecht bij de foodtrucks en bars in het park.'
+          },
+          {
+            question:'Moet ik ervaring hebben?',
+            answer:'Nee, iedereen is welkom. Voor technische of contentrollen is ervaring handig, maar we zorgen altijd voor briefing en begeleiding.'
+          }
+        ]
+      },
+      {
+        title:'Website',
+        description:'Handige tips voor het gebruik van bamfestival.nl.',
+        items:[
+          {
+            question:'Waar vind ik de timetable?',
+            answer:'Op de <a class="text-brand-magenta underline" href="#timetable">timetable</a> bekijk je per dag en podium alle tijden. Vanuit het hoofdmenu kom je er met één klik.'
+          },
+          {
+            question:'Kan ik de line-up filteren?',
+            answer:'Ja, op de <a class="text-brand-magenta underline" href="/line-up/">line-up pagina</a> filter je op dag, podium en genre. Je selectie blijft actief zolang de pagina geopend blijft.'
+          },
+          {
+            question:'Werkt de site ook op mobiel?',
+            answer:'De site is mobile-first ontworpen. Alle kaarten, timetable en plattegrond werken op smartphones en tablets. Voeg de site toe aan je beginscherm voor snelle toegang tijdens het festival.'
+          },
+          {
+            question:'Ik zie een fout op de site, hoe meld ik die?',
+            answer:'Stuur een bericht naar <span class="text-brand-magenta underline email-link" data-user="info" data-domain="bamfestival.nl" data-label="info@bamfestival.nl">info [at] bamfestival [dot] nl</span> met een korte omschrijving en screenshots. We passen het zo snel mogelijk aan.'
+          }
+        ]
+      },
+      {
+        title:'Algemeen',
+        description:'Over contact, gevonden voorwerpen en praktische zaken.',
+        items:[
+          {
+            question:'Hoe neem ik contact op met de organisatie?',
+            answer:'Mail naar <span class="text-brand-magenta underline email-link" data-user="info" data-domain="bamfestival.nl" data-label="info@bamfestival.nl">info [at] bamfestival [dot] nl</span> of bel tijdens kantooruren <a class="text-brand-magenta underline" href="tel:+31853087777">085 308 77 77</a>.'
+          },
+          {
+            question:'Waar meld ik gevonden of verloren voorwerpen?',
+            answer:'Loop tijdens het festival langs de infobalie bij de hoofdingang. Na het weekend delen we updates via deze FAQ en kun je mailen naar <span class="text-brand-magenta underline email-link" data-user="info" data-domain="bamfestival.nl" data-label="info@bamfestival.nl">info [at] bamfestival [dot] nl</span> met een beschrijving van het item.'
+          },
+          {
+            question:'Kan ik cash betalen op het terrein?',
+            answer:'We werken cashless met pin en contactloos betalen. Voor uitzonderingen kun je terecht bij de kassapunten naast het hoofdpodium.'
+          },
+          {
+            question:'Hoe word ik partner of sponsor?',
+            answer:'Bekijk de <a class="text-brand-magenta underline" href="#sponsors">sponsorsectie</a> of mail rechtstreeks naar <span class="text-brand-magenta underline email-link" data-user="sponsoring" data-domain="bamfestival.nl" data-label="sponsoring@bamfestival.nl">sponsoring [at] bamfestival [dot] nl</span>.'
+          }
+        ]
       }
     ];
     const AFTERMOVIES = [
@@ -3050,16 +3153,62 @@
     }
     function renderFAQ(){
       render('tpl-faq');
-      const items = [
-        {q:'Wat kost BAM! Festival?', a:'BAM! is gratis. Donaties helpen het festival mogelijk te maken.'},
-        {q:'Is het terrein rolstoeltoegankelijk?', a:'Ja. Verharde paden, rolstoeltoiletten en rustige zones aanwezig.'},
-        {q:'Mag ik eigen eten en drinken meenemen?', a:'Kleine snacks en water zijn oké. Geen glas en geen alcohol.'},
-      ];
-      document.getElementById('faq-acc').innerHTML = items.map(it=>`
-        <details class="group rounded-2xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
-          <summary class="cursor-pointer font-semibold text-brand-primary transition group-open:text-brand-magenta">${it.q}</summary>
-          <div class="mt-2 text-sm text-brand-dark/70">${it.a}</div>
-        </details>`).join('');
+      const gridEl = document.getElementById('faq-grid');
+      if(!gridEl){
+        return;
+      }
+      gridEl.innerHTML = FAQ_CATEGORIES.map(category => `
+        <article class="space-y-3 rounded-3xl border border-brand-primary/10 bg-brand-light/60 p-5 shadow-card" role="listitem">
+          <div class="space-y-1">
+            <h2 class="font-display text-xl text-brand-primary">${category.title}</h2>
+            <p class="text-sm text-brand-dark/70">${category.description}</p>
+          </div>
+          <div class="space-y-2" data-faq-group>
+            ${category.items.map(item => `
+              <details class="group rounded-2xl border border-brand-primary/15 bg-white/95 p-4 shadow-card" data-faq-disclosure>
+                <summary class="cursor-pointer font-semibold text-brand-primary transition group-open:text-brand-magenta">${item.question}</summary>
+                <div class="mt-2 text-sm text-brand-dark/70">${item.answer}</div>
+              </details>
+            `).join('')}
+          </div>
+        </article>
+      `).join('');
+      gridEl.querySelectorAll('[data-faq-group]').forEach(group => {
+        const disclosures = Array.from(group.querySelectorAll('details[data-faq-disclosure]'));
+        disclosures.forEach(details => {
+          details.addEventListener('toggle', () => {
+            if(!details.open){
+              return;
+            }
+            disclosures.forEach(other => {
+              if(other !== details){
+                other.removeAttribute('open');
+              }
+            });
+          });
+        });
+        group.addEventListener('keydown', event => {
+          if(event.key !== 'ArrowDown' && event.key !== 'ArrowUp'){
+            return;
+          }
+          if(event.target.tagName !== 'SUMMARY'){
+            return;
+          }
+          const summaries = disclosures.map(detail => detail.querySelector('summary')).filter(Boolean);
+          if(!summaries.length){
+            return;
+          }
+          event.preventDefault();
+          const currentIndex = summaries.indexOf(event.target);
+          if(currentIndex === -1){
+            return;
+          }
+          const nextIndex = event.key === 'ArrowDown'
+            ? (currentIndex + 1) % summaries.length
+            : (currentIndex - 1 + summaries.length) % summaries.length;
+          summaries[nextIndex].focus();
+        });
+      });
     }
     const sponsorAlt = (name, role) => {
       const label = role === 'partner' ? 'partner' : 'sponsor';
