@@ -737,32 +737,47 @@
   </template>
   <template id="tpl-fotos">
     <section class="w-full px-4 sm:px-6 py-10">
-      <div class="page-shell space-y-10 rounded-3xl border border-brand-primary/10 bg-white/90 p-6 shadow-card">
+      <article class="page-shell space-y-8 rounded-3xl border border-brand-primary/10 bg-white/90 p-6 shadow-card">
         <header class="grid gap-4 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
           <div>
             <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Herbeleef BAM!</span>
-            <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Foto&#39;s &amp; aftermovies</h1>
-            <p class="mt-3 max-w-2xl text-sm md:text-base text-brand-dark/80">Herbeleef BAM! Festival via fotoalbums en aftermovies vol parkvibes, enthousiaste publieksshots en backstage-momenten.</p>
+            <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Foto&#39;s</h1>
+            <p class="mt-3 max-w-2xl text-sm md:text-base text-brand-dark/80">Dompel je opnieuw onder in parklicht, publiekssfeer en backstage-momenten met zorgvuldig gecureerde fotoalbums per festivaljaar.</p>
           </div>
           <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/60 p-4 text-sm text-brand-dark/70">
-            <p><strong>Tip:</strong> Klik op een album voor een galerij en downloadopties. Aftermovies openen in een volledige pagina met video.</p>
+            <p><strong>Tip:</strong> Open een album voor een volledige galerij en ontdek welke fotografen het festival vastlegden.</p>
           </div>
         </header>
-        <section>
+        <section class="space-y-4">
           <div class="flex items-baseline justify-between gap-3">
             <h2 class="font-display text-2xl text-brand-primary">Fotoalbums</h2>
-            <a href="#zoek:media" class="text-xs font-semibold uppercase tracking-wide text-brand-dark/60 underline decoration-brand-magenta decoration-2 underline-offset-4">Zoek in media</a>
           </div>
-          <div id="albums-grid" class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
+          <div id="albums-container" class="space-y-6"></div>
         </section>
-        <section>
+      </article>
+    </section>
+  </template>
+  <template id="tpl-aftermovies">
+    <section class="w-full px-4 sm:px-6 py-10">
+      <article class="page-shell space-y-8 rounded-3xl border border-brand-primary/10 bg-white/90 p-6 shadow-card">
+        <header class="grid gap-4 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Herbeleef BAM!</span>
+            <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Aftermovies</h1>
+            <p class="mt-3 max-w-2xl text-sm md:text-base text-brand-dark/80">Bekijk samenvattingen van knallende headliners, intieme parkpodia en enthousiaste crew — rechtstreeks vanuit het Prins Bernhardplantsoen.</p>
+          </div>
+          <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/60 p-4 text-sm text-brand-dark/70">
+            <p><strong>Tip:</strong> Open een aftermovie voor embedded video, highlights en deelknoppen voor sociale media.</p>
+          </div>
+        </header>
+        <section class="space-y-4">
           <div class="flex items-baseline justify-between gap-3">
             <h2 class="font-display text-2xl text-brand-primary">Aftermovies</h2>
-            <span class="text-xs uppercase tracking-wide text-brand-dark/60">Bekijk en deel de hoogtepunten</span>
+            <span class="text-xs uppercase tracking-wide text-brand-dark/60">Deel de hoogtepunten</span>
           </div>
-          <div id="aftermovies-grid" class="mt-4 grid gap-4 md:grid-cols-2"></div>
+          <div id="aftermovies-grid" class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
         </section>
-      </div>
+      </article>
     </section>
   </template>
   <template id="tpl-photo-detail">
@@ -784,6 +799,7 @@
               <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Fotoalbum</span>
               <h1 id="album-title" class="font-display text-3xl text-brand-primary"></h1>
               <p id="album-summary" class="mt-3 text-sm md:text-base text-brand-dark/80"></p>
+              <div id="album-links" class="mt-3 flex flex-wrap gap-3 text-sm"></div>
             </div>
             <dl class="grid gap-3 text-sm text-brand-dark/70">
               <div>
@@ -793,10 +809,6 @@
               <div>
                 <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Locatie</dt>
                 <dd id="album-location"></dd>
-              </div>
-              <div id="album-download-row">
-                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Downloads</dt>
-                <dd><a id="album-download" class="inline-flex items-center gap-2 rounded-xl border border-brand-magenta px-3 py-2 text-sm text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md" target="_blank" rel="noopener noreferrer">Volledige album</a></dd>
               </div>
             </dl>
           </div>
@@ -812,39 +824,40 @@
     <section class="w-full px-4 sm:px-6 py-10">
       <article class="page-shell space-y-8 rounded-3xl border border-brand-primary/10 bg-white/95 p-6 shadow-card">
         <nav class="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wide text-brand-dark/60">
-          <a href="#fotos" class="inline-flex items-center gap-1 text-brand-primary underline decoration-brand-magenta decoration-2 underline-offset-4">Terug naar foto&#39;s</a>
+          <a href="#aftermovies" class="inline-flex items-center gap-1 text-brand-primary underline decoration-brand-magenta decoration-2 underline-offset-4">Terug naar aftermovies</a>
           <span class="hidden sm:inline">•</span>
           <span id="after-year"></span>
         </nav>
-        <header class="grid gap-6 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] lg:items-start">
+        <section class="grid gap-6 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] lg:items-start">
           <div class="overflow-hidden rounded-3xl border border-brand-primary/10 shadow-card">
             <div class="relative aspect-video">
               <iframe id="after-video" class="absolute inset-0 h-full w-full rounded-3xl" src="" title="Aftermovie video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
           </div>
           <div class="space-y-4">
-            <div>
+            <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/50 p-4">
               <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Aftermovie</span>
               <h1 id="after-title" class="font-display text-3xl text-brand-primary"></h1>
               <p id="after-summary" class="mt-3 text-sm md:text-base text-brand-dark/80"></p>
+              <div id="after-share" class="mt-3 flex flex-wrap gap-3 text-sm"></div>
             </div>
             <ul id="after-highlights" class="space-y-2 rounded-3xl border border-brand-primary/15 bg-brand-light/50 p-4 text-sm text-brand-dark"></ul>
-            <dl class="grid gap-3 text-sm text-brand-dark/70">
-              <div>
-                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Gepubliceerd</dt>
-                <dd id="after-published"></dd>
-              </div>
-              <div>
-                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Lengte</dt>
-                <dd id="after-runtime"></dd>
-              </div>
-              <div>
-                <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Platform</dt>
-                <dd><a id="after-link" class="inline-flex items-center gap-2 rounded-xl border border-brand-magenta px-3 py-2 text-sm text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md" target="_blank" rel="noopener noreferrer">Open video</a></dd>
-              </div>
-            </dl>
           </div>
-        </header>
+        </section>
+        <dl class="grid gap-3 text-sm text-brand-dark/70 md:grid-cols-3">
+          <div>
+            <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Gepubliceerd</dt>
+            <dd id="after-published"></dd>
+          </div>
+          <div>
+            <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Lengte</dt>
+            <dd id="after-runtime"></dd>
+          </div>
+          <div>
+            <dt class="font-semibold uppercase tracking-wide text-brand-primary/70">Platform</dt>
+            <dd><a id="after-link" class="inline-flex items-center gap-2 rounded-xl border border-brand-magenta px-3 py-2 text-sm text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md" target="_blank" rel="noopener noreferrer">Open video</a></dd>
+          </div>
+        </dl>
       </article>
     </section>
   </template>
@@ -1463,8 +1476,10 @@
         cover:'assets/images/hero-park-2026-1200.webp',
         photographer:'Wim van der Geest',
         location:'Prins Bernhardplantsoen, Hengelo',
-        download:'https://bamfestival.nl/fotoalbums/2025',
-        downloadLabel:'Bekijk album 2025',
+        photographerLinks:[
+          { label:'Website', url:'https://wimvandergeest.com' },
+          { label:'Instagram', url:'https://www.instagram.com/wimvandergeest/' }
+        ],
         gallery:[
           { src:'assets/images/hero-park-2026-800.webp', caption:'Neon Bloom sluit het hoofdpodium af.', credit:'Foto: Wim van der Geest' },
           { src:'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop', caption:'Golden hour over het park.', credit:'Foto: Anne Peters' },
@@ -1479,8 +1494,10 @@
         cover:'https://images.unsplash.com/photo-1464375117522-1311d0bfc108?q=80&w=1600&auto=format&fit=crop',
         photographer:'Lotte de Vries',
         location:'Prins Bernhardplantsoen, Hengelo',
-        download:'https://bamfestival.nl/fotoalbums/2024',
-        downloadLabel:'Bekijk album 2024',
+        photographerLinks:[
+          { label:'Portfolio', url:'https://lottedevriesfotografie.nl' },
+          { label:'Instagram', url:'https://www.instagram.com/lottedevriesfoto/' }
+        ],
         gallery:[
           { src:'https://images.unsplash.com/photo-1464375117522-1311d0bfc108?q=80&w=1600&auto=format&fit=crop', caption:'Afterparty vibes rond de vijver.', credit:'Foto: Lotte de Vries' },
           { src:'https://images.unsplash.com/photo-1523757956233-94a86ff74ea5?q=80&w=1600&auto=format&fit=crop', caption:'Families picknicken tijdens de middagshows.', credit:'Foto: Patrick Mulder' }
@@ -1494,8 +1511,10 @@
         cover:'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1600&auto=format&fit=crop',
         photographer:'Iris Noort',
         location:'Prins Bernhardplantsoen, Hengelo',
-        download:'https://bamfestival.nl/fotoalbums/2023',
-        downloadLabel:'Bekijk album 2023',
+        photographerLinks:[
+          { label:'Website', url:'https://irisnoortfotografie.nl' },
+          { label:'Instagram', url:'https://www.instagram.com/irisnoort/' }
+        ],
         gallery:[
           { src:'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1600&auto=format&fit=crop', caption:'Jazz brunch op het parkpodium.', credit:'Foto: Iris Noort' },
           { src:'https://images.unsplash.com/photo-1529634898388-84d3e7f7bc71?q=80&w=1600&auto=format&fit=crop', caption:'Kunstinstallaties tussen de bomen.', credit:'Foto: Marco Visser' }
@@ -2021,16 +2040,7 @@
       nieuws: renderNieuws,
       fotos: renderFotos,
       media: renderFotos,
-      aftermovies: () => {
-        renderFotos();
-        requestAnimationFrame(() => {
-          const section = document.getElementById('aftermovies-section');
-          if (section){
-            const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            section.scrollIntoView({ behavior: prefersReduce ? 'auto' : 'smooth', block:'start' });
-          }
-        });
-      },
+      aftermovies: renderAftermovies,
       vrijwilligers: renderVrijwilligers,
       enquete: renderEnquete,
       historie: renderHistorie,
@@ -3058,36 +3068,82 @@
     }
     function renderFotos(){
       render('tpl-fotos');
-      const albums = [...PHOTO_ALBUMS].sort((a,b)=>b.year-a.year);
-      const albumGrid = document.getElementById('albums-grid');
-      albumGrid.innerHTML = albums.map(album => `
-        <article class="flex flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
-          <div class="aspect-[4/3] overflow-hidden bg-brand-purple/10">
-            <img src="${album.cover}" srcset="${buildSrcSet(album.cover)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${album.title}" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
-          </div>
-          <div class="flex flex-1 flex-col gap-2 p-4">
-            <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-brand-primary/70">
-              <span>${album.year}</span>
-              <span>${album.photographer}</span>
-            </div>
-            <h3 class="font-display text-xl leading-tight text-brand-primary"><a href="#album:${album.id}" class="hover:underline">${album.title}</a></h3>
-            <p class="text-sm text-brand-dark/70">${album.summary}</p>
-            <div class="mt-auto pt-2 text-xs font-semibold uppercase tracking-wide text-brand-magenta">Open fotoalbum →</div>
-          </div>
-        </article>`).join('');
-      const afterGrid = document.getElementById('aftermovies-grid');
+      const container = document.getElementById('albums-container');
+      if (!container){
+        return;
+      }
+      const albums = [...PHOTO_ALBUMS];
+      const grouped = albums.reduce((acc, album) => {
+        const key = album.year ?? 'Overzicht';
+        if (!acc.has(key)){
+          acc.set(key, []);
+        }
+        acc.get(key).push(album);
+        return acc;
+      }, new Map());
+      const sections = Array.from(grouped.entries())
+        .sort((a,b)=>{
+          const yearA = Number(a[0]) || 0;
+          const yearB = Number(b[0]) || 0;
+          return yearB - yearA;
+        })
+        .map(([year, items]) => {
+          const albumsMarkup = items
+            .sort((a,b)=>a.title.localeCompare(b.title))
+            .map(album => `
+              <article class="flex flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
+                <a href="#album:${album.id}" class="group block aspect-[4/3] overflow-hidden bg-brand-purple/10">
+                  <img src="${album.cover}" srcset="${buildSrcSet(album.cover)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${album.title}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                </a>
+                <div class="flex flex-1 flex-col gap-2 p-4">
+                  <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-brand-primary/70">
+                    <span>${album.photographer}</span>
+                    <span>${album.location || 'Prins Bernhardplantsoen'}</span>
+                  </div>
+                  <h3 class="font-display text-xl leading-tight text-brand-primary">
+                    <a href="#album:${album.id}" class="hover:underline">${album.title}</a>
+                  </h3>
+                  <div class="mt-auto pt-2">
+                    <a class="inline-flex items-center gap-2 text-sm font-semibold text-brand-magenta underline underline-offset-4" href="#album:${album.id}">Open fotoalbum →</a>
+                  </div>
+                </div>
+              </article>`).join('');
+          const countLabel = `${items.length} ${items.length === 1 ? 'album' : 'albums'}`;
+          return `
+            <section class="space-y-3" aria-label="Fotoalbums ${year}">
+              <div class="flex items-center justify-between gap-3">
+                <h3 class="font-display text-xl text-brand-primary">${year}</h3>
+                <span class="text-xs uppercase tracking-wide text-brand-dark/60">${countLabel}</span>
+              </div>
+              <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                ${albumsMarkup}
+              </div>
+            </section>`;
+        }).join('');
+      container.innerHTML = sections || '<p class="text-sm text-brand-dark/60">Nieuwe fotoalbums volgen binnenkort.</p>';
+    }
+    function renderAftermovies(){
+      render('tpl-aftermovies');
+      const grid = document.getElementById('aftermovies-grid');
+      if (!grid){
+        return;
+      }
       const afters = [...AFTERMOVIES].sort((a,b)=>b.year-a.year);
-      afterGrid.innerHTML = afters.map(after => `
+      grid.innerHTML = afters.map(after => `
         <article class="flex flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
-          <div class="relative aspect-video overflow-hidden bg-brand-purple/10">
-            <img src="${after.thumb}" srcset="${buildSrcSet(after.thumb)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${after.title}" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+          <a href="#aftermovie:${after.id}" class="group relative block aspect-video overflow-hidden bg-brand-purple/10">
+            <img src="${after.thumb}" srcset="${buildSrcSet(after.thumb)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${after.title}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
             <span class="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">${after.runtime}</span>
-          </div>
+          </a>
           <div class="flex flex-1 flex-col gap-2 p-4">
             <div class="text-xs font-semibold uppercase tracking-wide text-brand-primary/70">${after.year}</div>
-            <h3 class="font-display text-lg text-brand-primary"><a href="#aftermovie:${after.id}" class="hover:underline">${after.title}</a></h3>
+            <h3 class="font-display text-lg text-brand-primary">
+              <a href="#aftermovie:${after.id}" class="hover:underline">${after.title}</a>
+            </h3>
             <p class="text-sm text-brand-dark/70">${after.summary}</p>
-            <div class="mt-auto pt-2 text-xs font-semibold uppercase tracking-wide text-brand-magenta">Bekijk aftermovie →</div>
+            <div class="mt-auto pt-2">
+              <a class="inline-flex items-center gap-2 text-sm font-semibold text-brand-magenta underline underline-offset-4" href="#aftermovie:${after.id}">Bekijk aftermovie →</a>
+            </div>
           </div>
         </article>`).join('');
     }
@@ -3108,14 +3164,17 @@
       document.getElementById('album-summary').textContent = album.summary;
       document.getElementById('album-photographer').textContent = album.photographer || 'Onbekend';
       document.getElementById('album-location').textContent = album.location || 'Prins Bernhardplantsoen, Hengelo';
-      const downloadRow = document.getElementById('album-download-row');
-      if (album.download){
-        const downloadEl = document.getElementById('album-download');
-        downloadEl.href = album.download;
-        downloadEl.textContent = album.downloadLabel || 'Download album';
-        downloadRow.style.display = '';
-      } else {
-        downloadRow.style.display = 'none';
+      const linksEl = document.getElementById('album-links');
+      if (linksEl){
+        if (Array.isArray(album.photographerLinks) && album.photographerLinks.length){
+          linksEl.style.display = '';
+          linksEl.innerHTML = album.photographerLinks.map(link => `
+            <a class="inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 px-3 py-1 text-brand-primary transition hover:-translate-y-0.5 hover:shadow-md" href="${link.url}" target="_blank" rel="noopener noreferrer">${link.label}</a>
+          `).join('');
+        } else {
+          linksEl.innerHTML = '';
+          linksEl.style.display = 'none';
+        }
       }
       const galleryEl = document.getElementById('album-gallery');
       galleryEl.innerHTML = (album.gallery && album.gallery.length)
@@ -3141,6 +3200,88 @@
       videoEl.src = `https://www.youtube.com/embed/${after.videoId}?rel=0`;
       document.getElementById('after-title').textContent = after.title;
       document.getElementById('after-summary').textContent = after.summary;
+      const shareContainer = document.getElementById('after-share');
+      if (shareContainer){
+        const currentUrl = (typeof window !== 'undefined' && window.location) ? window.location.href : '';
+        if (currentUrl){
+          const shareText = `${after.title} – BAM! Festival aftermovie`;
+          const encodedUrl = encodeURIComponent(currentUrl);
+          const encodedText = encodeURIComponent(shareText);
+          const shareLinks = [
+            { label:'Facebook', url:`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+            { label:'X', url:`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}` },
+            { label:'WhatsApp', url:`https://wa.me/?text=${encodedText}%20${encodedUrl}` }
+          ];
+          shareContainer.innerHTML = '';
+          shareLinks.forEach(link => {
+            const anchor = document.createElement('a');
+            anchor.className = 'inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 px-3 py-1 text-brand-primary transition hover:-translate-y-0.5 hover:shadow-md';
+            anchor.href = link.url;
+            anchor.target = '_blank';
+            anchor.rel = 'noopener noreferrer';
+            anchor.textContent = link.label;
+            shareContainer.appendChild(anchor);
+          });
+          const copyBtn = document.createElement('button');
+          copyBtn.type = 'button';
+          copyBtn.className = 'inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 px-3 py-1 text-brand-primary transition hover:-translate-y-0.5 hover:shadow-md';
+          copyBtn.textContent = 'Kopieer link';
+          const notify = (label, reset = true) => {
+            copyBtn.textContent = label;
+            if (reset){
+              setTimeout(() => {
+                copyBtn.textContent = 'Kopieer link';
+              }, 2200);
+            }
+          };
+          copyBtn.addEventListener('click', async () => {
+            try{
+              if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText){
+                await navigator.clipboard.writeText(currentUrl);
+              } else {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = currentUrl;
+                tempInput.setAttribute('readonly','');
+                tempInput.style.position = 'absolute';
+                tempInput.style.left = '-9999px';
+                const container = document.body || document.documentElement;
+                if (!container){
+                  throw new Error('Geen container beschikbaar om te kopiëren');
+                }
+                container.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                container.removeChild(tempInput);
+              }
+              notify('Link gekopieerd');
+            } catch (error){
+              console.warn('Kon link niet kopiëren', error);
+              notify('Probeer opnieuw');
+            }
+          });
+          shareContainer.appendChild(copyBtn);
+          if (typeof navigator !== 'undefined' && navigator.share){
+            const nativeBtn = document.createElement('button');
+            nativeBtn.type = 'button';
+            nativeBtn.className = 'inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 px-3 py-1 text-brand-primary transition hover:-translate-y-0.5 hover:shadow-md';
+            nativeBtn.textContent = 'Deel via apparaat';
+            nativeBtn.addEventListener('click', async () => {
+              try{
+                await navigator.share({ title: shareText, text: shareText, url: currentUrl });
+              } catch (error){
+                if (error && error.name !== 'AbortError'){
+                  console.warn('Native share niet gelukt', error);
+                }
+              }
+            });
+            shareContainer.appendChild(nativeBtn);
+          }
+          shareContainer.style.display = '';
+        } else {
+          shareContainer.innerHTML = '';
+          shareContainer.style.display = 'none';
+        }
+      }
       document.getElementById('after-published').textContent = after.published || '';
       document.getElementById('after-runtime').textContent = after.runtime || '';
       const highlightsEl = document.getElementById('after-highlights');
