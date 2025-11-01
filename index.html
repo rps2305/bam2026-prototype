@@ -1439,20 +1439,14 @@
       }
     ];
     const SPONSORS = {
-      Diamond:[
-        { name:'Hoofdsponsor X', logo:'https://dummyimage.com/220x110/ffd829/111827&text=Hoofdsponsor' },
-        { name:'Gemeente Hengelo', logo:'https://dummyimage.com/220x110/8b1c66/ffffff&text=Gemeente' }
+      Sponsors:[
+        { name:'Brand Bier', logo:'assets/logos/brand-bier.webp', role:'sponsor' },
+        { name:'Saint Security & Safety', logo:'assets/logos/saint-security-safety.webp', role:'sponsor' },
+        { name:'Control Bee', logo:'assets/logos/control-bee.webp', role:'sponsor' }
       ],
-      Gold:[
-        { name:'Bedrijf A', logo:'https://dummyimage.com/200x110/009de0/ffffff&text=Gold+A' },
-        { name:'Bedrijf B', logo:'https://dummyimage.com/200x110/5e2e84/ffffff&text=Gold+B' },
-        { name:'Bedrijf C', logo:'https://dummyimage.com/200x110/e31362/ffffff&text=Gold+C' }
-      ],
-      Silver:[
-        { name:'Partner 1', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+1' },
-        { name:'Partner 2', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+2' },
-        { name:'Partner 3', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+3' },
-        { name:'Partner 4', logo:'https://dummyimage.com/160x100/fdf8ed/8b1c66&text=Silver+4' }
+      Partners:[
+        { name:'Studio Whooom', logo:'assets/logos/studio-whooom.webp', role:'partner' },
+        { name:'Baard & Haar', logo:'assets/logos/baard-en-haar.webp', role:'partner' }
       ]
     };
     const PHOTO_ALBUMS = [
@@ -2477,9 +2471,9 @@
       const sponsorsGrid = document.getElementById('home-sponsors-logos');
       if (sponsorsGrid){
         const featuredSponsors = Object.values(SPONSORS).flat().slice(0,6);
-        sponsorsGrid.innerHTML = featuredSponsors.map(({ name, logo }) => `
+        sponsorsGrid.innerHTML = featuredSponsors.map(({ name, logo, role }) => `
           <figure class="flex h-24 items-center justify-center rounded-2xl border border-brand-primary/15 bg-white/95 p-3 shadow-card">
-            <img src="${logo}" srcset="${buildSrcSet(logo)}" sizes="(max-width: 768px) 45vw, 140px" alt="${name}" loading="lazy" decoding="async" class="max-h-14 w-auto object-contain" />
+            <img src="${logo}" srcset="${buildSrcSet(logo)}" sizes="(max-width: 768px) 45vw, 140px" alt="${sponsorAlt(name, role)}" loading="lazy" decoding="async" class="max-h-14 w-auto object-contain" />
             <figcaption class="sr-only">${name}</figcaption>
           </figure>`).join('');
       }
@@ -3059,16 +3053,20 @@
           <div class="mt-2 text-sm text-brand-dark/70">${it.a}</div>
         </details>`).join('');
     }
+    const sponsorAlt = (name, role) => {
+      const label = role === 'partner' ? 'partner' : 'sponsor';
+      return `${name} – ${label} BAM! Festival`;
+    };
     function renderSponsors(){
       render('tpl-sponsors');
       const el = document.getElementById('sponsor-tiers');
-      el.innerHTML = Object.entries(SPONSORS).map(([tier,items])=>`
+      el.innerHTML = Object.entries(SPONSORS).map(([groupLabel,items])=>`
         <section class="rounded-3xl border border-brand-primary/15 bg-white/95 p-5 shadow-card">
-          <h2 class="font-display text-xl uppercase tracking-wide text-brand-primary">${tier}</h2>
-          <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-6">
-            ${items.map(({name,logo})=>`
-              <figure class="flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-2 text-center">
-                <img src="${logo}" srcset="${buildSrcSet(logo)}" sizes="(max-width: 768px) 45vw, 180px" alt="${name}" loading="lazy" decoding="async" class="h-14 w-full object-contain" onerror="this.src='https://dummyimage.com/180x80/cccccc/111827&text=Sponsor'" />
+          <h2 class="font-display text-xl uppercase tracking-wide text-brand-primary">${groupLabel}</h2>
+          <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            ${items.map(({name,logo,role})=>`
+              <figure class="flex h-28 flex-col items-center justify-center gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-3 text-center">
+                <img src="${logo}" srcset="${buildSrcSet(logo)}" sizes="(max-width: 768px) 45vw, 180px" alt="${sponsorAlt(name, role)}" loading="lazy" decoding="async" class="h-16 w-full object-contain" onerror="this.src='https://dummyimage.com/180x80/cccccc/111827&text=BAM!'" />
                 <figcaption class="text-[0.65rem] font-semibold uppercase tracking-wide text-brand-primary">${name}</figcaption>
               </figure>`).join('')}
           </div>
