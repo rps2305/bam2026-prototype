@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/main.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-o9N1j7kPp65P9FDLdPGP1K7tbkZgkHq9v+J8Bn0i8mE=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhII9+hmNHrzRCf9tD/mpZyoHS5obTRR9BMY=" crossorigin="anonymous" />
   <meta property="og:site_name" content="BAM! Festival Hengelo (Ov.)" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bamfestival.nl/" />
@@ -75,8 +75,8 @@
             },
             "geo": {
               "@type": "GeoCoordinates",
-              "latitude": 52.26219,
-              "longitude": 6.79363
+              "latitude": 52.2625738,
+              "longitude": 6.7979581
             }
           },
           "offers": {
@@ -169,7 +169,7 @@
       ]
     }
   </script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o+3bqT9XPh0uAbfZmm1O+66Q6bQ0sJY9hw3rro3At+k=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" defer></script>
 </head>
 <body class="bg-bam-gradient text-brand-dark dark:bg-brand-dark dark:text-white">
   <a href="#app" class="skip-link sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-4 focus:left-4 focus-rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:text-brand-primary focus:shadow-lg">Direct naar inhoud</a>
@@ -974,7 +974,7 @@
           <h2 class="font-display text-2xl text-brand-primary">Bezoek ons in het park</h2>
           <p class="text-sm md:text-base text-brand-dark/80">Tijdens het festival vind je ons in het Prins Bernhardplantsoen in Hengelo. Gebruik de kaart hieronder voor de snelste route.</p>
         </section>
-        <div id="contact-map" class="h-72 w-full overflow-hidden rounded-3xl border border-brand-primary/15 bg-white shadow-card"></div>
+        <div id="contact-map" class="w-full overflow-hidden rounded-3xl border border-brand-primary/15 bg-white shadow-card" style="width:100%;min-height:480px;height:clamp(560px,75vh,880px);"></div>
       </article>
     </section>
   </template>
@@ -1940,6 +1940,7 @@
       doneer: renderDoneer
     };
     let contactMap;
+    let contactMapResizeHandler = null;
     const formatTimeLabel = (value) => {
       if (value === null || value === undefined) return '';
       const str = String(value).trim();
@@ -3089,6 +3090,10 @@
         mapContainer.innerHTML = '<div class="p-4 text-sm text-brand-dark/70">Kaart kon niet geladen worden. Probeer het later opnieuw.</div>';
         return;
       }
+      if (contactMapResizeHandler){
+        window.removeEventListener('resize', contactMapResizeHandler);
+        contactMapResizeHandler = null;
+      }
       if (contactMap){
         contactMap.remove();
         contactMap = null;
@@ -3096,12 +3101,18 @@
       mapContainer.innerHTML = '';
       const initMap = () => {
         try {
-          contactMap = L.map(mapContainer, { scrollWheelZoom:false }).setView([52.26219, 6.79363], 17);
+          const bamParkCoords = [52.2625738, 6.7979581];
+          contactMap = L.map(mapContainer, { scrollWheelZoom:false }).setView(bamParkCoords, 17);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>-bijdragers'
           }).addTo(contactMap);
-          L.marker([52.26219, 6.79363]).addTo(contactMap).bindPopup('<strong>BAM! Festival</strong><br>Prins Bernhardplantsoen<br>Hengelo');
-          setTimeout(() => contactMap && contactMap.invalidateSize(), 150);
+          L.marker(bamParkCoords).addTo(contactMap).bindPopup('<strong>BAM! Festival</strong><br>Prins Bernhardplantsoen 1<br>Hengelo');
+          const ensureSize = () => contactMap && contactMap.invalidateSize();
+          requestAnimationFrame(ensureSize);
+          setTimeout(ensureSize, 200);
+          setTimeout(ensureSize, 600);
+          window.addEventListener('resize', ensureSize, { passive:true });
+          contactMapResizeHandler = ensureSize;
         } catch (error){
           console.error('Leaflet map kon niet initialiseren', error);
           mapContainer.innerHTML = '<div class="p-4 text-sm text-brand-dark/70">Kaart kon niet geladen worden. Probeer het later opnieuw.</div>';
