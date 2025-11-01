@@ -20,7 +20,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/main.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhII9+hmNHrzRCf9tD/mpZyoHS5obTRR9BMY=" crossorigin="anonymous" />
+  <link rel="preload" href="/vendor/leaflet/leaflet.css" as="style" />
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" />
   <meta property="og:site_name" content="BAM! Festival Hengelo (Ov.)" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bamfestival.nl/" />
@@ -36,7 +37,7 @@
   <meta name="twitter:description" content="Ontdek line-up, plattegrond, vrijwilligers, nieuws en partners van BAM! Festival 2026." />
   <meta name="twitter:image" content="assets/images/og-bam-festival-2026.webp" />
   <meta name="twitter:image:alt" content="Publiek en artiesten op BAM! Festival 2026 in Hengelo" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https://bamfestival.nl https://images.unsplash.com https://dummyimage.com; font-src 'self' https://fonts.gstatic.com https://bamfestival.nl; connect-src 'self'; frame-src https://forms.office.com https://www.youtube-nocookie.com https://open.spotify.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https://bamfestival.nl https://images.unsplash.com https://dummyimage.com https://img.youtube.com https://i.ytimg.com; font-src 'self' https://fonts.gstatic.com https://bamfestival.nl; connect-src 'self'; frame-src https://forms.office.com https://www.youtube-nocookie.com https://open.spotify.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -169,7 +170,7 @@
       ]
     }
   </script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" defer></script>
+  <script src="/vendor/leaflet/leaflet.js" defer></script>
 </head>
 <body class="bg-bam-gradient text-brand-dark dark:bg-brand-dark dark:text-white">
   <a href="#app" class="skip-link sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-4 focus:left-4 focus-rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:text-brand-primary focus:shadow-lg">Direct naar inhoud</a>
