@@ -413,14 +413,14 @@
       </section>
       <!-- Now/Next -->
       <section class="mt-8 rounded-3xl border border-brand-primary/15 bg-white/95 p-6 shadow-card">
-        <div class="flex items-end justify-between"><h2 class="font-display text-2xl md:text-3xl">Nu & straks op het podium</h2><a href="/timetable/" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-magenta underline underline-offset-4">Bekijk de volledige timetable →</a></div>
+        <div class="flex items-end justify-between"><h2 class="font-display text-2xl md:text-3xl">Nu & straks op het podium</h2><a href="#timetable" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-magenta underline underline-offset-4">Bekijk de volledige timetable →</a></div>
         <div id="home-nownext" class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"></div>
       </section>
       <!-- Line-up -->
       <section class="mt-10 rounded-3xl border border-brand-primary/15 bg-white/95 p-6 shadow-card">
         <div class="flex items-end justify-between mb-3">
           <h2 class="font-display text-2xl md:text-3xl">Line‑up</h2>
-          <a href="/line-up/" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-magenta underline underline-offset-4">Bekijk de volledige line-up →</a>
+          <a href="#line-up" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-magenta underline underline-offset-4">Bekijk de volledige line-up →</a>
         </div>
         <div id="home-lineup" class="mt-4 grid gap-4 md:grid-cols-3 xl:grid-cols-4"></div>
       </section>
@@ -1758,7 +1758,7 @@
           },
           {
             question:'Kan ik de line-up filteren?',
-            answer:'Ja, op de <a class="text-brand-magenta underline" href="/line-up/">line-up pagina</a> filter je op dag, podium en genre. Je selectie blijft actief zolang de pagina geopend blijft.'
+            answer:'Ja, op de <a class="text-brand-magenta underline" href="#line-up">line-up pagina</a> filter je op dag, podium en genre. Je selectie blijft actief zolang de pagina geopend blijft.'
           },
           {
             question:'Werkt de site ook op mobiel?',
@@ -2560,29 +2560,29 @@
       };
       const nowNext = ensureFeatured(4, ['dj','theatre']);
       nowNextEl.innerHTML = nowNext.map(a => {
-        const typeChip = a.type !== 'music' ? typeBadge(a.type, 'text-[0.7rem]') : '';
+        const typeChip = typeBadge(a.type, 'text-[0.3rem] tracking-wide');
         const dayLabel = labelDay(a.day);
         const timeRange = `${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)}`;
         return `
         <article class="flex flex-col gap-3 rounded-3xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
           <div class="flex items-start justify-between gap-3">
-            <div class="space-y-1">
-              <p class="text-xs font-semibold uppercase tracking-wide text-brand-primary/60">${dayLabel}</p>
-              <p class="font-mono text-sm font-semibold text-brand-primary">${timeRange}</p>
+            <div class="space-y-[1px] text-[0.24rem] tracking-wide text-brand-primary/70">
+              <span>${dayLabel}</span>
+              <span class="font-mono text-[0.28rem] text-brand-primary/80">${timeRange}</span>
             </div>
-            <a href="#artist:${a.id}" class="inline-flex items-center gap-1 whitespace-nowrap rounded-xl border border-brand-magenta px-3 py-1 text-xs font-semibold text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">Open</a>
+            <a href="#artist:${a.id}" class="inline-flex items-center gap-1 whitespace-nowrap rounded-xl border border-brand-magenta px-3 py-1 text-[0.42rem] font-semibold text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">Open</a>
           </div>
           <div class="space-y-2">
             <a href="#artist:${a.id}" class="block text-lg font-semibold leading-snug text-brand-primary hover:underline">${a.name}</a>
-            <div class="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wide text-brand-dark/60">
-              <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow px-3 py-1 font-semibold text-brand-dark">${a.stage}</span>
+            <div class="flex flex-wrap items-center gap-2 text-[0.26rem] tracking-wide text-brand-dark/60">
+              <span class="inline-flex items-center justify-center rounded-full bg-brand-yellow px-2 py-0.5 text-center leading-tight text-[0.26rem] text-brand-dark">${a.stage}</span>
               ${typeChip}
             </div>
           </div>
         </article>`;
       }).join('');
       const featuredLineup = ensureFeatured(4, ['dj','theatre']);
-      lineupEl.innerHTML = featuredLineup.map(a => cardArtist(a, { includeMusicLabel:false })).join('');
+      lineupEl.innerHTML = featuredLineup.map(a => cardArtist(a, { includeMusicLabel:true })).join('');
       const latestNews = [...NEWS].sort((a,b)=>new Date(b.date) - new Date(a.date)).slice(0,3);
       newsEl.innerHTML = latestNews.map(n => {
         const createdLabel = formatDateTime(n.created || n.date);
@@ -2617,28 +2617,56 @@
       }
     }
     function cardArtist(a, options = {}){
-      const { includeMusicLabel = true, extraBadge = '', action } = options;
-      const showTypeLabel = a.type !== 'music' || includeMusicLabel;
-      const metaParts = [`${labelDay(a.day)}`, `${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)}`];
-      const typeChip = showTypeLabel ? typeBadge(a.type, 'text-[0.7rem]') : '';
+      const { includeMusicLabel = true, extraBadge = '', action, schedule, typeClass = '' } = options;
+      const slots = (schedule && schedule.length)
+        ? schedule
+        : [{
+          day: a.day,
+          stage: a.stage,
+          start: a.start,
+          end: a.end,
+          type: a.type,
+          label: a.label,
+          isMatch: true
+        }];
+      const primarySlot = slots[0];
+      const showTypeLabel = includeMusicLabel || (primarySlot?.type ?? a.type) !== 'music';
+      const typeChip = showTypeLabel
+        ? typeBadge(primarySlot?.type ?? a.type, `text-[0.25rem] tracking-wide ${typeClass}`.trim())
+        : '';
       const extraBadgeChip = extraBadge
-        ? `<span class="inline-block rounded-full border border-brand-primary/20 bg-brand-light/60 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-brand-primary/80">${extraBadge}</span>`
+        ? `<span class="inline-block rounded-full border border-brand-primary/20 bg-brand-light/60 px-2.5 py-0.5 text-[0.26rem] tracking-wide text-brand-primary/65">${extraBadge}</span>`
         : '';
       const actionMarkup = action
         ? `<div><a href="${action.href}" class="inline-flex items-center gap-1 rounded-xl border border-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">${action.label}</a></div>`
         : '';
+      const scheduleMarkup = slots.map(slot => {
+        if (!slot.day || !slot.start || !slot.end || !slot.stage) return '';
+        const highlightClass = slot.isMatch ? 'bg-brand-yellow/20 text-brand-primary' : 'bg-brand-primary/10 text-brand-dark/70';
+        const labelMarkup = slot.label && slot.label !== 'Hoofdset'
+          ? `<span class="ml-1 rounded-full bg-white/60 px-2 py-0.5 text-[0.26rem] tracking-wide text-brand-dark/60">${slot.label}</span>`
+          : '';
+        return `<li class="flex flex-wrap items-center gap-1 rounded-xl ${highlightClass} px-2 py-1 text-[0.26rem] tracking-wide">
+          <span>${labelDay(slot.day)}</span>
+          <span class="opacity-30">•</span>
+          <span class="inline-flex items-center justify-center rounded-full bg-brand-yellow px-2 py-0.5 text-center leading-tight text-[0.26rem] tracking-wide text-brand-dark">${slot.stage}</span>
+          <span class="opacity-30">•</span>
+          <span>${formatTimeLabel(slot.start)}–${formatTimeLabel(slot.end)}</span>
+          ${labelMarkup}
+        </li>`;
+      }).join('');
+      const scheduleList = scheduleMarkup ? `<ul class="space-y-1">${scheduleMarkup}</ul>` : '';
       return `<article class="flex flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card dark:bg-white/5">
         <div class="aspect-square w-full overflow-hidden bg-brand-purple/10">
           <img src="${a.img}" srcset="${buildSrcSet(a.img)}" sizes="(max-width: 768px) 100vw, 25vw" alt="${a.name}" loading="lazy" decoding="async" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
         </div>
         <div class="flex flex-1 flex-col gap-2 p-4">
           <h3 class="font-display text-xl leading-tight text-brand-primary"><a href="#artist:${a.id}" class="hover:underline">${a.name}</a></h3>
-          <div class="text-sm text-brand-dark/70">${metaParts.join(' · ')}</div>
           <div class="flex flex-wrap gap-2">
-            <span class="inline-block rounded-full bg-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">${a.stage}</span>
             ${typeChip}
             ${extraBadgeChip}
           </div>
+          ${scheduleList}
           <div class="mt-auto flex flex-col gap-3 pt-2">
             ${actionMarkup}
             <div class="flex flex-wrap gap-2 text-xs uppercase tracking-wide text-brand-dark/60">
@@ -2727,6 +2755,13 @@
         const stage = selStage.value;
         const type = selType.value;
         const events = buildEvents();
+        const eventsByArtist = events.reduce((map, event) => {
+          if (!map.has(event.artist.id)){
+            map.set(event.artist.id, []);
+          }
+          map.get(event.artist.id).push(event);
+          return map;
+        }, new Map());
         const filtered = events.filter(event =>
           (day === 'all' || event.day === day) &&
           (stage === 'all' || event.stage === stage) &&
@@ -2751,21 +2786,42 @@
         });
         if (listEl){
           if (renderAsCards){
-            listEl.innerHTML = sorted.map(event => {
-              const cardData = {
-                ...event.artist,
-                day: event.day,
-                stage: event.stage,
-                start: event.start,
-                end: event.end,
-                type: event.type
-              };
-              const extraBadge = event.label && event.label !== 'Hoofdset' ? event.label : '';
-              return cardArtist(cardData, {
-                extraBadge,
-                action: { href: `#artist:${event.artist.id}`, label: 'Meer info' }
+            const filteredSet = new Set(filtered);
+            const grouped = new Map();
+            sorted.forEach(event => {
+              if (!grouped.has(event.artist.id)) grouped.set(event.artist.id, []);
+              grouped.get(event.artist.id).push(event);
+            });
+            const aggregated = Array.from(grouped.entries()).map(([artistId, matchedSlots]) => {
+              const allSlots = (eventsByArtist.get(artistId) || []).slice().sort((a,b)=>{
+                const dayDiff = dayIndex(a.day) - dayIndex(b.day);
+                if (dayDiff !== 0) return dayDiff;
+                return a.start.localeCompare(b.start);
               });
-            }).join('');
+              const schedule = allSlots.map(slot => ({
+                day: slot.day,
+                stage: slot.stage,
+                start: slot.start,
+                end: slot.end,
+                type: slot.type,
+                label: slot.label,
+                isMatch: filteredSet.has(slot)
+              }));
+              const firstMatch = matchedSlots[0];
+              return {
+                artist: firstMatch.artist,
+                schedule,
+                anchor: firstMatch
+              };
+            }).sort((a,b)=>{
+              const dayDiff = dayIndex(a.anchor.day) - dayIndex(b.anchor.day);
+              if (dayDiff !== 0) return dayDiff;
+              return a.anchor.start.localeCompare(b.anchor.start);
+            });
+            listEl.innerHTML = aggregated.map(item => cardArtist(item.artist, {
+              schedule: item.schedule,
+              action: { href: `#artist:${item.artist.id}`, label: 'Meer info' }
+            })).join('');
           } else {
             listEl.innerHTML = sorted.map(event => `
           <li class="flex items-center gap-4 rounded-2xl border border-brand-primary/15 bg-white/95 px-4 py-3 shadow-card">
@@ -3679,7 +3735,9 @@
     const typeInfo = (id) => PERFORMANCE_TYPES.find(t => t.id === id) || { id, label:id, icon:'' };
     function typeBadge(id, extraClass = ''){
       const info = typeInfo(id);
-      return `<span class="inline-flex items-center gap-1 rounded-full bg-brand-accent/15 px-2.5 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wide text-brand-accent ${extraClass}">${info.icon ? `<span aria-hidden="true">${info.icon}</span>` : ''}<span>${info.label}</span></span>`;
+      const hasCustomSize = /text-\[/.test(extraClass);
+      const typography = hasCustomSize ? 'uppercase tracking-wide' : 'text-[0.7rem] font-semibold uppercase tracking-wide';
+      return `<span class="inline-flex items-center gap-1 rounded-full bg-brand-accent/15 px-2.5 py-0.5 text-brand-accent ${typography} ${extraClass}">${info.icon ? `<span aria-hidden="true">${info.icon}</span>` : ''}<span>${info.label}</span></span>`;
     }
     function labelType(id){ return typeInfo(id).label || id; }
     const COOKIE_STORAGE_KEY = 'bam.cookieConsent';
