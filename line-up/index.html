@@ -11,7 +11,7 @@
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="preload" href="/assets/css/main.css" as="style" />
   <link rel="stylesheet" href="/assets/css/main.css" />
-  <script defer src="/assets/js/main.js"></script>
+  <script type="module" src="/assets/js/main.js"></script>
   <style>
     .lineup-wrapper {
       margin-top: 2rem;
@@ -147,19 +147,20 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.55rem;
-      font-size: 0.72rem;
+      gap: 0.4rem;
+      font-size: 0.6rem;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #0f172a;
     }
     .lineup-grid .cluster .pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      justify-content: center;
+      gap: 0.3rem;
       border-radius: 999px;
-      padding: 0.45rem 0.9rem;
+      padding: 0.35rem 0.75rem;
       background: rgba(250, 204, 21, 0.9);
       color: #111827;
       box-shadow: inset 0 0 0 1px rgba(249, 250, 215, 0.45);
@@ -172,7 +173,7 @@
       background: none;
       border: 0;
       box-shadow: none;
-      font-size: 0.8rem;
+      font-size: 0.6rem;
       font-weight: 600;
       letter-spacing: 0.06em;
       color: rgba(15, 23, 42, 0.65);
@@ -187,7 +188,7 @@
       padding: 0.45rem 0.85rem;
       background: rgba(20, 184, 166, 0.18);
       color: #0f172a;
-      font-size: 0.72rem;
+      font-size: 0.58rem;
       content: '';
     }
     .lineup-grid .card[data-type="music"] .cluster::after {

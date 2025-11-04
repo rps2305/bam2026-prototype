@@ -15,7 +15,9 @@
   <meta name="theme-color" content="#0F172A" media="(prefers-color-scheme: dark)" />
   <meta name="msapplication-navbutton-color" content="#1F2937" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="/assets/logos/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="/assets/logos/favicon-64.png" type="image/png" sizes="64x64" />
+  <link rel="icon" href="/assets/logos/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -179,7 +181,7 @@
     <div class="flex h-16 w-full items-center gap-3 px-4 sm:px-6">
       <button id="btnMenu" type="button" class="lg:hidden inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-brand-primary shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/20 dark:bg-brand-dark/60 dark:text-white" aria-label="Open navigatie" aria-controls="mobile-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="sr-only">Open navigatie</span></button>
       <a href="#home" class="flex items-center gap-2 shrink-0">
-        <img id="brandLogo" src="logo-bam-festival-zwart.webp" srcset="logo-bam-festival-zwart.webp 1x, logo-bam-festival-zwart.webp 2x" sizes="120px" alt="BAM! Festival" class="h-7 w-auto" loading="lazy" decoding="async" onerror="this.src='https://dummyimage.com/140x40/7c3aed/ffffff&text=BAM!+Festival'" />
+        <img id="brandLogo" src="logo-bam-festival-zwart.webp" srcset="logo-bam-festival-zwart.webp 1x, logo-bam-festival-zwart.webp 2x" sizes="120px" alt="BAM! Festival" class="h-7 w-auto" width="165" height="47" loading="lazy" decoding="async" onerror="this.src='https://dummyimage.com/140x40/7c3aed/ffffff&text=BAM!+Festival'" />
       </a>
       <nav id="mainNav" class="main-nav hidden lg:flex ml-2" aria-label="Hoofdmenu">
         <ul class="main-nav__list" role="menubar">
@@ -377,7 +379,7 @@
             <h2 class="font-display text-3xl text-brand-primary">Festivalinfo in één oogopslag</h2>
             <p class="text-sm md:text-base text-brand-dark">Alles wat je moet weten voordat je naar Hengelo afreist: openingstijden, bereikbaarheid, betalingen en handige links voor nog meer antwoorden.</p>
           </div>
-          <a href="#faq" class="btn-secondary border-brand-magenta/60 text-brand-magenta">Bekijk alle veelgestelde vragen →</a>
+          <a href="#faq" class="btn-secondary btn-secondary--magenta">Bekijk alle veelgestelde vragen →</a>
         </div>
         <dl class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <div class="rounded-2xl border border-brand-primary/15 bg-brand-light/60 p-4">
@@ -666,7 +668,7 @@
             <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Word onderdeel van de crew</span>
             <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Inschrijven als vrijwilliger</h1>
             <p class="text-sm md:text-base text-brand-dark/80">Zonder vrijwilligers geen BAM! Festival. Elk jaar bouwen meer dan 600 enthousiaste mensen mee aan twee dagen muziek, theater en kunst in het Prins Bernhardplantsoen. Meld je aan voor je favoriete rol en beleef het festival vanaf de andere kant van het podium.</p>
-            <div class="flex flex-wrap gap-3"><span class="btn-secondary text-sm text-brand-magenta border-brand-magenta/60 email-link" data-user="vrijwilligers" data-domain="bamfestival.nl" data-label="vrijwilligers@bamfestival.nl">Stel een vraag</span></div>
+            <div class="flex flex-wrap gap-3"><span class="btn-secondary btn-secondary--magenta text-sm email-link" data-user="vrijwilligers" data-domain="bamfestival.nl" data-label="vrijwilligers@bamfestival.nl">Stel een vraag</span></div>
           </div>
           <div class="grid gap-3 rounded-3xl border border-brand-primary/15 bg-brand-light/60 p-5 text-sm text-brand-dark">
             <div>
@@ -2560,22 +2562,22 @@
       };
       const nowNext = ensureFeatured(4, ['dj','theatre']);
       nowNextEl.innerHTML = nowNext.map(a => {
-        const typeChip = typeBadge(a.type, 'text-[0.3rem] tracking-wide');
+        const typeChip = typeBadge(a.type, 'text-[0.48rem] tracking-wide');
         const dayLabel = labelDay(a.day);
         const timeRange = `${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)}`;
         return `
         <article class="flex flex-col gap-3 rounded-3xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
           <div class="flex items-start justify-between gap-3">
-            <div class="space-y-[1px] text-[0.24rem] tracking-wide text-brand-primary/70">
+            <div class="space-y-[1px] text-[0.5rem] tracking-wide text-brand-primary/75">
               <span>${dayLabel}</span>
-              <span class="font-mono text-[0.28rem] text-brand-primary/80">${timeRange}</span>
+              <span class="font-mono text-[0.58rem] text-brand-primary/85">${timeRange}</span>
             </div>
-            <a href="#artist:${a.id}" class="inline-flex items-center gap-1 whitespace-nowrap rounded-xl border border-brand-magenta px-3 py-1 text-[0.42rem] font-semibold text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">Open</a>
+            <a href="#artist:${a.id}" class="inline-flex items-center gap-1 whitespace-nowrap rounded-xl border border-brand-magenta px-3 py-1 text-[0.52rem] font-semibold text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">Open</a>
           </div>
           <div class="space-y-2">
             <a href="#artist:${a.id}" class="block text-lg font-semibold leading-snug text-brand-primary hover:underline">${a.name}</a>
-            <div class="flex flex-wrap items-center gap-2 text-[0.26rem] tracking-wide text-brand-dark/60">
-              <span class="inline-flex items-center justify-center rounded-full bg-brand-yellow px-2 py-0.5 text-center leading-tight text-[0.26rem] text-brand-dark">${a.stage}</span>
+            <div class="flex flex-wrap items-center gap-2 text-[0.5rem] tracking-wide text-brand-dark/70">
+              <span class="inline-flex items-center justify-center rounded-full bg-brand-yellow px-2.5 py-0.5 text-center leading-tight text-[0.5rem] text-brand-dark">${a.stage}</span>
               ${typeChip}
             </div>
           </div>
@@ -2632,10 +2634,10 @@
       const primarySlot = slots[0];
       const showTypeLabel = includeMusicLabel || (primarySlot?.type ?? a.type) !== 'music';
       const typeChip = showTypeLabel
-        ? typeBadge(primarySlot?.type ?? a.type, `text-[0.22rem] tracking-wide ${typeClass}`.trim())
+        ? typeBadge(primarySlot?.type ?? a.type, `text-[0.48rem] tracking-wide ${typeClass}`.trim())
         : '';
       const extraBadgeChip = extraBadge
-        ? `<span class="inline-block rounded-full border border-brand-primary/20 bg-brand-light/60 px-2.5 py-0.5 text-[0.26rem] tracking-wide text-brand-primary/65">${extraBadge}</span>`
+        ? `<span class="inline-block rounded-full border border-brand-primary/20 bg-brand-light/60 px-2.5 py-0.5 text-[0.45rem] tracking-wide text-brand-primary/70">${extraBadge}</span>`
         : '';
       const actionMarkup = action
         ? `<div><a href="${action.href}" class="inline-flex items-center gap-1 rounded-xl border border-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">${action.label}</a></div>`
@@ -2644,12 +2646,12 @@
         if (!slot.day || !slot.start || !slot.end || !slot.stage) return '';
         const highlightClass = slot.isMatch ? 'bg-brand-yellow/20 text-brand-primary' : 'bg-brand-primary/10 text-brand-dark/70';
         const labelMarkup = slot.label && slot.label !== 'Hoofdset'
-          ? `<span class="ml-1 rounded-full bg-white/60 px-2 py-0.5 text-[0.26rem] tracking-wide text-brand-dark/60">${slot.label}</span>`
+          ? `<span class="ml-1 rounded-full bg-white/60 px-2 py-0.5 text-[0.45rem] tracking-wide text-brand-dark/60">${slot.label}</span>`
           : '';
-        return `<li class="flex flex-wrap items-center gap-1 rounded-xl ${highlightClass} px-2 py-1 text-[0.26rem] tracking-wide">
+        return `<li class="flex flex-wrap items-center gap-1 rounded-xl ${highlightClass} px-2 py-1 text-[0.48rem] tracking-wide">
           <span>${labelDay(slot.day)}</span>
           <span class="opacity-30">•</span>
-          <span class="inline-flex items-center justify-center rounded-full bg-brand-yellow px-2 py-0.5 text-center leading-tight text-[0.26rem] tracking-wide text-brand-dark">${slot.stage}</span>
+          <span class="inline-flex items-center justify-center rounded-full bg-brand-yellow px-2.5 py-0.5 text-center leading-tight text-[0.48rem] tracking-wide text-brand-dark">${slot.stage}</span>
           <span class="opacity-30">•</span>
           <span>${formatTimeLabel(slot.start)}–${formatTimeLabel(slot.end)}</span>
           ${labelMarkup}
