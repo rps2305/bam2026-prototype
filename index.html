@@ -2632,7 +2632,7 @@
       const primarySlot = slots[0];
       const showTypeLabel = includeMusicLabel || (primarySlot?.type ?? a.type) !== 'music';
       const typeChip = showTypeLabel
-        ? typeBadge(primarySlot?.type ?? a.type, `text-[0.25rem] tracking-wide ${typeClass}`.trim())
+        ? typeBadge(primarySlot?.type ?? a.type, `text-[0.22rem] tracking-wide ${typeClass}`.trim())
         : '';
       const extraBadgeChip = extraBadge
         ? `<span class="inline-block rounded-full border border-brand-primary/20 bg-brand-light/60 px-2.5 py-0.5 text-[0.26rem] tracking-wide text-brand-primary/65">${extraBadge}</span>`
