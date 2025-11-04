@@ -222,7 +222,7 @@
       </nav>
       <div class="ml-auto hidden md:flex items-center gap-2">
         <form id="searchForm" class="hidden md:flex items-center" role="search">
-          <input id="searchInput" class="px-3 py-2 w-44 lg:w-56 rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
+          <input id="searchInput" class="px-3 py-2 w-40 lg:w-48 rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
         </form>
         <button id="btnTheme" class="theme-toggle" type="button" aria-label="Schakel donker thema" aria-pressed="false"><span class="theme-toggle__icon" aria-hidden="true">☀️</span><span class="sr-only">Schakel donkere modus</span></button>
       </div>
@@ -422,7 +422,7 @@
           <h2 class="font-display text-2xl md:text-3xl">Line‑up</h2>
           <a href="/line-up/" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-magenta underline underline-offset-4">Bekijk de volledige line-up →</a>
         </div>
-        <div id="home-lineup" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        <div id="home-lineup" class="mt-4 grid gap-4 md:grid-cols-3 xl:grid-cols-4"></div>
       </section>
       <!-- Story -->
       <section class="mt-12">
@@ -488,7 +488,7 @@
             <option value="all">Alle disciplines</option>
           </select>
         </div>
-        <ul id="list-program" class="mt-6 space-y-3"></ul>
+        <div id="list-program" data-view="cards" class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3"></div>
       </article>
     </section>
   </template>
@@ -2624,12 +2624,16 @@
       }
     }
     function cardArtist(a, options = {}){
-      const { includeMusicLabel = true } = options;
-      const typeLabel = labelType(a.type);
+      const { includeMusicLabel = true, extraBadge = '', action } = options;
       const showTypeLabel = a.type !== 'music' || includeMusicLabel;
       const metaParts = [`${labelDay(a.day)}`, `${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)}`];
-      if (showTypeLabel && typeLabel) metaParts.push(typeLabel);
       const typeChip = showTypeLabel ? typeBadge(a.type, 'text-[0.7rem]') : '';
+      const extraBadgeChip = extraBadge
+        ? `<span class="inline-block rounded-full border border-brand-primary/20 bg-brand-light/60 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-brand-primary/80">${extraBadge}</span>`
+        : '';
+      const actionMarkup = action
+        ? `<div><a href="${action.href}" class="inline-flex items-center gap-1 rounded-xl border border-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">${action.label}</a></div>`
+        : '';
       return `<article class="flex flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card dark:bg-white/5">
         <div class="aspect-square w-full overflow-hidden bg-brand-purple/10">
           <img src="${a.img}" srcset="${buildSrcSet(a.img)}" sizes="(max-width: 768px) 100vw, 25vw" alt="${a.name}" loading="lazy" decoding="async" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
@@ -2640,9 +2644,13 @@
           <div class="flex flex-wrap gap-2">
             <span class="inline-block rounded-full bg-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">${a.stage}</span>
             ${typeChip}
+            ${extraBadgeChip}
           </div>
-          <div class="mt-auto flex flex-wrap gap-2 pt-2 text-xs uppercase tracking-wide text-brand-dark/60">
-            ${a.genres.map(g=>`<span class="rounded-full bg-brand-primary/10 px-2.5 py-0.5">${g}</span>`).join('')}
+          <div class="mt-auto flex flex-col gap-3 pt-2">
+            ${actionMarkup}
+            <div class="flex flex-wrap gap-2 text-xs uppercase tracking-wide text-brand-dark/60">
+              ${a.genres.map(g=>`<span class="rounded-full bg-brand-primary/10 px-2.5 py-0.5">${g}</span>`).join('')}
+            </div>
           </div>
         </div>
       </article>`;
@@ -2678,6 +2686,7 @@
       STAGES.forEach(s=> selStage.appendChild(new Option(s, s)));
       PERFORMANCE_TYPES.forEach(t=> selType.appendChild(new Option(t.label, t.id)));
       const listEl = showList ? document.getElementById('list-program') : null;
+      const renderAsCards = listEl?.dataset.view === 'cards';
       const gridEl = showGrid ? document.getElementById('grid-program') : null;
       const parseTime = (time) => {
         const [h, m] = time.split(':').map(Number);
@@ -2732,7 +2741,9 @@
         );
         if (!filtered.length){
           if (listEl){
-            listEl.innerHTML = `<li class="rounded-2xl border border-dashed border-brand-primary/20 bg-white/90 px-4 py-6 text-center text-sm text-brand-dark/70">Geen optredens gevonden voor deze selectie.</li>`;
+            listEl.innerHTML = renderAsCards
+              ? `<div class="col-span-full rounded-2xl border border-dashed border-brand-primary/20 bg-white/90 px-4 py-6 text-center text-sm text-brand-dark/70">Geen optredens gevonden voor deze selectie.</div>`
+              : `<li class="rounded-2xl border border-dashed border-brand-primary/20 bg-white/90 px-4 py-6 text-center text-sm text-brand-dark/70">Geen optredens gevonden voor deze selectie.</li>`;
           }
           if (gridEl){
             gridEl.innerHTML = `<div class="rounded-2xl border border-dashed border-brand-primary/20 bg-white/90 px-4 py-6 text-center text-sm text-brand-dark/70">Timetable volgt zodra er optredens in deze selectie zijn.</div>`;
@@ -2746,7 +2757,24 @@
           return a.start.localeCompare(b.start);
         });
         if (listEl){
-          listEl.innerHTML = sorted.map(event => `
+          if (renderAsCards){
+            listEl.innerHTML = sorted.map(event => {
+              const cardData = {
+                ...event.artist,
+                day: event.day,
+                stage: event.stage,
+                start: event.start,
+                end: event.end,
+                type: event.type
+              };
+              const extraBadge = event.label && event.label !== 'Hoofdset' ? event.label : '';
+              return cardArtist(cardData, {
+                extraBadge,
+                action: { href: `#artist:${event.artist.id}`, label: 'Meer info' }
+              });
+            }).join('');
+          } else {
+            listEl.innerHTML = sorted.map(event => `
           <li class="flex items-center gap-4 rounded-2xl border border-brand-primary/15 bg-white/95 px-4 py-3 shadow-card">
             <img src="${event.artist.img}" srcset="${buildSrcSet(event.artist.img)}" sizes="64px" alt="${event.artist.name}" loading="lazy" decoding="async" class="h-16 w-16 shrink-0 rounded-2xl object-cover" />
             <div class="flex-1 min-w-0">
@@ -2760,6 +2788,7 @@
             </div>
             <a href="#artist:${event.artist.id}" class="inline-flex items-center rounded-xl bg-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:shadow-lg">Info</a>
           </li>`).join('');
+          }
         }
         if (gridEl){
           const activeStages = stage === 'all'
@@ -3462,7 +3491,14 @@
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>-bijdragers'
           }).addTo(contactMap);
-          L.marker(bamParkCoords).addTo(contactMap).bindPopup('<strong>BAM! Festival</strong><br>Prins Bernhardplantsoen 1<br>Hengelo');
+          L.circleMarker(bamParkCoords, {
+            radius: 10,
+            color: '#8b5cf6',
+            weight: 3,
+            opacity: 0.9,
+            fillColor: '#facc15',
+            fillOpacity: 0.95
+          }).addTo(contactMap).bindPopup('<strong>BAM! Festival</strong><br>Prins Bernhardplantsoen 1<br>Hengelo');
           const ensureSize = () => contactMap && contactMap.invalidateSize();
           requestAnimationFrame(ensureSize);
           setTimeout(ensureSize, 200);
