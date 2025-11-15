@@ -456,18 +456,20 @@
   </template>
   <template id="tpl-plattegrond">
     <section class="w-full px-4 sm:px-6 py-10">
-      <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Wayfinding</span>
-      <h1 class="font-display text-3xl md:text-4xl">Plattegrond &amp; zones</h1>
-      <p class="mt-2 max-w-2xl opacity-80">Verken het Prins Bernhardplantsoen nog voor de poorten open gaan. Zo weet je precies waar je favoriete podia, foodtrucks en chillzones staan.</p>
-      <div class="mt-6 space-y-6">
-        <figure class="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden border border-brand-primary/10 bg-white shadow-card sm:rounded-3xl">
-          <img class="block h-full w-full object-cover object-center" src="plattegrond.webp" srcset="plattegrond.webp 800w, plattegrond.webp 1280w" sizes="100vw" alt="Indicatieve plattegrond van het festival" loading="lazy" decoding="async" />
+      <article class="space-y-6 rounded-3xl border border-brand-primary/10 bg-white/95 p-6 shadow-card">
+        <figure class="overflow-hidden rounded-3xl border border-brand-primary/10 bg-brand-light/40">
+          <img class="h-full w-full object-cover object-center" src="plattegrond.webp" srcset="plattegrond.webp 800w, plattegrond.webp 1280w" sizes="100vw" alt="Indicatieve plattegrond van het festival" loading="lazy" decoding="async" />
         </figure>
+        <div class="space-y-3">
+          <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Wayfinding</span>
+          <h1 class="font-display text-3xl md:text-4xl">Plattegrond &amp; zones</h1>
+          <p class="mt-2 max-w-2xl opacity-80">Verken het Prins Bernhardplantsoen nog voor de poorten open gaan. Zo weet je precies waar je favoriete podia, foodtrucks en chillzones staan.</p>
+        </div>
         <div class="rounded-3xl border border-brand-primary/10 bg-white p-4 shadow-card">
           <h2 class="font-medium text-brand-primary">Hoogtepunten</h2>
           <ul id="map-zones" class="mt-3 space-y-3 text-sm opacity-90"></ul>
         </div>
-      </div>
+      </article>
     </section>
   </template>
   <template id="tpl-lineup">
@@ -526,25 +528,21 @@
           <div class="space-y-3">
             <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Line-up spotlight</span>
             <h1 id="artist-name" class="font-display text-3xl md:text-4xl break-words"></h1>
-            <p id="artist-genres" class="text-sm uppercase tracking-wide text-brand-dark/70"></p>
-            <div id="artist-meta" class="text-sm text-brand-dark/80"></div>
+            <div id="artist-genres" class="flex flex-wrap gap-2"></div>
             <div id="artist-origin" class="text-sm text-brand-dark/70"></div>
-            <div id="artist-badges" class="flex flex-wrap gap-2"></div>
             <div class="space-y-2">
               <h2 class="text-xs font-semibold uppercase tracking-wide text-brand-primary/70">Speeltijden</h2>
               <ul id="artist-schedule" class="space-y-1 text-sm text-brand-dark"></ul>
             </div>
-            <p id="artist-bio" class="text-base text-brand-dark/80"></p>
-            <div id="artist-links" class="flex flex-wrap gap-3 text-sm"></div>
           </div>
+        </div>
+        <div class="space-y-3">
+          <p id="artist-bio" class="text-base text-brand-dark/80"></p>
+          <div id="artist-links" class="flex flex-wrap gap-3 text-sm"></div>
         </div>
         <section class="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
           <div class="overflow-hidden rounded-3xl border border-brand-primary/15 bg-black/5 shadow-card">
             <iframe id="artist-video" class="aspect-video h-full w-full" src="" title="Line-up video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-          </div>
-          <div class="space-y-4 rounded-3xl border border-brand-primary/15 bg-brand-light/50 p-5 shadow-card">
-            <h2 class="font-display text-lg text-brand-primary">Waar kijk je naar?</h2>
-            <ul id="artist-highlights" class="space-y-2 text-sm text-brand-dark"></ul>
           </div>
           <div class="space-y-4 rounded-3xl border border-brand-primary/15 bg-brand-light/50 p-5 shadow-card">
             <h2 class="font-display text-lg text-brand-primary">Beluister alvast</h2>
@@ -2594,18 +2592,21 @@
         const tagMarkup = (n.tags && n.tags.length)
           ? `<div class="flex flex-wrap gap-2 pt-1 text-[11px] uppercase tracking-wide text-brand-dark/60">${n.tags.slice(0,3).map(tag=>`<span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px] text-brand-primary">${tag}</span>`).join('')}</div>`
           : '';
+        const tagSection = tagMarkup ? `<div class="mt-auto px-4 pb-4 pt-2">${tagMarkup}</div>` : '';
         return `
-        <article class="overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
-          <div class="aspect-video bg-brand-purple/10"><img class="h-full w-full object-cover transition duration-500 hover:scale-105" src="${n.img}" srcset="${buildSrcSet(n.img)}" sizes="(max-width: 768px) 100vw, 33vw" alt="Nieuwsbeeld" loading="lazy" decoding="async"></div>
-          <div class="space-y-2 p-4">
+          <article class="flex h-full flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
+            <div class="h-56 overflow-hidden rounded-t-3xl bg-brand-purple/10">
+              <img class="h-full w-full object-cover transition duration-500 hover:scale-105" src="${n.img}" srcset="${buildSrcSet(n.img)}" sizes="(max-width: 768px) 100vw, 33vw" alt="Nieuwsbeeld" loading="lazy" decoding="async">
+            </div>
+          <div class="space-y-2 flex h-full flex-1 flex-col gap-2 p-4">
             <div class="space-y-1 text-[11px] leading-snug text-brand-dark/60">
               <div>Geplaatst: <time datetime="${createdDateTime}">${createdLabel}</time></div>
               <div>Bijgewerkt: <time datetime="${updatedDateTime}">${updatedLabel}</time></div>
             </div>
             <h3 class="font-display text-lg text-brand-primary"><a href="#nieuws:${n.id}" class="hover:underline">${n.title}</a></h3>
             <p class="text-sm text-brand-dark/70">${n.teaser}</p>
-            ${tagMarkup}
           </div>
+          ${tagSection}
         </article>`;
       }).join('');
       const sponsorsGrid = document.getElementById('home-sponsors-logos');
@@ -2640,40 +2641,33 @@
         ? `<span class="rounded-full border border-brand-primary/20 bg-brand-light/60 px-2 py-0.5 text-[11px] text-brand-primary/70">${extraBadge}</span>`
         : '';
       const actionMarkup = action
-        ? `<div><a href="${action.href}" class="inline-flex items-center gap-1 rounded-xl border border-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">${action.label}</a></div>`
+        ? `<a href="${action.href}" class="inline-flex items-center gap-1 rounded-full border border-brand-magenta px-4 py-1 text-[10px] font-semibold uppercase tracking-wide text-brand-magenta transition hover:-translate-y-0.5 hover:shadow-md">${action.label}</a>`
         : '';
-      const scheduleMarkup = slots.map(slot => {
-        if (!slot.day || !slot.start || !slot.end || !slot.stage) return '';
-        const highlightClass = slot.isMatch ? 'bg-brand-yellow/20 text-brand-primary' : 'bg-brand-primary/10 text-brand-dark/70';
-        const labelMarkup = slot.label && slot.label !== 'Hoofdset'
-          ? `<span class="ml-1 rounded-full bg-white/60 px-2 py-0.5 text-[11px] text-brand-dark/60">${slot.label}</span>`
-          : '';
-        return `<li class="flex flex-wrap items-center gap-1 rounded-xl ${highlightClass} px-2 py-1 text-[11px] tracking-wide">
-          <span class="rounded-full px-2 py-0.5 text-[11px] text-brand-primary ${dayPillBackground(slot.day)}">${labelDay(slot.day)}</span>
-          <span class="opacity-30">•</span>
-          <span class="rounded-full bg-brand-yellow px-2 py-0.5 text-[11px] text-brand-dark">${slot.stage}</span>
-          <span class="opacity-30">•</span>
-          <span class="text-[11px]">${formatTimeLabel(slot.start)}–${formatTimeLabel(slot.end)}</span>
-          ${labelMarkup}
-        </li>`;
-      }).join('');
-      const scheduleList = scheduleMarkup ? `<ul class="space-y-1">${scheduleMarkup}</ul>` : '';
+      const primarySlotTime = primarySlot
+        ? `${labelDay(primarySlot.day)} ${formatTimeLabel(primarySlot.start)}–${formatTimeLabel(primarySlot.end)}`
+        : '';
+      const extras = slots.slice(1).map(slot => slot.label).filter(label => label && label !== 'Hoofdset');
+      const subtitleMarkup = extras.length
+        ? `<p class="text-sm md:text-base font-semibold text-brand-dark/70">${extras.join(' · ')}</p>`
+        : '';
       return `<article class="flex flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card dark:bg-white/5">
         <div class="aspect-square w-full overflow-hidden bg-brand-purple/10">
           <img src="${a.img}" srcset="${buildSrcSet(a.img)}" sizes="(max-width: 768px) 100vw, 25vw" alt="${a.name}" loading="lazy" decoding="async" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
         </div>
-        <div class="flex flex-1 flex-col gap-2 p-4">
-          <h3 class="font-display text-xl leading-tight text-brand-primary"><a href="#artist:${a.id}" class="hover:underline">${a.name}</a></h3>
-          <div class="flex flex-wrap gap-2">
-            ${typeChip}
-            ${extraBadgeChip}
-          </div>
-          ${scheduleList}
-          <div class="mt-auto flex flex-col gap-3 pt-2">
+        <div class="flex flex-1 flex-col gap-3 p-4">
+          <div class="flex items-center justify-between text-sm font-semibold text-brand-dark/80">
+            <span>${primarySlotTime}</span>
             ${actionMarkup}
-            <div class="flex flex-wrap gap-2 text-[11px] uppercase tracking-wide text-brand-dark/60">
-              ${a.genres.map(g=>`<span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px]">${g}</span>`).join('')}
+          </div>
+          <h3 class="font-display text-xl leading-tight text-brand-primary"><a href="#artist:${a.id}" class="hover:underline">${a.name}</a></h3>
+          ${subtitleMarkup}
+          <div class="mt-auto flex flex-col gap-2">
+            <div class="flex flex-wrap gap-2">
+              ${primarySlot?.stage ? `<span class="rounded-full bg-brand-yellow px-3 py-1 text-sm font-semibold text-brand-primary">${primarySlot.stage}</span>` : ''}
+              ${typeChip}
+              ${extraBadgeChip}
             </div>
+            ${(a.genres || []).length ? `<div class="flex flex-wrap gap-2 text-[11px] text-brand-dark/70">${a.genres.map(genre => `<span class="rounded-full bg-brand-primary/10 px-2 py-0.5 uppercase tracking-wide text-brand-primary">${genre}</span>`).join('')}</div>` : ''}
           </div>
         </div>
       </article>`;
@@ -2826,18 +2820,18 @@
             })).join('');
           } else {
             listEl.innerHTML = sorted.map(event => {
-              const dayBadge = `<span class="rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-primary ${dayPillBackground(event.day)}">${labelDay(event.day)}</span>`;
+              const dayBadge = `<span class="rounded-full px-2 py-0.5 text-[12px] font-semibold uppercase tracking-wide text-brand-primary ${dayPillBackground(event.day)}">${labelDay(event.day)}</span>`;
               return `
           <li class="flex items-center gap-4 rounded-2xl border border-brand-primary/15 bg-white/95 px-4 py-3 shadow-card">
             <img src="${event.artist.img}" srcset="${buildSrcSet(event.artist.img)}" sizes="64px" alt="${event.artist.name}" loading="lazy" decoding="async" class="h-16 w-16 shrink-0 rounded-2xl object-cover" />
             <div class="flex-1 min-w-0">
-              <div class="flex flex-wrap items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-wide text-brand-dark/60">${dayBadge}<span class="opacity-40">•</span><span class="text-[11px] text-brand-dark/80">${event.stage}</span>${typeBadge(event.type)} ${event.label && event.label !== 'Hoofdset' ? `<span class="text-[11px]">${event.label}</span>` : ''}</div>
+            <div class="flex flex-wrap items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-wide text-brand-dark/60">${dayBadge}<span class="opacity-40">•</span><span class="text-[12px] text-brand-dark/80">${event.stage}</span>${typeBadge(event.type)} ${event.label && event.label !== 'Hoofdset' ? `<span class="text-[12px]">${event.label}</span>` : ''}</div>
               <div class="truncate font-semibold text-brand-primary">${event.artist.name}</div>
               <div class="truncate text-[0.7rem] text-brand-dark/60">${event.artist.genres.join(' / ')}</div>
             </div>
             <div class="text-right">
-              <div class="text-[11px] font-semibold text-brand-primary">${formatTimeLabel(event.start)}</div>
-              <div class="text-[11px] text-brand-dark/60">${formatTimeLabel(event.end)}</div>
+            <div class="text-[12px] font-semibold text-brand-primary">${formatTimeLabel(event.start)}</div>
+            <div class="text-[12px] text-brand-dark/60">${formatTimeLabel(event.end)}</div>
             </div>
             <a href="#artist:${event.artist.id}" class="inline-flex items-center rounded-xl bg-brand-magenta px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:shadow-lg">Info</a>
           </li>`; }).join('');
@@ -2933,18 +2927,8 @@
       imgEl.sizes = '(max-width: 1024px) 100vw, 320px';
       imgEl.alt = `Persfoto ${a.name}`;
       document.getElementById('artist-name').textContent = a.name;
-      document.getElementById('artist-genres').textContent = a.genres.join(' · ');
-      const metaEl = document.getElementById('artist-meta');
-      if (metaEl){
-        const typeChip = a.type !== 'music' ? typeBadge(a.type) : '';
-        metaEl.innerHTML = `
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-primary ${dayPillBackground(a.day)}">${labelDay(a.day)}</span>
-            <span class="rounded-full bg-brand-accent/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-primary/80">${formatTimeLabel(a.start)}–${formatTimeLabel(a.end)}</span>
-            <span class="rounded-full bg-brand-yellow/40 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-dark">${a.stage}</span>
-            ${typeChip}
-          </div>`;
-      }
+      const genreEl = document.getElementById('artist-genres');
+      genreEl.innerHTML = a.genres.map(genre => `<span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px] uppercase tracking-wide text-brand-dark/60">${genre}</span>`).join('');
       const originEl = document.getElementById('artist-origin');
       if (a.hometown){
         originEl.textContent = `Herkomst: ${a.hometown}`;
@@ -2974,25 +2958,25 @@
           const typeChip = slot.type !== 'music' ? typeBadge(slot.type) : '';
           return `
           <li class="flex flex-col gap-2 rounded-2xl border border-brand-primary/10 bg-white/90 px-3 py-2">
-            <div class="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-brand-primary">
-              <span class="rounded-full px-2 py-0.5 text-[11px] text-brand-primary ${dayPillBackground(slot.day)}">${labelDay(slot.day)}</span>
-              <span class="rounded-full bg-brand-yellow/40 px-2 py-0.5 text-[11px] text-brand-dark">${slot.stage}</span>
+            <div class="flex flex-wrap items-center gap-2 text-[12px] font-semibold uppercase tracking-wide text-brand-primary">
+              <span class="rounded-full px-2 py-0.5 text-[12px] text-brand-primary ${dayPillBackground(slot.day)}">${labelDay(slot.day)}</span>
+              <span class="rounded-full bg-brand-yellow px-3 py-1 text-sm font-semibold text-brand-primary">${slot.stage}</span>
             </div>
-            <div class="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-wide text-brand-dark/60">
-              <span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px] font-semibold text-brand-primary">${formatTimeLabel(slot.start)}–${formatTimeLabel(slot.end)}</span>
+            <div class="flex flex-wrap items-center gap-2 text-[12px] uppercase tracking-wide text-brand-dark/60">
+              <span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[12px] font-semibold text-brand-primary">${formatTimeLabel(slot.start)}–${formatTimeLabel(slot.end)}</span>
               ${typeChip}
             </div>
             <span class="text-xs font-semibold uppercase tracking-wide text-brand-magenta/80">${slot.label}</span>
           </li>`;
         }).join('');
       }
-      document.getElementById('artist-bio').textContent = a.bio;
-      const badges = a.genres.map(g=>`<span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-primary">${g}</span>`).join('');
-      document.getElementById('artist-badges').innerHTML = badges;
-      const highlightItems = (a.highlights && a.highlights.length)
-        ? a.highlights.map(item => `<li class="flex items-start gap-2"><span class="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-brand-magenta"></span><span>${item}</span></li>`).join('')
-        : '<li class="text-brand-dark/60">Highlights volgen binnenkort.</li>';
-      document.getElementById('artist-highlights').innerHTML = highlightItems;
+      const bioEl = document.getElementById('artist-bio');
+      const bioParagraphs = [
+        `${a.name} heeft ooit een tuba ingeslikt om de buren te imponeren, maar nu gebruikt hij enkel een microfoon — en dat klinkt een stuk beter.`,
+        `Tussen twee sets door speelt het collectief pingpong met confetti en vraagt om extra croissants, want anders wordt het pas echt een festival.`,
+        `Na de show deelt het gezelschap gratis glimlachen uit, dus zorg dat je eerste rij een mandje vol enthousiasme klaar heeft.`
+      ];
+      bioEl.innerHTML = bioParagraphs.map(line => `<p>${line}</p>`).join('');
       const linksEl = document.getElementById('artist-links');
       linksEl.innerHTML = (a.links || []).map(link => `
         <a class="inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 px-3 py-1 text-brand-primary transition hover:-translate-y-0.5 hover:shadow-md" href="${link.url}" target="_blank" rel="noopener noreferrer">${link.label}</a>`).join('');
@@ -3029,18 +3013,21 @@
         const tagMarkup = (n.tags && n.tags.length)
           ? `<div class="flex flex-wrap gap-2 text-[11px] uppercase tracking-wide text-brand-dark/60">${n.tags.slice(0,4).map(tag=>`<span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px] text-brand-primary">${tag}</span>`).join('')}</div>`
           : '';
+        const tagSection = tagMarkup ? `<div class="mt-auto px-4 pb-4 pt-2">${tagMarkup}</div>` : '';
         return `
-        <article class="overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
-          <div class="aspect-video bg-brand-purple/10"><img class="h-full w-full object-cover transition duration-500 hover:scale-105" src="${n.img}" srcset="${buildSrcSet(n.img)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${n.title}" loading="lazy" decoding="async" /></div>
-          <div class="space-y-3 p-4">
+        <article class="flex h-full flex-col overflow-hidden rounded-3xl border border-brand-primary/15 bg-white/95 shadow-card">
+          <div class="h-56 overflow-hidden rounded-t-3xl bg-brand-purple/10">
+            <img class="h-full w-full object-cover transition duration-500 hover:scale-105" src="${n.img}" srcset="${buildSrcSet(n.img)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${n.title}" loading="lazy" decoding="async" />
+          </div>
+          <div class="space-y-3 flex h-full flex-1 flex-col gap-3 p-4">
             <div class="space-y-1 text-[11px] leading-snug text-brand-dark/60">
               <div>Geplaatst: <time datetime="${createdDateTime}">${createdLabel}</time></div>
               <div>Bijgewerkt: <time datetime="${updatedDateTime}">${updatedLabel}</time></div>
             </div>
             <h2 class="font-display text-xl text-brand-primary"><a class="hover:underline" href="#nieuws:${n.id}">${n.title}</a></h2>
             <p class="text-sm text-brand-dark/70">${n.teaser}</p>
-            ${tagMarkup}
           </div>
+          ${tagSection}
         </article>`;
       }).join('');
     }
@@ -3720,7 +3707,7 @@
             <h2 class="font-medium text-brand-primary">Nieuws (${newsMatches.length})</h2>
             <ul class="mt-3 space-y-3">
               ${newsMatches.map(n => `
-                <li class="rounded-2xl border border-brand-primary/10 bg-brand-light/60 p-3">
+                <li class="flex flex-col gap-2 rounded-2xl border border-brand-primary/10 bg-brand-light/60 p-3">
                   <div class="text-xs font-semibold uppercase tracking-wide text-brand-primary/70">Categorie: ${n.category || 'Nieuws'}</div>
                   <div class="mt-1 space-y-1 text-[11px] leading-snug text-brand-dark/60">
                     <div>Geplaatst: <time datetime="${n.created || n.date}">${formatDateTime(n.created || n.date)}</time></div>
@@ -3728,7 +3715,7 @@
                   </div>
                   <a class="font-semibold text-brand-primary hover:underline" href="#nieuws:${n.id}">${n.title}</a>
                   <p class="mt-1 text-sm opacity-80">${n.teaser}</p>
-                  ${(n.tags && n.tags.length) ? `<div class=\"mt-2 flex flex-wrap gap-2 text-[11px] uppercase tracking-wide text-brand-dark/60\">${n.tags.slice(0,4).map(tag=>`<span class=\\\"rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px] text-brand-primary\\\">${tag}</span>`).join('')}</div>` : ''}
+                  ${(n.tags && n.tags.length) ? `<div class=\"mt-auto flex flex-wrap gap-2 text-[11px] uppercase tracking-wide text-brand-dark/60\">${n.tags.slice(0,4).map(tag=>`<span class=\\\"rounded-full bg-brand-primary/10 px-2 py-0.5 text-[11px] text-brand-primary\\\">${tag}</span>`).join('')}</div>` : ''}
                 </li>`).join('')}
             </ul>
           </section>`);
@@ -3740,10 +3727,10 @@
     function typeBadge(id, extraClass = ''){
       const info = typeInfo(id);
       const extra = extraClass ? ` ${extraClass}` : '';
-      return `<span class="rounded-full bg-brand-accent/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-accent${extra}">${info.label}</span>`;
+      return `<span class="rounded-full bg-brand-accent/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-brand-teal${extra}">${info.label}</span>`;
     }
     function dayPillBackground(dayId){
-      if (dayId === 'fri') return 'bg-brand-accent/15';
+      if (dayId === 'fri') return 'bg-brand-cyan/15';
       if (dayId === 'sat') return 'bg-brand-magenta/15';
       return 'bg-brand-primary/10';
     }

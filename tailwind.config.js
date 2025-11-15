@@ -1,16 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './index.html',
-    './*.html',
-    './src/**/*.{js,ts,jsx,tsx}'
-  ],
+  content: ['./index.html', './*.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
         sans: ['Merriweather Sans', 'Interstate', 'ui-sans-serif', 'system-ui'],
-        display: ['Interstate', 'Merriweather Sans', 'ui-sans-serif', 'system-ui']
+        display: ['Interstate', 'Merriweather Sans', 'ui-sans-serif', 'system-ui'],
       },
       colors: {
         brand: {
@@ -27,17 +23,17 @@ module.exports = {
           gradient: {
             start: '#EC4899',
             mid: '#8B5CF6',
-            end: '#06B6D4'
+            end: '#06B6D4',
           },
           overlay: 'rgba(0,0,0,0.4)',
           dark: '#0F172A',
-          light: '#F8F7F4'
-        }
+          light: '#F8F7F4',
+        },
       },
       boxShadow: {
-        card: '0 8px 30px rgba(0,0,0,0.08)'
-      }
-    }
+        card: '0 8px 30px rgba(0,0,0,0.08)',
+      },
+    },
   },
   plugins: [],
 };
