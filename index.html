@@ -224,6 +224,7 @@
       </nav>
       <div class="ml-auto hidden md:flex items-center gap-2">
         <form id="searchForm" class="hidden md:flex items-center" role="search">
+          <label for="searchInput" class="sr-only">Zoeken</label>
           <input id="searchInput" class="px-3 py-2 w-40 lg:w-48 rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
         </form>
         <button id="btnTheme" class="theme-toggle" type="button" aria-label="Schakel donker thema" aria-pressed="false"><span class="theme-toggle__icon" aria-hidden="true">☀️</span><span class="sr-only">Schakel donkere modus</span></button>
@@ -232,6 +233,7 @@
     <!-- Mobile row -->
     <div class="md:hidden px-4 pb-2 flex items-center gap-2 border-t border-black/10 dark:border-white/10">
       <form id="searchFormMobile" class="flex-1 flex items-center gap-2 py-2" role="search">
+        <label for="searchInputMobile" class="sr-only">Zoeken</label>
         <input id="searchInputMobile" class="px-3 py-2 w-full rounded-xl border border-black/10 dark:border-white/20 bg-white dark:bg-transparent" placeholder="Zoeken…" />
       </form>
       <button id="btnThemeMobile" class="theme-toggle" type="button" aria-label="Schakel donker thema" aria-pressed="false"><span class="theme-toggle__icon" aria-hidden="true">☀️</span><span class="sr-only">Schakel donkere modus</span></button>
