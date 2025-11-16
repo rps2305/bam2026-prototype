@@ -1,0 +1,11 @@
+timetable:
+  version: 1.x
+  css:
+    theme:
+      css/bam-festival-timetable.css: {}
+  js:
+    js/bam-festival-timetable.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/once

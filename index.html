@@ -509,20 +509,23 @@
         <header class="space-y-3">
           <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Timetable 2026</span>
           <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Plan je festivaldag</h1>
-          <p class="max-w-3xl text-sm md:text-base text-brand-dark/80">Gebruik de filters om het rooster per dag, podium of discipline te bekijken. Klik op een blok om direct naar het artiestprofiel te gaan.</p>
+          <p class="max-w-3xl text-sm md:text-base text-brand-dark/80">Blader per dag en podium door de timetable en klik op een blok voor details. De weergave schaalt op mobiel automatisch zodat je horizontaal kunt scrollen.</p>
         </header>
-        <div class="flex flex-wrap gap-3 items-center">
-          <select id="filter-day" class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20">
-            <option value="all">Alle dagen</option>
-          </select>
-          <select id="filter-stage" class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20">
-            <option value="all">Alle podia</option>
-          </select>
-          <select id="filter-type" class="px-3 py-2 rounded-xl border border-black/10 dark:border-white/20">
-            <option value="all">Alle disciplines</option>
-          </select>
+        <div class="rounded-3xl border border-brand-primary/10 bg-slate-50/75 p-4 sm:p-6 dark:bg-brand-dark/50">
+          <div id="bam-festival-timetable" class="bam-festival-timetable">
+            <div class="bam-header">
+              <h2 id="bam-timetable-title" class="bam-title">BAM! Festival 2026</h2>
+              <div class="bam-day-selector" role="tablist" aria-label="Festivaldagen"></div>
+            </div>
+            <div class="bam-timetable-container" tabindex="0" aria-live="polite">
+              <div class="bam-timetable-wrapper" aria-label="Timetable weergave"></div>
+            </div>
+            <div class="bam-instructions">
+              Klik op een evenement voor meer details • Scroll horizontaal op mobiele apparaten
+            </div>
+          </div>
+          <script id="bam-festival-data" type="application/json"></script>
         </div>
-        <div id="grid-program" class="grid gap-2 text-[0.7rem] sm:text-xs md:text-sm"></div>
       </article>
     </section>
   </template>
@@ -2898,10 +2901,268 @@
       setupProgramView({ templateId:'tpl-lineup', showList:true, showGrid:false });
     }
     function renderTimetable(){
-      setupProgramView({ templateId:'tpl-timetable', showList:false, showGrid:true });
+      render('tpl-timetable');
+      const container = document.getElementById('bam-festival-timetable');
+      if (!container){
+        return;
+      }
+      const titleEl = document.getElementById('bam-timetable-title');
+      if (titleEl){
+        titleEl.textContent = 'BAM! Festival 2026 – Timetable';
+      }
+      const dataset = buildFestivalDataFromArtists(ARTISTS);
+      const dataScript = document.getElementById('bam-festival-data');
+      if (dataScript){
+        dataScript.textContent = JSON.stringify(dataset);
+      }
+      mountStandaloneTimetable(container, dataset);
     }
     function renderProgramma(){
       renderLineup();
+    }
+    function buildFestivalDataFromArtists(artists){
+      if (!Array.isArray(artists) || !artists.length){
+        return [];
+      }
+      const dayOrder = (id) => {
+        const idx = DAYS.findIndex(day => day.id === id);
+        return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
+      };
+      const dayMap = new Map();
+      const ensureDayEntry = (dayId) => {
+        if (!dayMap.has(dayId)){
+          dayMap.set(dayId, {
+            id: dayId,
+            label: labelDay(dayId) || dayId,
+            order: dayOrder(dayId),
+            stages: [],
+            stageLookup: new Map(),
+            events: []
+          });
+        }
+        return dayMap.get(dayId);
+      };
+      const ensureStageIndex = (entry, stageName) => {
+        if (!stageName){
+          stageName = 'Onbekend podium';
+        }
+        if (!entry.stageLookup.has(stageName)){
+          entry.stageLookup.set(stageName, entry.stages.length);
+          entry.stages.push(stageName);
+        }
+        return entry.stageLookup.get(stageName);
+      };
+      let counter = 0;
+      const normalizeSlot = (artist, slot) => {
+        const day = slot.day || artist.day;
+        const stage = slot.stage || artist.stage;
+        const start = slot.start || artist.start;
+        const end = slot.end || artist.end;
+        if (!day || !stage || !start || !end){
+          return null;
+        }
+        return { artist, day, stage, start, end };
+      };
+      artists.forEach(artist => {
+        const primarySlot = normalizeSlot(artist, {
+          day: artist.day,
+          stage: artist.stage,
+          start: artist.start,
+          end: artist.end
+        });
+        const allSlots = [
+          primarySlot,
+          ...((artist.extraSlots || []).map(slot => normalizeSlot(artist, slot)))
+        ].filter(Boolean);
+        allSlots.forEach(slot => {
+          const entry = ensureDayEntry(slot.day);
+          const stageIndex = ensureStageIndex(entry, slot.stage);
+          entry.events.push({
+            id: `${artist.id}-${counter++}`,
+            title: artist.name,
+            genre: artist.genres?.join(' / ') || 'Onbekend genre',
+            stage: stageIndex,
+            startTime: slot.start,
+            endTime: slot.end,
+            type: (slot.type || artist.type || 'music')
+          });
+        });
+      });
+      return Array.from(dayMap.values())
+        .sort((a, b) => a.order - b.order)
+        .map(entry => ({
+          day: entry.label,
+          stages: entry.stages,
+          events: entry.events
+        }));
+    }
+    function mountStandaloneTimetable(container, festivalData){
+      const wrapper = container.querySelector('.bam-timetable-wrapper');
+      const selector = container.querySelector('.bam-day-selector');
+      if (!wrapper || !selector){
+        return;
+      }
+      if (!Array.isArray(festivalData) || !festivalData.length){
+        selector.innerHTML = '';
+        wrapper.innerHTML = '<div class="bam-no-events">De timetable is nog in voorbereiding.</div>';
+        return;
+      }
+      selector.innerHTML = '';
+      festivalData.forEach((day, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'bam-day-btn';
+        button.dataset.day = String(index);
+        button.setAttribute('aria-pressed', 'false');
+        button.textContent = day.day;
+        selector.appendChild(button);
+      });
+      let selectedDay = 0;
+      const startHour = 12;
+      const endHour = 25;
+      const pixelsPerHour = 120;
+      const pixelsPerMinute = pixelsPerHour / 60;
+      const determineEventType = (event) => {
+        if (event?.type){
+          const type = event.type.toString().toLowerCase();
+          if (type === 'theater') return 'theatre';
+          if (['music', 'dj', 'theatre'].includes(type)) return type;
+        }
+        const genre = (event?.genre || '').toLowerCase();
+        if (genre.includes('theater') || genre.includes('theatre') || genre.includes('cabaret')){
+          return 'theatre';
+        }
+        if (
+          genre.includes('dj') ||
+          genre.includes('dance') ||
+          genre.includes('electronic') ||
+          genre.includes('techno') ||
+          genre.includes('house') ||
+          genre.includes('club')
+        ){
+          return 'dj';
+        }
+        return 'music';
+      };
+      const getTypeClass = (event) => {
+        const type = determineEventType(event);
+        if (type === 'dj') return 'type-dj';
+        if (type === 'theatre') return 'type-theatre';
+        if (type === 'music') return 'type-music';
+        return 'type-default';
+      };
+      const timeToMinutes = (value) => {
+        const [hours, minutes] = value.split(':').map(Number);
+        return (hours * 60) + minutes;
+      };
+      const getEventPosition = (event) => {
+        const startMinutes = timeToMinutes(event.startTime);
+        let endMinutes = timeToMinutes(event.endTime);
+        if (endMinutes < startMinutes){
+          endMinutes += 24 * 60;
+        }
+        const duration = endMinutes - startMinutes;
+        return {
+          top: (startMinutes - startHour * 60) * pixelsPerMinute,
+          height: duration * pixelsPerMinute
+        };
+      };
+      const formatHour = (hour) => (hour >= 24 ? (hour - 24) : hour).toString().padStart(2, '0');
+      const generateTimeLabels = () => {
+        const labels = [];
+        for (let hour = startHour; hour <= endHour; hour += 1){
+          labels.push({
+            time: `${formatHour(hour)}:00`,
+            position: (hour - startHour) * pixelsPerHour,
+            isHour: true
+          });
+          if (hour < endHour){
+            labels.push({
+              time: `${formatHour(hour)}:30`,
+              position: (hour - startHour) * pixelsPerHour + pixelsPerHour / 2,
+              isHour: false
+            });
+          }
+        }
+        return labels;
+      };
+      const updateButtons = () => {
+        selector.querySelectorAll('.bam-day-btn').forEach(button => {
+          const isActive = Number(button.dataset.day) === selectedDay;
+          button.classList.toggle('active', isActive);
+          button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+      };
+      const renderDay = () => {
+        const currentDay = festivalData[selectedDay];
+        if (!currentDay){
+          wrapper.innerHTML = '<div class="bam-no-events">Geen events voor deze dag.</div>';
+          return;
+        }
+        const timeLabels = generateTimeLabels();
+        const totalHeight = (endHour - startHour) * pixelsPerHour;
+        let html = '<div class="bam-stage-headers">';
+        html += '<div class="bam-time-column"></div>';
+        currentDay.stages.forEach(stage => {
+          html += `<div class="bam-stage-header">${stage}</div>`;
+        });
+        html += '</div>';
+        html += '<div class="bam-timeline-container">';
+        html += `<div class="bam-time-labels" style="height:${totalHeight}px;">`;
+        timeLabels.forEach(label => {
+          const className = label.isHour ? 'bam-time-label hour' : 'bam-time-label half-hour';
+          html += `<div class="${className}" style="top:${label.position - 10}px;">${label.time}</div>`;
+        });
+        html += '</div>';
+        html += '<div class="bam-stages-container">';
+        html += `<div class="bam-stages-grid" style="height:${totalHeight}px;">`;
+        currentDay.stages.forEach((stage, stageIndex) => {
+          html += '<div class="bam-stage-column">';
+          timeLabels.forEach(label => {
+            const className = label.isHour ? 'bam-time-grid-line hour' : 'bam-time-grid-line half-hour';
+            html += `<div class="${className}" style="top:${label.position}px;"></div>`;
+          });
+          currentDay.events
+            .filter(event => event.stage === stageIndex)
+            .forEach(event => {
+              const { top, height } = getEventPosition(event);
+              const safeHeight = Math.max(height, 50);
+              const colorClass = getTypeClass(event);
+              html += `<div class="bam-event ${colorClass}" style="top:${top}px;height:${safeHeight}px;" data-event-id="${event.id}">`;
+              html += `<a class="bam-event-title" href="#artist:${event.id}">${event.title}</a>`;
+              html += '</div>';
+            });
+          html += '</div>';
+        });
+        html += '</div></div></div>';
+        wrapper.innerHTML = html;
+        wrapper.querySelectorAll('.bam-event').forEach(node => {
+          node.addEventListener('click', () => {
+            const eventId = node.getAttribute('data-event-id');
+            const event = currentDay.events.find(item => item.id === eventId);
+            if (!event){
+              return;
+            }
+            const stageName = currentDay.stages[event.stage] || '';
+            alert(`${event.title}
+Genre: ${event.genre}
+Type: ${determineEventType(event)}
+Tijd: ${event.startTime} - ${event.endTime}
+Podium: ${stageName}`);
+          });
+        });
+      };
+      selector.addEventListener('click', (event) => {
+        const button = event.target.closest('.bam-day-btn');
+        if (!button){
+          return;
+        }
+        selectedDay = Number(button.dataset.day);
+        updateButtons();
+        renderDay();
+      });
+      updateButtons();
+      renderDay();
     }
     const formatDate = (iso) => {
       if (!iso) return '';

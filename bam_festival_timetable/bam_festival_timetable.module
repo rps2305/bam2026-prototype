@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Contains bam_festival_timetable.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function bam_festival_timetable_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.bam_festival_timetable':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module provides a festival timetable block that displays artists from the "Artists" content type.') . '</p>';
+      $output .= '<h3>' . t('Required Fields') . '</h3>';
+      $output .= '<p>' . t('The module uses the following fields from the Artists content type:') . '</p>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('field_datumstart (Start date)') . '</li>';
+      $output .= '<li>' . t('field_datumeinde (End date)') . '</li>';
+      $output .= '<li>' . t('field_starttijd (Start time)') . '</li>';
+      $output .= '<li>' . t('field_eindetijd (End time)') . '</li>';
+      $output .= '<li>' . t('field_locatie (Location/Stage - taxonomy reference)') . '</li>';
+      $output .= '<li>' . t('field_genre (Genre - taxonomy reference)') . '</li>';
+      $output .= '<li>' . t('field_year (Year - taxonomy reference)') . '</li>';
+      $output .= '</ul>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function bam_festival_timetable_theme() {
+  return [
+    'bam_festival_timetable_block' => [
+      'variables' => [
+        'festival_data' => NULL,
+        'festival_title' => NULL,
+      ],
+      'template' => 'bam-festival-timetable-block',
+    ],
+  ];
+}

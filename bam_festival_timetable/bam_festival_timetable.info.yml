@@ -1,0 +1,11 @@
+name: 'BAM Festival Timetable'
+type: module
+description: 'Provides a festival timetable block that pulls data from Artists content type'
+core_version_requirement: ^11
+package: Custom
+dependencies:
+  - drupal:block
+  - drupal:node
+  - drupal:field
+  - drupal:datetime
+  - drupal:taxonomy

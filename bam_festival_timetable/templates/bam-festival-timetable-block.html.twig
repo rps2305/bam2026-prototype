@@ -1,0 +1,49 @@
+<div id="bam-festival-timetable" class="bam-festival-timetable">
+  {% if festival_data is not empty %}
+    {% if festival_data.debug is defined %}
+      <div class="bam-debug-info" style="background: #f0f0f0; padding: 1rem; margin-bottom: 1rem; border-radius: 0.5rem;">
+        <h3>Debug Information</h3>
+        <ul>
+          {% for debug_item in festival_data.debug %}
+            <li>{{ debug_item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <div class="bam-header">
+      <h1 class="bam-title">{{ festival_title }}</h1>
+      <div class="bam-day-selector">
+        {% for day_data in festival_data %}
+          {% if day_data.day is defined %}
+            <button class="bam-day-btn" data-day="{{ loop.index0 }}">
+              {{ day_data.day }}
+            </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="bam-timetable-container">
+      <div class="bam-timetable-wrapper">
+        <!-- Day content will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="bam-instructions">
+      Klik op een evenement voor meer details • Scroll horizontaal op mobiele apparaten
+    </div>
+  {% else %}
+    <div class="bam-no-events">
+      <h2>{{ festival_title }}</h2>
+      <p>Er zijn nog geen artiesten gepubliceerd voor dit festival.</p>
+      <p><a href="/node/add/artists">Voeg een artiest toe</a></p>
+    </div>
+  {% endif %}
+</div>
+
+{% if festival_data is not empty %}
+<script type="application/json" id="bam-festival-data">
+  {{ festival_data|json_encode|raw }}
+</script>
+{% endif %}
