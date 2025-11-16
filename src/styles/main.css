@@ -594,7 +594,7 @@
 
   .btn-primary {
     background-color: #ff0055;
-    color: #ffffff;
+    color: #0f172a;
     box-shadow: 0 16px 40px rgba(255, 0, 85, 0.25);
   }
 
@@ -603,10 +603,6 @@
     background-color: #ff2a7f;
     transform: translateY(-2px);
     box-shadow: 0 18px 40px rgba(255, 0, 85, 0.35);
-  }
-
-  .dark .btn-primary {
-    color: #ffffff;
   }
 
   .btn-secondary {

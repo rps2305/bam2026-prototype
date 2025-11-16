@@ -15,12 +15,18 @@
   <meta name="theme-color" content="#0F172A" media="(prefers-color-scheme: dark)" />
   <meta name="msapplication-navbutton-color" content="#1F2937" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" href="/assets/logos/favicon-32.png" type="image/png" sizes="32x32" />
   <link rel="icon" href="/assets/logos/favicon-64.png" type="image/png" sizes="64x64" />
+  <link rel="apple-touch-icon" sizes="64x64" href="/assets/logos/favicon-64.png" type="image/png" />
   <link rel="icon" href="/assets/logos/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&display=swap" as="style" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700&amp;display=swap" />
+  </noscript>
   <link rel="stylesheet" href="assets/css/main.css" />
   <link rel="preload" href="vendor/leaflet/leaflet.css" as="style" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
@@ -29,15 +35,15 @@
   <meta property="og:url" content="https://bamfestival.nl/" />
   <meta property="og:title" content="BAM! Festival 2026 – Gratis muziekfestival Hengelo" />
   <meta property="og:description" content="Vrijdag 22 en zaterdag 23 mei 2026: zeven podia, gratis toegang en volop cultuur in het Prins Bernhardplantsoen in Hengelo." />
-  <meta property="og:image" content="assets/images/og-bam-festival-2026.webp" />
-  <meta property="og:image:secure_url" content="assets/images/og-bam-festival-2026.webp" />
+  <meta property="og:image" content="https://bamfestival.nl/assets/images/og-bam-festival-2026.webp" />
+  <meta property="og:image:secure_url" content="https://bamfestival.nl/assets/images/og-bam-festival-2026.webp" />
   <meta property="og:image:alt" content="Publiek en artiesten op BAM! Festival 2026 in Hengelo" />
   <meta property="og:locale" content="nl_NL" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@bamfestival" />
   <meta name="twitter:title" content="BAM! Festival 2026 – Gratis muziekfestival Hengelo" />
   <meta name="twitter:description" content="Ontdek line-up, plattegrond, vrijwilligers, nieuws en partners van BAM! Festival 2026." />
-  <meta name="twitter:image" content="assets/images/og-bam-festival-2026.webp" />
+  <meta name="twitter:image" content="https://bamfestival.nl/assets/images/og-bam-festival-2026.webp" />
   <meta name="twitter:image:alt" content="Publiek en artiesten op BAM! Festival 2026 in Hengelo" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https://bamfestival.nl https://images.unsplash.com https://dummyimage.com https://img.youtube.com https://i.ytimg.com https://*.tile.openstreetmap.org; font-src 'self' https://fonts.gstatic.com https://bamfestival.nl; connect-src 'self'; frame-src https://forms.office.com https://www.youtube-nocookie.com https://www.youtube.com https://open.spotify.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
   <script type="application/ld+json">
@@ -181,7 +187,7 @@
     <div class="flex h-16 w-full items-center gap-3 px-4 sm:px-6">
       <button id="btnMenu" type="button" class="lg:hidden inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-brand-primary shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/20 dark:bg-brand-dark/60 dark:text-white" aria-label="Open navigatie" aria-controls="mobile-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="sr-only">Open navigatie</span></button>
       <a href="#home" class="flex items-center gap-2 shrink-0">
-        <img id="brandLogo" src="logo-bam-festival-zwart.webp" srcset="logo-bam-festival-zwart.webp 1x, logo-bam-festival-zwart.webp 2x" sizes="120px" alt="BAM! Festival" class="h-7 w-auto" width="165" height="47" loading="lazy" decoding="async" onerror="this.src='https://dummyimage.com/140x40/7c3aed/ffffff&text=BAM!+Festival'" />
+        <img id="brandLogo" src="logo-bam-festival-zwart.webp" alt="BAM! Festival" class="h-7 w-auto" width="165" height="47" loading="lazy" decoding="async" onerror="this.src='https://dummyimage.com/140x40/7c3aed/ffffff&text=BAM!+Festival'" />
       </a>
       <nav id="mainNav" class="main-nav hidden lg:flex ml-2" aria-label="Hoofdmenu">
         <ul class="main-nav__list" role="menubar">

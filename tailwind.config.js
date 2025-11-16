@@ -17,11 +17,11 @@ module.exports = {
           accent: '#14B8A6',
           teal: '#14B8A6',
           yellow: '#FACC15',
-          magenta: '#EC4899',
+          magenta: '#D03892',
           purple: '#8B5CF6',
           cyan: '#06B6D4',
           gradient: {
-            start: '#EC4899',
+            start: '#D03892',
             mid: '#8B5CF6',
             end: '#06B6D4',
           },
