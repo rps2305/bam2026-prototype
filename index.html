@@ -694,6 +694,10 @@
           <h2 class="font-display text-2xl text-brand-primary">Highlights</h2>
           <ul id="history-highlights" class="mt-4 space-y-2 rounded-3xl border border-brand-primary/15 bg-brand-light/50 p-4 text-sm text-brand-dark"></ul>
         </section>
+        <section>
+          <h2 class="font-display text-2xl text-brand-primary">Galerij</h2>
+          <div id="history-gallery" class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3"></div>
+        </section>
       </article>
     </section>
   </template>
@@ -1584,6 +1588,11 @@
           'Introductie van het nieuwe nachtprogramma in TriMotion Lounge.',
           'Recordaantal vrijwilligers: 620 crewleden uit de regio.',
           'Live-visuals op het hoofdpodium met het thema “Electric Bloom”.'
+        ],
+        gallery:[
+          { src:'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop', caption:'Zonnestralen weerspiegeld in het hoofdpodiumlicht.', credit:'Foto: Anne Peters' },
+          { src:'https://images.unsplash.com/photo-1464375117522-1311d0bfc108?q=80&w=1600&auto=format&fit=crop', caption:'Afterparty bij het water met lichtgevende bekers.', credit:'Foto: Lotte de Vries' },
+          { src:'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?q=80&w=1600&auto=format&fit=crop', caption:'Straattheater tussen het publiek in 2024.', credit:'Foto: Daniel Vermeer' }
         ]
       },
       {
@@ -1599,6 +1608,10 @@
           'Grotere toegankelijke zone met gebarentolken en prikkelarme lounge.',
           'Lancering van de kunst- en theaterroute “Parkfluisteraars”.',
           'Nieuwe circulariteits-crew haalt 94% van de bekers op.'
+        ],
+        gallery:[
+          { src:'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1600&auto=format&fit=crop', caption:'Jazzenaars en kunstinstallaties op de route.', credit:'Foto: Iris Noort' },
+          { src:'https://images.unsplash.com/photo-1529634898388-84d3e7f7bc71?q=80&w=1600&auto=format&fit=crop', caption:'Kunst en cultuur overal in het park.', credit:'Foto: Marco Visser' }
         ]
       },
       {
@@ -1614,6 +1627,10 @@
           'Comeback na twee festivalvrije jaren met een bomvol park.',
           'Première van de BAM! Family Saturday met workshops voor kids.',
           'Samenwerking met poppodia uit Twente voor nieuw talent.'
+        ],
+        gallery:[
+          { src:'https://images.unsplash.com/photo-1464375117522-1311d0bfc108?q=80&w=1600&auto=format&fit=crop', caption:'Familievibes tijdens de BAM! Family Saturday.', credit:'Foto: Lotte de Vries' },
+          { src:'https://images.unsplash.com/photo-1523757956233-94a86ff74ea5?q=80&w=1600&auto=format&fit=crop', caption:'Publiek picknickt terwijl clubs hun set beginnen.', credit:'Foto: Patrick Mulder' }
         ]
       },
       {
@@ -1627,6 +1644,10 @@
           'Eerste editie met volledig plasticvrije foodcourt.',
           'Opening met een parade door de binnenstad naar het park.',
           'Internationale DJ-night in samenwerking met Metropool.'
+        ],
+        gallery:[
+          { src:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop', caption:'Parade door de binnenstad naar het festivalpark.', credit:'Foto: Eva van den Bos' },
+          { src:'https://images.unsplash.com/photo-1470229538611-16ba8c7ffbd7?q=80&w=1600&auto=format&fit=crop', caption:'Nitro-lights en een nachtelijk podiumvuurwerk.', credit:'Foto: Thijs Groen' }
         ]
       },
       {
@@ -1640,6 +1661,10 @@
           'Live recording van de Aftermovie in samenwerking met Saxion.',
           'Extra straattheater in de aanloopstraten rondom het park.',
           'Lancering van het duurzame bekersysteem met herbruikbare cups.'
+        ],
+        gallery:[
+          { src:'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop', caption:'Straattheater en clubklanken in het park.', credit:'Foto: Suzanne Voets' },
+          { src:'https://images.unsplash.com/photo-1470229538611-16ba8c7ffbd7?q=80&w=1600&auto=format&fit=crop', caption:'Het duurzame bekersysteem in actie.', credit:'Foto: Thijs Groen' }
         ]
       }
     ];
@@ -3456,6 +3481,19 @@ Podium: ${stageName}`);
       highlightsEl.innerHTML = (entry.highlights && entry.highlights.length)
         ? entry.highlights.map(highlight => `<li class="flex items-start gap-2"><span class="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-brand-magenta"></span><span>${highlight}</span></li>`).join('')
         : '<li class="text-brand-dark/60">Highlights volgen binnenkort.</li>';
+      const galleryEl = document.getElementById('history-gallery');
+      if (galleryEl){
+        galleryEl.innerHTML = (entry.gallery && entry.gallery.length)
+          ? entry.gallery.map(item => `
+            <figure class="overflow-hidden rounded-2xl border border-brand-primary/15 bg-white shadow-card">
+              <img src="${item.src}" srcset="${buildSrcSet(item.src)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${item.caption || entry.year}" class="h-full w-full object-cover" />
+              <figcaption class="p-3 text-sm text-brand-dark/70">
+                <span class="block font-semibold">${item.caption || ''}</span>
+                <span class="text-xs uppercase tracking-wide text-brand-dark/50">${item.credit || ''}</span>
+              </figcaption>
+            </figure>`).join('')
+          : '<p class="text-sm text-brand-dark/60">Galerij volgt binnenkort.</p>';
+      }
     }
     function renderVrijwilligers(){
       render('tpl-vrijwilligers');
