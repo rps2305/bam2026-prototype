@@ -280,7 +280,7 @@
     </div>
   </div>
   <!-- Main -->
-  <main id="app" class="min-h-[70vh] px-4 py-10 md:py-16"></main>
+  <main id="app" class="min-h-[70vh] px-4 sm:px-6 py-10 md:py-16"></main>
   <!-- Footer -->
   <footer class="mt-10 border-t border-brand-primary/20 bg-white/80 backdrop-blur dark:bg-black/60 dark:border-white/10">
     <div class="flex flex-col gap-6 px-4 sm:px-6 py-10 text-sm opacity-90">
@@ -356,28 +356,21 @@
       <!-- Hero -->
       <section class="relative overflow-hidden rounded-3xl border border-brand-primary/20 bg-[linear-gradient(315deg,#5e2e84,#722a7e_12%,#7f2473_23%,#8c1d67_35%,#ad1a66_46%,#ca1664_57%,#e21262_66%,#b95b98_74%,#8381c1_81%,#009de0_87%,#93b2b8_92%,#d0c686_96%,#ffd829)] text-white shadow-card">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,216,41,0.35),transparent_60%)]"></div>
-        <div class="relative flex flex-col gap-8 p-6 md:flex-row md:items-center md:p-12">
+        <div class="relative flex flex-col gap-8 p-6 md:flex-row md:items-start md:p-12">
           <div class="flex-1 space-y-5">
             <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">17e editie • Gratis toegang</span>
             <h1 class="font-display text-4xl leading-tight md:text-6xl md:leading-tight">BAM! Festival Hengelo 2027</h1>
             <p class="text-sm font-semibold uppercase tracking-[0.3em] text-white/70 md:text-base">Vrijdag 21 &amp; zaterdag 22 mei · Prins Bernhardplantsoen, Hengelo (Ov.)</p>
             <p class="max-w-xl text-base md:text-lg text-white/85">Twee dagen lang gratis muziekfestival in Overijssel vol muziek, theater, kunst en verrassingen midden in het park.</p>
             <p class="max-w-2xl text-sm md:text-base text-white/80">Sinds 2008 bouwen honderden vrijwilligers, artiesten en partners aan hét gratis festival van Overijssel. Samen vieren we cultuur voor iedereen — van eerste festivalgangers tot doorgewinterde liefhebbers.</p>
-            <div class="flex flex-wrap gap-3">
-              <a href="#programma" class="btn-primary">Bekijk programma</a>
-              <a href="#vrijwilligers" class="btn-ghost">Word vrijwilliger</a>
-              <a href="#sponsors" class="btn-ghost inline-flex items-center gap-2">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M3.5 9.5l4.5-4.5 4 4 4-4 4.5 4.5" />
-                  <path d="M3.5 14.5l4.5 4.5 4-4 4 4 4.5-4.5" />
-                  <path d="M8 9.5l8 5" />
-                </svg>
-                <span>Word sponsor</span>
-              </a>
-              <a href="#doneer" class="btn-ghost">Doneer nu</a>
+            <div class="mt-4 flex flex-wrap items-center gap-3 sm:gap-4">
+              <a href="#programma" class="btn-primary inline-flex whitespace-nowrap">Bekijk programma</a>
+              <a href="#vrijwilligers" class="btn-ghost inline-flex whitespace-nowrap">Word vrijwilliger</a>
+              <a href="#sponsors" class="btn-ghost inline-flex whitespace-nowrap">Word sponsor</a>
+              <a href="#doneer" class="btn-ghost inline-flex whitespace-nowrap">Doneer nu</a>
             </div>
           </div>
-          <div class="w-full max-w-md shrink-0 overflow-hidden rounded-3xl border border-white/20 bg-white/10 backdrop-blur">
+          <div class="w-full max-w-md shrink-0 overflow-hidden rounded-3xl border border-white/20 bg-white/10 backdrop-blur md:self-start">
             <img class="h-full w-full object-cover mix-blend-screen" src="assets/images/hero-park-2027-1200.webp" srcset="assets/images/hero-park-2027-800.webp 800w, assets/images/hero-park-2027-1200.webp 1200w" sizes="(max-width: 768px) 100vw, 40vw" alt="Vrijwilligers overleggen met laptops in het Prins Bernhardplantsoen" loading="lazy" decoding="async" />
           </div>
         </div>
@@ -800,9 +793,6 @@
             <h1 class="font-display text-3xl md:text-4xl text-brand-primary">Foto&#39;s</h1>
             <p class="mt-3 max-w-2xl text-sm md:text-base text-brand-dark/80">Dompel je opnieuw onder in parklicht, publiekssfeer en backstage-momenten met zorgvuldig gecureerde fotoalbums per festivaljaar.</p>
           </div>
-          <div class="rounded-3xl border border-brand-primary/15 bg-brand-light/60 p-4 text-sm text-brand-dark/70">
-            <p><strong>Tip:</strong> Open een album voor een volledige galerij en ontdek welke fotografen het festival vastlegden.</p>
-          </div>
         </header>
         <section class="space-y-4">
           <div class="flex items-baseline justify-between gap-3">
@@ -1051,42 +1041,20 @@
   </template>
   <template id="tpl-doneer">
     <section class="w-full px-4 sm:px-6 py-10">
-      <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Hou het festival gratis</span>
-      <h1 class="font-display text-3xl md:text-4xl">Doneer</h1>
-      <p class="mt-2 text-sm md:text-base opacity-80">BAM! Festival is al sinds 2008 een gratis cultureel feest voor iedereen — en dat houden we graag zo. Na de natte editie van afgelopen jaar hebben we de steun van bezoekers en partners harder nodig dan ooit om het park te transformeren tot een veilig, duurzaam festivalterrein.</p>
-      <div class="mt-6 overflow-hidden rounded-3xl border border-brand-primary/15 bg-[linear-gradient(120deg,rgba(139,28,102,0.15),rgba(255,216,41,0.12))] p-6 shadow-card">
-        <h2 class="font-display text-2xl text-brand-primary">Elke bijdrage telt</h2>
-        <p class="mt-4 text-sm md:text-base opacity-80">Dankzij jouw donatie kunnen we artiesten betalen, nieuwe makers een podium geven en investeren in toegankelijkheid: van rolstoelroutes tot prikkelarme zones en veel vrijwilligers met een warm hart.</p>
-        <div class="mt-4 flex flex-wrap gap-3">
-          <a href="https://qrcode.ideal.nl/qr1.ideal.nl/574f0572-03bb-4edd-96bf-19b2ec518b83" target="_blank" rel="noopener noreferrer" class="btn-primary text-sm">Doneer via iDEAL</a>
-          <span class="text-xs uppercase tracking-wide text-brand-primary/70">Of kies zelf een bedrag hieronder</span>
-        </div>
+      <span class="inline-flex items-center gap-2 rounded-full bg-brand-yellow/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-primary">Donaties</span>
+      <h1 class="font-display text-3xl md:text-4xl">Doneren aan BAM! Festival</h1>
+      <div class="mt-3 space-y-3 text-sm md:text-base opacity-80">
+        <p>De zestiende editie van BAM! Festival had alles in zich om een feest te worden, maar het weer dacht daar anders over. Zowel op vrijdagavond als op zaterdag kregen bezoekers te maken met zware buien, waardoor het aantal bezoekers fors lager uitviel dan voorgaande jaren. Waar het festival normaal tussen de 15.000 en 17.000 mensen verwelkomt, bleef de teller dit jaar steken op zo’n 11.000 bezoekers.</p>
+        <p>Met name de regen op zaterdag speelde de organisatie parten. Ondanks een indrukwekkende line-up met onder andere Hans Dulfer, Fresku, The Indien, Paceshifters en Thijs Boontjes, bleef het park veel leger dan gehoopt. De lagere horeca-inkomsten en de vaste kosten voor productie, techniek en artiesten zorgden ervoor dat BAM! dit jaar niet uit de kosten kwam. De stichting moet interen op haar financiële reserve, die juist bedoeld is om tegenvallers op te vangen.</p>
+        <p>Toch was de sfeer onder de aanwezigen positief. Bezoekers die het slechte weer trotseerden, genoten zichtbaar van de optredens en de vertrouwde ontspannen sfeer van het BAM! Festival. Die waardering geeft moed, maar het mag duidelijk zijn dat de continuïteit van een gratis festival onder druk staat. Om BAM! ook de komende jaren mogelijk te maken, roept de organisatie op tot steun. Elke donatie helpt om BAM! gratis én toegankelijk voor iedereen te houden.</p>
       </div>
-      <div class="mt-6 grid gap-6 md:grid-cols-2">
-        <div class="rounded-3xl border border-brand-primary/10 bg-white p-5 shadow-card">
-          <h2 class="font-medium text-brand-primary">Kies een bijdrage</h2>
-          <ul id="donation-tiers" class="mt-4 space-y-3 text-sm opacity-90"></ul>
+      <div class="mt-6 overflow-hidden rounded-3xl border border-brand-primary/15 bg-[linear-gradient(120deg,rgba(139,28,102,0.15),rgba(255,216,41,0.12))] p-6 shadow-card">
+        <h2 class="font-display text-2xl text-brand-primary">Steun het gratis festival</h2>
+        <p class="mt-3 text-sm md:text-base opacity-80">Doneren aan BAM! Festival kan via onderstaande knop. Jouw bijdrage gaat direct naar het gratis houden van het festival en het versterken van de reserve voor slechte weerscenario’s.</p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <a href="https://qrcode.ideal.nl/qr1.ideal.nl/574f0572-03bb-4edd-96bf-19b2ec518b83" target="_blank" rel="noopener noreferrer" class="btn-primary text-sm">Doneer via iDEAL</a>
+          <span class="text-xs uppercase tracking-wide text-brand-primary/70 break-all">qrcode.ideal.nl/qr1.ideal.nl/574f0572-03bb-4edd-96bf-19b2ec518b83</span>
         </div>
-        <form id="donation-form" class="rounded-3xl border border-brand-primary/10 bg-white p-5 shadow-card grid gap-3">
-          <label class="grid gap-1 text-sm">
-            <span>Bedrag (EUR)</span>
-            <input id="donation-amount" type="number" min="5" step="5" class="rounded-xl border border-brand-primary/20 px-3 py-2" placeholder="25" required />
-          </label>
-          <label class="grid gap-1 text-sm">
-            <span>Naam</span>
-            <input id="donation-name" class="rounded-xl border border-brand-primary/20 px-3 py-2" placeholder="Voornaam Achternaam" />
-          </label>
-          <label class="grid gap-1 text-sm">
-            <span>E‑mail</span>
-            <input id="donation-email" type="email" class="rounded-xl border border-brand-primary/20 px-3 py-2" placeholder="jij@voorbeeld.nl" />
-          </label>
-          <label class="grid gap-1 text-sm">
-            <span>Bericht (optioneel)</span>
-            <textarea id="donation-message" class="rounded-xl border border-brand-primary/20 px-3 py-2 min-h-[100px]" placeholder="Laat een boodschap achter voor het team."></textarea>
-          </label>
-          <button class="mt-2 btn-primary" type="submit">Doneer veilig</button>
-          <p id="donation-feedback" class="text-xs font-semibold"></p>
-        </form>
       </div>
     </section>
   </template>
@@ -3032,6 +3000,7 @@
           const stageIndex = ensureStageIndex(entry, slot.stage);
           entry.events.push({
             id: `${artist.id}-${counter++}`,
+            artistId: artist.id,
             title: artist.name,
             genre: artist.genres?.join(' / ') || 'Onbekend genre',
             stage: stageIndex,
@@ -3182,7 +3151,8 @@
               const safeHeight = Math.max(height, 50);
               const colorClass = getTypeClass(event);
               html += `<div class="bam-event ${colorClass}" style="top:${top}px;height:${safeHeight}px;" data-event-id="${event.id}">`;
-              html += `<a class="bam-event-title" href="#artist:${event.id}">${event.title}</a>`;
+              const artistTarget = event.artistId || event.id;
+              html += `<a class="bam-event-title" href="#artist:${artistTarget}">${event.title}</a>`;
               html += '</div>';
             });
           html += '</div>';
@@ -3262,14 +3232,13 @@ Podium: ${stageName}`);
       const scheduleEl = document.getElementById('artist-schedule');
       if (scheduleEl){
         const slots = [
-          { day:a.day, stage:a.stage, start:a.start, end:a.end, type:a.type, label:'Hoofdset' },
+          { day:a.day, stage:a.stage, start:a.start, end:a.end, type:a.type },
           ...((a.extraSlots || []).map((slot, index) => ({
             day:slot.day,
             stage:slot.stage,
             start:slot.start,
             end:slot.end,
-            type:slot.type || a.type,
-            label:slot.label || `Extra set ${index + 1}`
+            type:slot.type || a.type
           })))
         ].sort((slotA, slotB) => {
           const dayDiff = (DAYS.findIndex(d => d.id === slotA.day) - DAYS.findIndex(d => d.id === slotB.day));
@@ -3288,7 +3257,6 @@ Podium: ${stageName}`);
               <span class="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[12px] font-semibold text-brand-primary">${formatTimeLabel(slot.start)}–${formatTimeLabel(slot.end)}</span>
               ${typeChip}
             </div>
-            <span class="text-xs font-semibold uppercase tracking-wide text-brand-magenta/80">${slot.label}</span>
           </li>`;
         }).join('');
       }
@@ -3885,37 +3853,6 @@ Podium: ${stageName}`);
     }
     function renderDoneer(){
       render('tpl-doneer');
-      const tiers = [
-        { amount:'€10', label:'Start de dag', detail:'Help ons het park klaar te maken en vrijwilligers van koffie te voorzien.' },
-        { amount:'€25', label:'Supporter', detail:'Dekt de gage van een lokaal talent of materiaal voor het kunstprogramma.' },
-        { amount:'€50', label:'BAM! Vriend', detail:'Maakt extra techniek of licht mogelijk op het hoofdpodium.' },
-        { amount:'€100', label:'Superfan', detail:'Draagt bij aan inclusieve voorzieningen zoals gebarentolken en rustige zones.' }
-      ];
-      document.getElementById('donation-tiers').innerHTML = tiers.map(t => `
-        <li class="rounded-2xl border border-brand-primary/15 bg-white/95 p-4 shadow-card">
-          <div class="flex items-baseline justify-between gap-3">
-            <span class="text-xl font-semibold text-brand-primary">${t.amount}</span>
-            <span class="rounded-full bg-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">${t.label}</span>
-          </div>
-          <p class="mt-3 text-sm text-brand-dark/70">${t.detail}</p>
-        </li>`).join('');
-      const form = document.getElementById('donation-form');
-      const feedback = document.getElementById('donation-feedback');
-      form.addEventListener('submit', (event)=>{
-        event.preventDefault();
-        const rawAmount = document.getElementById('donation-amount').value;
-        const amount = parseInt(rawAmount, 10);
-        if (!amount || amount < 5){
-          feedback.textContent = 'Vul een geldig bedrag van minimaal €5 in.';
-          feedback.classList.remove('text-brand-primary');
-          feedback.classList.add('text-brand-magenta');
-          return;
-        }
-        feedback.textContent = `Bedankt voor je toezegging van €${amount}. We sturen je binnen 24 uur een betaalverzoek.`;
-        feedback.classList.remove('text-brand-magenta');
-        feedback.classList.add('text-brand-primary');
-        form.reset();
-      });
     }
     function renderPrivacy(){
       render('tpl-privacy');
