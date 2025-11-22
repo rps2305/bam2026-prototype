@@ -8,7 +8,7 @@
 - [ ] Screenreader regressietest (VoiceOver/NVDA) plannen na Drupal-integratie.
 
 ## SEO & Structured Data
-- [x] Titel & meta description geoptimaliseerd voor 2026 editie.
+- [x] Titel & meta description geoptimaliseerd voor 2027 editie.
 - [x] Canonical, hreflang (`nl`, `x-default`) en social previews (OG/Twitter).
 - [x] JSON-LD (`MusicEvent`, `Organization`, `LocalBusiness`, `FAQPage`).
 - [x] Sitemap vernieuwd met routes (incl. enquête) + robots verwijst ernaar.

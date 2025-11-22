@@ -1,6 +1,6 @@
-# BAM! Festival 2026 – Front-end Prototype
+# BAM! Festival 2027 – Front-end Prototype
 
-Deze repository bevat de goedgekeurde front-end van het BAM! Festival 2026. De HTML en Tailwind CSS worden later omgezet naar een custom Drupal 11 thema. Alle pagina’s, componenten en assets zijn geoptimaliseerd voor toegankelijkheid, SEO, performance en mobile-first gebruik.
+Deze repository bevat de goedgekeurde front-end van het BAM! Festival 2027. De HTML en Tailwind CSS worden later omgezet naar een custom Drupal 11 thema. Alle pagina’s, componenten en assets zijn geoptimaliseerd voor toegankelijkheid, SEO, performance en mobile-first gebruik.
 
 ## Belangrijkste verbeteringen
 - Eén consistente design language met lokaal gebouwde Tailwind CSS en gedeelde tokens.
@@ -62,8 +62,8 @@ npm run watch:css                 # development watch (optioneel)
 - Microsoft Forms embeds (vrijwilligers + enquête) laden lazy en hebben fallbacklinks.
 
 ## SEO & Structured Data
-- Titel: “BAM! Festival 2026 – Gratis muziekfestival Hengelo” (53 chars).
-- Meta description: 180 karakters, call-to-action gericht op weekend 22/23 mei 2026.
+- Titel: “BAM! Festival 2027 – Gratis muziekfestival Hengelo” (53 chars).
+- Meta description: 180 karakters, call-to-action gericht op weekend 21/22 mei 2027.
 - Canonical + hreflang (`nl`, `x-default`), `OG`/`Twitter` met lokale WebP.
 - JSON-LD (`@graph`) voor MusicEvent + organizer, LocalBusiness, FAQPage.
 - Sitemap verwijst naar toekomstige Drupal-routes (plattegrond, programma, vrijwilligers, enquête).
